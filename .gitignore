@@ -22,4 +22,8 @@ hs_err_pid*
 
 # Vim
 .*.swp
+
 /bin/
+
+# Eclipse
+.classpath

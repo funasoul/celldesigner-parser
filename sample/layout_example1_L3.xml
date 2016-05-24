@@ -1,0 +1,260 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1" level="3" version="1" layout:required="false">
+  <layout:listOfLayouts xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+    <layout:layout layout:id="Layout_1">
+      <layout:dimensions layout:width="400" layout:height="220" layout:depth="1"/>
+      <layout:listOfCompartmentGlyphs>
+        <layout:compartmentGlyph layout:id="CompartmentGlyph_1" layout:compartment="Compartment_1">
+          <layout:boundingBox>
+            <layout:position layout:x="390" layout:y="210" layout:z="1"/>
+            <layout:dimensions layout:width="5" layout:height="5" layout:depth="1"/>
+          </layout:boundingBox>
+        </layout:compartmentGlyph>
+      </layout:listOfCompartmentGlyphs>
+      <layout:listOfSpeciesGlyphs>
+        <layout:speciesGlyph layout:id="SpeciesGlyph_1" layout:species="Species_1">
+          <layout:boundingBox>
+            <layout:position layout:x="240" layout:y="24" layout:z="1"/>
+            <layout:dimensions layout:width="80" layout:height="26" layout:depth="1"/>
+          </layout:boundingBox>
+        </layout:speciesGlyph>
+        <layout:speciesGlyph layout:id="SpeciesGlyph_2" layout:species="Species_2">
+          <layout:boundingBox>
+            <layout:position layout:x="240" layout:y="24" layout:z="1"/>
+            <layout:dimensions layout:width="80" layout:height="170" layout:depth="1"/>
+          </layout:boundingBox>
+        </layout:speciesGlyph>
+      </layout:listOfSpeciesGlyphs>
+      <layout:listOfReactionGlyphs>
+        <layout:reactionGlyph layout:id="ReactionGlyph_1" layout:reaction="Reaction_1">
+          <layout:curve>
+            <layout:listOfCurveSegments>
+              <layout:curveSegment xsi:type="LineSegment">
+                <layout:start layout:x="165" layout:y="105" layout:z="1"/>
+                <layout:end layout:x="165" layout:y="115" layout:z="1"/>
+              </layout:curveSegment>
+            </layout:listOfCurveSegments>
+          </layout:curve>
+          <layout:listOfSpeciesReferenceGlyphs>
+            <layout:speciesReferenceGlyph layout:id="SpeciesReferenceGlyph_1" layout:speciesReference="SpeciesReference_1" layout:role="substrate" layout:speciesGlyph="SpeciesGlyph_1">
+              <layout:curve>
+                <layout:listOfCurveSegments>
+                  <layout:curveSegment xsi:type="CubicBezier">
+                    <layout:start layout:x="165" layout:y="105" layout:z="1"/>
+                    <layout:end layout:x="195" layout:y="60" layout:z="1"/>
+                    <layout:basePoint1 layout:x="165" layout:y="90" layout:z="1"/>
+                    <layout:basePoint2 layout:x="165" layout:y="90" layout:z="1"/>
+                  </layout:curveSegment>
+                </layout:listOfCurveSegments>
+              </layout:curve>
+            </layout:speciesReferenceGlyph>
+            <layout:speciesReferenceGlyph layout:id="SpeciesReferenceGlyph_2" layout:speciesReference="SpeciesReference_2" layout:role="product" layout:speciesGlyph="SpeciesGlyph_2">
+              <layout:curve>
+                <layout:listOfCurveSegments>
+                  <layout:curveSegment xsi:type="CubicBezier">
+                    <layout:start layout:x="165" layout:y="115" layout:z="1"/>
+                    <layout:end layout:x="195" layout:y="160" layout:z="1"/>
+                    <layout:basePoint1 layout:x="165" layout:y="130" layout:z="1"/>
+                    <layout:basePoint2 layout:x="165" layout:y="130" layout:z="1"/>
+                  </layout:curveSegment>
+                </layout:listOfCurveSegments>
+              </layout:curve>
+            </layout:speciesReferenceGlyph>
+          </layout:listOfSpeciesReferenceGlyphs>
+        </layout:reactionGlyph>
+        <layout:reactionGlyph layout:id="ReactionGlyph_2" layout:reaction="Reaction_2">
+          <layout:curve>
+            <layout:listOfCurveSegments>
+              <layout:curveSegment xsi:type="LineSegment">
+                <layout:start layout:x="235" layout:y="105" layout:z="1"/>
+                <layout:end layout:x="235" layout:y="115" layout:z="1"/>
+              </layout:curveSegment>
+            </layout:listOfCurveSegments>
+          </layout:curve>
+          <layout:listOfSpeciesReferenceGlyphs>
+            <layout:speciesReferenceGlyph layout:id="SpeciesReferenceGlyph_3" layout:speciesReference="SpeciesReference_3" layout:role="substrate" layout:speciesGlyph="SpeciesGlyph_2">
+              <layout:curve>
+                <layout:listOfCurveSegments>
+                  <layout:curveSegment xsi:type="CubicBezier">
+                    <layout:start layout:x="235" layout:y="115" layout:z="1"/>
+                    <layout:end layout:x="205" layout:y="160" layout:z="1"/>
+                    <layout:basePoint1 layout:x="235" layout:y="130" layout:z="1"/>
+                    <layout:basePoint2 layout:x="235" layout:y="130" layout:z="1"/>
+                  </layout:curveSegment>
+                </layout:listOfCurveSegments>
+              </layout:curve>
+            </layout:speciesReferenceGlyph>
+            <layout:speciesReferenceGlyph layout:id="SpeciesReferenceGlyph_4" layout:speciesReference="SpeciesReference_4" layout:role="product" layout:speciesGlyph="SpeciesGlyph_1">
+              <layout:curve>
+                <layout:listOfCurveSegments>
+                  <layout:curveSegment xsi:type="CubicBezier">
+                    <layout:start layout:x="235" layout:y="105" layout:z="1"/>
+                    <layout:end layout:x="205" layout:y="60" layout:z="1"/>
+                    <layout:basePoint1 layout:x="235" layout:y="90" layout:z="1"/>
+                    <layout:basePoint2 layout:x="235" layout:y="90" layout:z="1"/>
+                  </layout:curveSegment>
+                </layout:listOfCurveSegments>
+              </layout:curve>
+            </layout:speciesReferenceGlyph>
+          </layout:listOfSpeciesReferenceGlyphs>
+        </layout:reactionGlyph>
+      </layout:listOfReactionGlyphs>
+      <layout:listOfTextGlyphs>
+        <layout:textGlyph layout:graphicalObject="SpeciesGlyph_1" layout:id="TextGlyph_01" layout:originOfText="SpeciesGlyph_1">
+          <layout:boundingBox>
+            <layout:position layout:x="228" layout:y="24" layout:z="1"/>
+            <layout:dimensions layout:width="92" layout:height="26" layout:depth="1"/>
+          </layout:boundingBox>
+        </layout:textGlyph>
+        <layout:textGlyph layout:graphicalObject="SpeciesGlyph_2" layout:id="TextGlyph_02" layout:originOfText="SpeciesGlyph_2">
+          <layout:boundingBox>
+            <layout:position layout:x="228" layout:y="24" layout:z="1"/>
+            <layout:dimensions layout:width="92" layout:height="170" layout:depth="1"/>
+          </layout:boundingBox>
+        </layout:textGlyph>
+      </layout:listOfTextGlyphs>
+    </layout:layout>
+  </layout:listOfLayouts>
+  <model id="TestModel">
+    <layout:listOfLayouts xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <layout:layout layout:id="Layout_1">
+        <layout:dimensions layout:width="400" layout:height="220" layout:depth="1"/>
+        <layout:listOfCompartmentGlyphs>
+          <layout:compartmentGlyph layout:id="CompartmentGlyph_1" layout:compartment="Compartment_1">
+            <layout:boundingBox>
+              <layout:position layout:x="390" layout:y="210" layout:z="1"/>
+              <layout:dimensions layout:width="5" layout:height="5" layout:depth="1"/>
+            </layout:boundingBox>
+          </layout:compartmentGlyph>
+        </layout:listOfCompartmentGlyphs>
+        <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph layout:id="SpeciesGlyph_1" layout:species="Species_1">
+            <layout:boundingBox>
+              <layout:position layout:x="240" layout:y="24" layout:z="1"/>
+              <layout:dimensions layout:width="80" layout:height="26" layout:depth="1"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph layout:id="SpeciesGlyph_2" layout:species="Species_2">
+            <layout:boundingBox>
+              <layout:position layout:x="240" layout:y="24" layout:z="1"/>
+              <layout:dimensions layout:width="80" layout:height="170" layout:depth="1"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+        <layout:listOfReactionGlyphs>
+          <layout:reactionGlyph layout:id="ReactionGlyph_1" layout:reaction="Reaction_1">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="LineSegment">
+                  <layout:start layout:x="165" layout:y="105" layout:z="1"/>
+                  <layout:end layout:x="165" layout:y="115" layout:z="1"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph layout:id="SpeciesReferenceGlyph_1" layout:speciesReference="SpeciesReference_1" layout:role="substrate" layout:speciesGlyph="SpeciesGlyph_1">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start layout:x="165" layout:y="105" layout:z="1"/>
+                      <layout:end layout:x="195" layout:y="60" layout:z="1"/>
+                      <layout:basePoint1 layout:x="165" layout:y="90" layout:z="1"/>
+                      <layout:basePoint2 layout:x="165" layout:y="90" layout:z="1"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph layout:id="SpeciesReferenceGlyph_2" layout:speciesReference="SpeciesReference_2" layout:role="product" layout:speciesGlyph="SpeciesGlyph_2">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start layout:x="165" layout:y="115" layout:z="1"/>
+                      <layout:end layout:x="195" layout:y="160" layout:z="1"/>
+                      <layout:basePoint1 layout:x="165" layout:y="130" layout:z="1"/>
+                      <layout:basePoint2 layout:x="165" layout:y="130" layout:z="1"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+          <layout:reactionGlyph layout:id="ReactionGlyph_2" layout:reaction="Reaction_2">
+            <layout:curve>
+              <layout:listOfCurveSegments>
+                <layout:curveSegment xsi:type="LineSegment">
+                  <layout:start layout:x="235" layout:y="105" layout:z="1"/>
+                  <layout:end layout:x="235" layout:y="115" layout:z="1"/>
+                </layout:curveSegment>
+              </layout:listOfCurveSegments>
+            </layout:curve>
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph layout:id="SpeciesReferenceGlyph_3" layout:speciesReference="SpeciesReference_3" layout:role="substrate" layout:speciesGlyph="SpeciesGlyph_2">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start layout:x="235" layout:y="115" layout:z="1"/>
+                      <layout:end layout:x="205" layout:y="160" layout:z="1"/>
+                      <layout:basePoint1 layout:x="235" layout:y="130" layout:z="1"/>
+                      <layout:basePoint2 layout:x="235" layout:y="130" layout:z="1"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+              <layout:speciesReferenceGlyph layout:id="SpeciesReferenceGlyph_4" layout:speciesReference="SpeciesReference_4" layout:role="product" layout:speciesGlyph="SpeciesGlyph_1">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start layout:x="235" layout:y="105" layout:z="1"/>
+                      <layout:end layout:x="205" layout:y="60" layout:z="1"/>
+                      <layout:basePoint1 layout:x="235" layout:y="90" layout:z="1"/>
+                      <layout:basePoint2 layout:x="235" layout:y="90" layout:z="1"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+        </layout:listOfReactionGlyphs>
+        <layout:listOfTextGlyphs>
+          <layout:textGlyph layout:graphicalObject="SpeciesGlyph_1" layout:id="TextGlyph_01" layout:originOfText="SpeciesGlyph_1">
+            <layout:boundingBox>
+              <layout:position layout:x="228" layout:y="24" layout:z="1"/>
+              <layout:dimensions layout:width="92" layout:height="26" layout:depth="1"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+          <layout:textGlyph layout:graphicalObject="SpeciesGlyph_2" layout:id="TextGlyph_02" layout:originOfText="SpeciesGlyph_2">
+            <layout:boundingBox>
+              <layout:position layout:x="228" layout:y="24" layout:z="1"/>
+              <layout:dimensions layout:width="92" layout:height="170" layout:depth="1"/>
+            </layout:boundingBox>
+          </layout:textGlyph>
+        </layout:listOfTextGlyphs>
+      </layout:layout>
+    </layout:listOfLayouts>
+    <listOfCompartments>
+      <compartment id="Compartment_1" constant="true"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="Species_1" constant="false" hasOnlySubstanceUnits="false" boundaryCondition="false" compartment="Compartment_1"/>
+      <species id="Species_2" constant="false" hasOnlySubstanceUnits="false" boundaryCondition="false" compartment="Compartment_1"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="Reaction_1" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference id="SpeciesReference_1" constant="false" species="Species_1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference id="SpeciesReference_2" constant="false" species="Species_2"/>
+        </listOfProducts>
+      </reaction>
+      <reaction id="Reaction_2" reversible="false" fast="false">
+        <listOfReactants>
+          <speciesReference id="SpeciesReference_3" constant="false" species="Species_2"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference id="SpeciesReference_4" constant="false" species="Species_1"/>
+        </listOfProducts>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

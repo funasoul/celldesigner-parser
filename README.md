@@ -22,6 +22,10 @@ org/sbml/sbml/level2/version4/Event.java
 ```
 
 ## How to use the parser API
+### Requirements
+We have tested our API on Java 8 (1.8.0_40).
+
+### Example code
 The sample code will be committed soon, but just for a quick answer, here is an example code which will read an SBML file (w/ CellDesigner-Extensions and obtain CellDesigner specific information from its annotation).
 ```java
 package sample;

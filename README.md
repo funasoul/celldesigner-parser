@@ -54,7 +54,7 @@ public class APItest {
     } catch (JAXBException e) {
       e.printStackTrace();
     }
-    List<Species> sList = sbml.getModel()l.getListOfSpecies().getSpecies();
+    List<Species> sList = sbml.getModel().getListOfSpecies().getSpecies();
     for(Species s : sList){
       String str = s.getAnnotation().getExtension().getPositionToCompartment();
       System.out.println(s.getId() + ":" + str);

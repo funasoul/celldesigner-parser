@@ -9,15 +9,7 @@ import org.sbml.sbml.level2.version4.SpeciesReference;
  * Date Created: May 24, 2016
  */
 
-public class SpeciesReferenceWrapper {
-	
-	private SpeciesReference speciesReference;
-	private SpeciesReferenceAnnotationType annotation;
-	
-	public SpeciesReferenceWrapper(SpeciesReference s){
-		this.speciesReference = s;
-		annotation = s.getAnnotation();
-	}
+public class SpeciesReferenceWrapper extends SpeciesReference{
 	
 	/**
 	 * 

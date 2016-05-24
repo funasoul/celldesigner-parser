@@ -10,16 +10,7 @@ import org.sbml.sbml.level2.version4.Compartment;
  */
 
 public class CompartmentWrapper extends Compartment {
-	
-	private Compartment compartment;
-	private CompartmentAnnotationType annotation;
-	
-	
-	public CompartmentWrapper(Compartment c){
-		this.compartment = c;
-		annotation = c.getAnnotation();
-	}
-	
+
 	public String getName(){
 		return annotation.getExtension().getName();
 	}

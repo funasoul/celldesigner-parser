@@ -21,16 +21,8 @@ import org.sbml.sbml.level2.version4.Reaction;
 /**
  * @author
  */
-public class ReactionWrapper {
-		
-		private Reaction reaction;
-		private ReactionAnnotationType annotation;
-
-		public ReactionWrapper(Reaction r){
-			this.reaction = r;
-			annotation = r.getAnnotation();
-		}
-		
+public class ReactionWrapper extends Reaction{
+				
 	   public String getName() {
            return annotation.getExtension().getName();
        }

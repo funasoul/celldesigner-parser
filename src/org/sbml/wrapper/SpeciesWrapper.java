@@ -11,14 +11,7 @@ import org.sbml.sbml.level2.version4.Species;
  * Date Created: May 24, 2016
  */
 
-public class SpeciesWrapper {
-	private Species species;
-	private SpeciesAnnotationType annotation;
-	
-	public SpeciesWrapper(Species s){
-		this.species = s;
-		this.annotation = s.getAnnotation();
-	}
+public class SpeciesWrapper extends Species{
 	
 	/**
 	 * 	

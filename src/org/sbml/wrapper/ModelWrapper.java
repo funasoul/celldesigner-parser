@@ -25,14 +25,6 @@ import org.sbml.sbml.level2.version4.Model;
 
 public class ModelWrapper extends Model {
 
-	private Model model;
-	private ModelAnnotationType annotation;
-	
-	public ModelWrapper(Model m){
-		this.model = m;
-		this.annotation = m.getAnnotation();
-	}
-	
 	/**
 	 * 
 	 * @return

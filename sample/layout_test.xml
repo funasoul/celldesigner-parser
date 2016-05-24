@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' standalone='no'?>
+<sbml xmlns="http://www.sbml.org/sbml/level3/version1/core" xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1" level="3" version="1" layout:required="false">
+  <model id="Model">
+    <layout:listOfLayouts xmlns:layout="http://www.sbml.org/sbml/level3/version1/layout/version1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <layout:layout layout:id="layout">
+        <layout:dimensions layout:width="600" layout:height="480" layout:depth="1"/>
+        <layout:listOfCompartmentGlyphs>
+          <layout:compartmentGlyph layout:id="cGlyph" layout:compartment="C1"/>
+        </layout:listOfCompartmentGlyphs>
+        <layout:listOfSpeciesGlyphs>
+          <layout:speciesGlyph layout:id="s1Glyph" layout:species="s1">
+            <layout:boundingBox>
+              <layout:position layout:x="300" layout:y="100" layout:z="1"/>
+              <layout:dimensions layout:width="50" layout:height="30" layout:depth="1"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+          <layout:speciesGlyph layout:id="s2s2Glyph" layout:species="s2">
+            <layout:boundingBox>
+              <layout:position layout:x="300" layout:y="380" layout:z="1"/>
+              <layout:dimensions layout:width="50" layout:height="30" layout:depth="1"/>
+            </layout:boundingBox>
+          </layout:speciesGlyph>
+        </layout:listOfSpeciesGlyphs>
+        <layout:listOfReactionGlyphs>
+          <layout:reactionGlyph layout:id="rGlyph" layout:reaction="r1">
+            <layout:listOfSpeciesReferenceGlyphs>
+              <layout:speciesReferenceGlyph layout:id="s1ReferenceGlyph" layout:role="undefined" layout:speciesGlyph="s1Glyph"/>
+              <layout:speciesReferenceGlyph layout:id="s2ReferenceGlyph" layout:role="product" layout:speciesGlyph="s2s2Glyph">
+                <layout:curve>
+                  <layout:listOfCurveSegments>
+                    <layout:curveSegment xsi:type="CubicBezier">
+                      <layout:start layout:x="3000" layout:y="100" layout:z="0"/>
+                      <layout:end layout:x="300" layout:y="380" layout:z="0"/>
+                      <layout:basePoint1 layout:x="230" layout:y="220" layout:z="0"/>
+                      <layout:basePoint2 layout:x="230" layout:y="220" layout:z="0"/>
+                    </layout:curveSegment>
+                  </layout:listOfCurveSegments>
+                </layout:curve>
+              </layout:speciesReferenceGlyph>
+            </layout:listOfSpeciesReferenceGlyphs>
+          </layout:reactionGlyph>
+        </layout:listOfReactionGlyphs>
+      </layout:layout>
+    </layout:listOfLayouts>
+    <listOfCompartments>
+      <compartment id="C1"/>
+    </listOfCompartments>
+    <listOfSpecies>
+      <species id="s1" compartment="C1"/>
+      <species id="s2" compartment="C1"/>
+    </listOfSpecies>
+    <listOfReactions>
+      <reaction id="r1">
+        <listOfReactants>
+          <speciesReference species="s1"/>
+        </listOfReactants>
+        <listOfProducts>
+          <speciesReference species="s2"/>
+        </listOfProducts>
+        <kineticLaw>
+          <math xmlns="http://www.w3.org/1998/Math/MathML">          
+            <apply>
+              <times/>
+              <ci> k </ci>
+              <ci> s1 </ci>
+            </apply>
+          </math>
+                  <listOfLocalParameters>
+            <localParameter id="k" value="1"/>
+          </listOfLocalParameters>
+        </kineticLaw>
+      </reaction>
+    </listOfReactions>
+  </model>
+</sbml>

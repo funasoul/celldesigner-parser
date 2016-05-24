@@ -1542,7 +1542,7 @@
 			<xs:element name="blockDiagram" type="celldesigner:blockDiagram" minOccurs="0" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="modelAnnotation">
+	<xs:complexType name="modelAnnotationType">
 		<xs:annotation>
 			<xs:documentation>Annotation for model.</xs:documentation>
 		</xs:annotation>
@@ -1569,7 +1569,7 @@
 		</xs:sequence>
 	</xs:complexType>
 	<!--Compartment extension.-->
-	<xs:complexType name="compartmentAnnotation">
+	<xs:complexType name="compartmentAnnotationType">
 		<xs:annotation>
 			<xs:documentation>Annotation for compartment.</xs:documentation>
 		</xs:annotation>
@@ -2019,7 +2019,7 @@
 			<xs:element name="modification" type="celldesigner:modification" maxOccurs="unbounded"/>
 		</xs:sequence>
 	</xs:complexType>
-	<xs:complexType name="reactionAnnotation">
+	<xs:complexType name="reactionAnnotationType">
 		<xs:annotation>
 			<xs:documentation>Annotation for reaction.</xs:documentation>
 		</xs:annotation>
@@ -2063,7 +2063,7 @@
 		<xs:attribute name="locked" type="xs:boolean" use="required"/>
 		<xs:attribute name="visible" type="xs:boolean" use="required"/>
 	</xs:complexType>
-	<xs:complexType name="speciesReferenceAnnotation">
+	<xs:complexType name="speciesReferenceAnnotationType">
 		<xs:annotation>
 			<xs:documentation>Annotation for (modifier)speciesReference.</xs:documentation>
 		</xs:annotation>

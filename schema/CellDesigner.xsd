@@ -19,7 +19,7 @@
 							</xs:complexType>
 						</xs:element>
             -->
-						<xs:element name="annotation" type="celldesigner:compartmentAnnotation" minOccurs="0"/>
+						<xs:element name="annotation" type="celldesigner:compartmentAnnotationType" minOccurs="0"/>
 					</xs:sequence>
 				<!-- </xs:restriction> -->
 				</xs:extension>
@@ -65,7 +65,7 @@
 							</xs:complexType>
 						</xs:element>
             -->
-						<xs:element name="annotation" type="celldesigner:reactionAnnotation" minOccurs="0"/>
+						<xs:element name="annotation" type="celldesigner:reactionAnnotationType" minOccurs="0"/>
 						<!-- <xs:element name="listOfReactants" type="sbml:ListOfSpeciesReferences" minOccurs="0"/> -->
 						<!-- <xs:element name="listOfProducts" type="sbml:ListOfSpeciesReferences" minOccurs="0"/> -->
 						<!-- <xs:element name="listOfModifiers" type="sbml:ListOfModifierSpeciesReferences" minOccurs="0"/> -->
@@ -92,7 +92,7 @@
 							</xs:complexType>
 						</xs:element>
             -->
-						<xs:element name="annotation" type="celldesigner:speciesReferenceAnnotation" minOccurs="0"/>
+						<xs:element name="annotation" type="celldesigner:speciesReferenceAnnotationType" minOccurs="0"/>
 						<!-- <xs:element name="stoichiometryMath" type="sbml:StoichiometryMath" minOccurs="0"/> -->
 					</xs:sequence>
 				<!-- </xs:restriction> -->
@@ -116,7 +116,7 @@
 							</xs:complexType>
 						</xs:element>
             -->
-						<xs:element name="annotation" type="celldesigner:speciesReferenceAnnotation" minOccurs="0"/>
+						<xs:element name="annotation" type="celldesigner:speciesReferenceAnnotationType" minOccurs="0"/>
 					</xs:sequence>
 				<!-- </xs:restriction> -->
 				</xs:extension>
@@ -139,7 +139,7 @@
 							</xs:complexType>
 						</xs:element>
             -->
-						<xs:element name="annotation" type="celldesigner:modelAnnotation" minOccurs="0"/>
+						<xs:element name="annotation" type="celldesigner:modelAnnotationType" minOccurs="0"/>
             <!--
 						<xs:element name="listOfFunctionDefinitions" minOccurs="0">
 							<xs:complexType>

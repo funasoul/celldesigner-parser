@@ -98,8 +98,24 @@ public class ModelWrapper extends Model {
     	annotation.getExtension().setListOfIncludedSpecies(value);
     }
 
-    public void addIncludedSpecies(Species value){
-    	annotation.getExtension().getListOfIncludedSpecies().getSpecies().add(value);
+    /**
+     * 
+     * @param species
+     * void
+     * TODO
+     */
+    public void addIncludedSpecies(Species species){
+    	annotation.getExtension().getListOfIncludedSpecies().getSpecies().add(species);
+    }
+    
+    /**
+     * 
+     * @param species
+     * void
+     * TODO
+     */
+    public void removeIncludedSpecies(Species species){
+    	annotation.getExtension().getListOfIncludedSpecies().getSpecies().remove(species);
     }
     
     /**
@@ -125,6 +141,26 @@ public class ModelWrapper extends Model {
 
     /**
      * 
+     * @param compartmentAlias
+     * void
+     * TODO
+     */
+    public void addCompartmentAlias(CompartmentAlias compartmentAlias){
+    	annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias().add(compartmentAlias);
+    }
+    
+    /**
+     * 
+     * @param compartmentAlias
+     * void
+     * TODO
+     */
+    public void removeCompartmentAlias(CompartmentAlias compartmentAlias){
+    	annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias().remove(compartmentAlias);
+    }    
+    
+    /**
+     * 
      * @return
      * ListOfComplexSpeciesAliases
      * TODO
@@ -143,6 +179,26 @@ public class ModelWrapper extends Model {
     	annotation.getExtension().setListOfComplexSpeciesAliases(value);
     }
 
+    /**
+     * 
+     * @param value
+     * void
+     * TODO
+     */
+    public void addComplexSpeciesAlias(ComplexSpeciesAlias complexSpeciesAlias) {
+    	annotation.getExtension().getListOfComplexSpeciesAliases().getComplexSpeciesAlias().add(complexSpeciesAlias);
+    }
+    
+    /**
+     * 
+     * @param value
+     * void
+     * TODO
+     */
+    public void removeComplexSpeciesAlias(ComplexSpeciesAlias complexSpeciesAlias) {
+    	annotation.getExtension().getListOfComplexSpeciesAliases().getComplexSpeciesAlias().remove(complexSpeciesAlias);
+    }
+    
     /**
      * 
      * @return
@@ -167,6 +223,26 @@ public class ModelWrapper extends Model {
 
     /**
      * 
+     * @param speciesAlias
+     * void
+     * TODO
+     */
+    public void addSpeciesAlias(SpeciesAlias speciesAlias){
+    	 annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias().add(speciesAlias);
+    }
+    
+    /**
+     * 
+     * @param speciesAlias
+     * void
+     * TODO
+     */
+    public void removeSpeciesAlias(SpeciesAlias speciesAlias){
+    	 annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias().remove(speciesAlias);
+    }
+    
+    /**
+     * 
      * @return
      * ListOfGroups
      * TODO
@@ -187,6 +263,27 @@ public class ModelWrapper extends Model {
 
     /**
      * 
+     * @param group
+     * void
+     * TODO
+     */
+    public void addGroup(Group group){
+    	annotation.getExtension().getListOfGroups().getGroup().add(group);
+    }
+    
+    /**
+     * 
+     * @param group
+     * void
+     * TODO
+     */
+    public void removeGroup(Group group){
+    	annotation.getExtension().getListOfGroups().getGroup().remove(group);
+    }
+    
+    
+    /**
+     * 
      * @return
      * ListOfProteins
      * TODO
@@ -204,6 +301,27 @@ public class ModelWrapper extends Model {
     public void setListOfProteins(ListOfProteins value) {
     	annotation.getExtension().setListOfProteins(value);
     }
+
+    /**
+     * 
+     * @param protein
+     * void
+     * TODO
+     */
+    public void addProtein(Protein protein){
+    	annotation.getExtension().getListOfProteins().getProtein().add(protein);
+    }
+
+    /**
+     * 
+     * @param protein
+     * void
+     * TODO
+     */
+    public void removeProtein(Protein protein){
+    	annotation.getExtension().getListOfProteins().getProtein().remove(protein);
+    }
+    
 
     /**
      * 
@@ -227,6 +345,26 @@ public class ModelWrapper extends Model {
 
     /**
      * 
+     * @param gene
+     * void
+     * TODO
+     */
+    public void addGene(Gene gene){
+    	annotation.getExtension().getListOfGenes().getGene().add(gene);
+    }
+    
+    /**
+     * 
+     * @param gene
+     * void
+     * TODO
+     */
+    public void removeGene(Gene gene){
+    	annotation.getExtension().getListOfGenes().getGene().remove(gene);
+    }
+    
+    /**
+     * 
      * @return
      * ListOfRNAs
      * TODO
@@ -245,6 +383,26 @@ public class ModelWrapper extends Model {
     	annotation.getExtension().setListOfRNAs(value);
     }
 
+    /**
+     * 
+     * @param rna
+     * void
+     * TODO
+     */
+    public void addRNA(RNA rna){
+    	annotation.getExtension().getListOfRNAs().getRNA().add(rna);
+    }
+    
+    /**
+     * 
+     * @param rna
+     * void
+     * TODO
+     */
+    public void removeRNA(RNA rna){
+    	annotation.getExtension().getListOfRNAs().getRNA().remove(rna);
+    }
+    
     /**
      * 
      * @return
@@ -267,6 +425,26 @@ public class ModelWrapper extends Model {
 
     /**
      * 
+     * @param antisenseRNA
+     * void
+     * TODO
+     */
+    public void addAntisenseRNA(AntisenseRNA antisenseRNA){
+    	annotation.getExtension().getListOfAntisenseRNAs().getAntisenseRNA().add(antisenseRNA);
+    }
+    
+    /**
+     * 
+     * @param antisenseRNA
+     * void
+     * TODO
+     */
+    public void removeAntisenseRNA(AntisenseRNA antisenseRNA){
+    	annotation.getExtension().getListOfAntisenseRNAs().getAntisenseRNA().remove(antisenseRNA);
+    }
+    
+    /**
+     * 
      * @return
      * ListOfLayers
      * TODO
@@ -287,6 +465,27 @@ public class ModelWrapper extends Model {
 
     /**
      * 
+     * @param layer
+     * void
+     * TODO
+     */
+    public void addLayer(Layer layer){
+    	 annotation.getExtension().getListOfLayers().getLayer().add(layer);
+    }
+    
+    /**
+     * 
+     * @param layer
+     * void
+     * TODO
+     */
+    public void removeLayer(Layer layer){
+    	 annotation.getExtension().getListOfLayers().getLayer().remove(layer);
+    }
+    
+    
+    /**
+     * 
      * @return
      * ListOfBlockDiagrams
      * TODO
@@ -305,4 +504,23 @@ public class ModelWrapper extends Model {
     	annotation.getExtension().setListOfBlockDiagrams(value);
     }
 
+    /**
+     * 
+     * @param blockDiagram
+     * void
+     * TODO
+     */
+    public void addBlockDiagram(BlockDiagram blockDiagram){
+    	annotation.getExtension().getListOfBlockDiagrams().getBlockDiagram().add(blockDiagram);
+    }
+    
+    /**
+     * 
+     * @param blockDiagram
+     * void
+     * TODO
+     */
+    public void removeBlockDiagram(BlockDiagram blockDiagram){
+    	annotation.getExtension().getListOfBlockDiagrams().getBlockDiagram().remove(blockDiagram);
+    }
 }

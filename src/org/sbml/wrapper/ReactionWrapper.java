@@ -117,6 +117,26 @@ public class ReactionWrapper extends Reaction{
 
        /**
         * 
+        * @param link
+        * void
+        * TODO
+        */
+       public void addReactantLink(ReactantLink link){
+    	   annotation.getExtension().getListOfReactantLinks().getReactantLink().add(link);
+       }
+
+       /**
+        * 
+        * @param link
+        * void
+        * TODO
+        */
+       public void removeReactantLink(ReactantLink link){
+    	   annotation.getExtension().getListOfReactantLinks().getReactantLink().remove(link);
+       }
+       
+       /**
+        * 
         * @return
         * ListOfProductLinks
         * TODO
@@ -133,6 +153,26 @@ public class ReactionWrapper extends Reaction{
         */
        public void setListOfProductLinks(ListOfProductLinks value) {
     	   annotation.getExtension().setListOfProductLinks(value);
+       }
+       
+       /**
+        * 
+        * @param link
+        * void
+        * TODO
+        */
+       public void addProductLink(ProductLink link){
+    	   annotation.getExtension().getListOfProductLinks().getProductLink().add(link);
+       }
+
+       /**
+        * 
+        * @param link
+        * void
+        * TODO
+        */
+       public void removeProductLink(ProductLink link){
+    	   annotation.getExtension().getListOfProductLinks().getProductLink().remove(link);
        }
 
        /**
@@ -235,4 +275,23 @@ public class ReactionWrapper extends Reaction{
     	   annotation.getExtension().setListOfModification(value);
        }
 
+       /**
+        * 
+        * @param modification
+        * void
+        * TODO
+        */
+       public void addModification(Modification modification){
+    	   annotation.getExtension().getListOfModification().getModification().add(modification);
+       }
+
+       /**
+        * 
+        * @param modification
+        * void
+        * TODO
+        */
+       public void removeModification(Modification modification){
+    	   annotation.getExtension().getListOfModification().getModification().remove(modification);
+       }
 }

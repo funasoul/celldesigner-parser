@@ -94,4 +94,12 @@ public class SpeciesWrapper extends Species{
 	public void setListOfCatalyzedReactions(ListOfCatalyzedReactions value) {
 		annotation.getExtension().setListOfCatalyzedReactions(value);
 	}
+	
+	public void addCatalyzedReaction(Catalyzed catalyzed){
+		annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed().add(catalyzed);
+	}
+	
+	public void removeCatalyzedReaction(Catalyzed catalyzed){
+		annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed().remove(catalyzed);
+	}
 }

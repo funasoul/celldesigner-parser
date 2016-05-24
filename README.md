@@ -64,4 +64,5 @@ public class APItest {
 ```
 
 ## So, what's next?
-Based on this generated parser API, we will add several convenient APIs which will directly obtain CellDesigner-Extensions from SBML objects.
+- Based on this generated parser API, we will add several convenient APIs which will directly obtain CellDesigner-Extensions from SBML objects.
+- Decide what to do with current implementation of [JSBML](https://github.com/sbmlteam/jsbml).

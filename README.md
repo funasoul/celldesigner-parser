@@ -48,7 +48,7 @@ public class APItest {
     Sbml sbml = null;
     try {
       context = JAXBContext.newInstance(Sbml.class);
-        Unmarshaller unmarshaller = context.createUnmarshaller();
+      Unmarshaller unmarshaller = context.createUnmarshaller();
       Object schemaObject = JAXBIntrospector.getValue(unmarshaller.unmarshal(new File("sample.xml")));
       sbml = (Sbml) schemaObject;
     } catch (JAXBException e) {

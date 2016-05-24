@@ -1,5 +1,7 @@
 package org.sbml.wrapper;
 
+import java.util.List;
+
 import org.sbml._2001.ns.celldesigner.BaseProducts;
 import org.sbml._2001.ns.celldesigner.BaseReactants;
 import org.sbml._2001.ns.celldesigner.ConnectScheme;
@@ -8,8 +10,10 @@ import org.sbml._2001.ns.celldesigner.Line;
 import org.sbml._2001.ns.celldesigner.ListOfModification;
 import org.sbml._2001.ns.celldesigner.ListOfProductLinks;
 import org.sbml._2001.ns.celldesigner.ListOfReactantLinks;
+import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml._2001.ns.celldesigner.Offset;
-import org.sbml._2001.ns.celldesigner.ReactionAnnotationType;
+import org.sbml._2001.ns.celldesigner.ProductLink;
+import org.sbml._2001.ns.celldesigner.ReactantLink;
 import org.sbml.sbml.level2.version4.Reaction;
 
 /**
@@ -97,8 +101,8 @@ public class ReactionWrapper extends Reaction{
         * ListOfReactantLinks
         * TODO
         */
-       public ListOfReactantLinks getListOfReactantLinks() {
-           return annotation.getExtension().getListOfReactantLinks();
+       public List<ReactantLink> getListOfReactantLinks() {
+           return annotation.getExtension().getListOfReactantLinks().getReactantLink();
        }
 
        /**
@@ -117,8 +121,8 @@ public class ReactionWrapper extends Reaction{
         * ListOfProductLinks
         * TODO
         */
-       public ListOfProductLinks getListOfProductLinks() {
-           return annotation.getExtension().getListOfProductLinks();
+       public List<ProductLink> getListOfProductLinks() {
+           return annotation.getExtension().getListOfProductLinks().getProductLink();
        }
 
        /**
@@ -217,8 +221,8 @@ public class ReactionWrapper extends Reaction{
         * ListOfModification
         * TODO
         */
-       public ListOfModification getListOfModification() {
-           return annotation.getExtension().getListOfModification();
+       public List<Modification> getListOfModification() {
+           return annotation.getExtension().getListOfModification().getModification();
        }
 
        /**

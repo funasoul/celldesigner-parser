@@ -1,6 +1,5 @@
 package org.sbml.wrapper;
 
-import org.sbml._2001.ns.celldesigner.CompartmentAnnotationType;
 import org.sbml.sbml.level2.version4.Compartment;
 
 /**

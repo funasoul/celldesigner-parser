@@ -1,7 +1,9 @@
 package org.sbml.wrapper;
 
+import java.util.List;
+
+import org.sbml._2001.ns.celldesigner.Catalyzed;
 import org.sbml._2001.ns.celldesigner.ListOfCatalyzedReactions;
-import org.sbml._2001.ns.celldesigner.SpeciesAnnotationType;
 import org.sbml._2001.ns.celldesigner.SpeciesIdentity;
 import org.sbml.sbml.level2.version4.Species;
 
@@ -79,8 +81,8 @@ public class SpeciesWrapper extends Species{
 	 * ListOfCatalyzedReactions
 	 * TODO
 	 */
-	public ListOfCatalyzedReactions getListOfCatalyzedReactions() {
-		return annotation.getExtension().getListOfCatalyzedReactions();
+	public List<Catalyzed> getListOfCatalyzedReactions() {
+		return annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
 	}
 
 	/**

@@ -1,11 +1,19 @@
 package org.sbml.wrapper;
 
 import java.math.BigDecimal;
+import java.util.List;
 
+import org.sbml._2001.ns.celldesigner.AntisenseRNA;
+import org.sbml._2001.ns.celldesigner.BlockDiagram;
+import org.sbml._2001.ns.celldesigner.CompartmentAlias;
+import org.sbml._2001.ns.celldesigner.Gene;
+import org.sbml._2001.ns.celldesigner.Group;
+import org.sbml._2001.ns.celldesigner.Layer;
 import org.sbml._2001.ns.celldesigner.ListOfAntisenseRNAs;
 import org.sbml._2001.ns.celldesigner.ListOfBlockDiagrams;
 import org.sbml._2001.ns.celldesigner.ListOfCompartmentAliases;
 import org.sbml._2001.ns.celldesigner.ListOfComplexSpeciesAliases;
+import org.sbml._2001.ns.celldesigner.ListOfComplexSpeciesAliases.ComplexSpeciesAlias;
 import org.sbml._2001.ns.celldesigner.ListOfGenes;
 import org.sbml._2001.ns.celldesigner.ListOfGroups;
 import org.sbml._2001.ns.celldesigner.ListOfIncludedSpecies;
@@ -13,18 +21,23 @@ import org.sbml._2001.ns.celldesigner.ListOfLayers;
 import org.sbml._2001.ns.celldesigner.ListOfProteins;
 import org.sbml._2001.ns.celldesigner.ListOfRNAs;
 import org.sbml._2001.ns.celldesigner.ListOfSpeciesAliases;
-import org.sbml._2001.ns.celldesigner.ModelAnnotationType;
 import org.sbml._2001.ns.celldesigner.ModelDisplay;
+import org.sbml._2001.ns.celldesigner.Protein;
+import org.sbml._2001.ns.celldesigner.RNA;
+import org.sbml._2001.ns.celldesigner.Species;
+import org.sbml._2001.ns.celldesigner.SpeciesAlias;
 import org.sbml.sbml.level2.version4.Model;
 
 /**
  * @author Kaito Ii
  *
  * Date Created: May 24, 2016
+ * 
  */
 
 public class ModelWrapper extends Model {
 
+	
 	/**
 	 * 
 	 * @return
@@ -71,8 +84,8 @@ public class ModelWrapper extends Model {
      * ListOfIncludedSpecies
      * TODO
      */
-    public ListOfIncludedSpecies getListOfIncludedSpecies() {
-        return annotation.getExtension().getListOfIncludedSpecies();
+    public  List<Species> getListOfIncludedSpecies() {
+        return annotation.getExtension().getListOfIncludedSpecies().getSpecies();
     }
 
     /**
@@ -85,14 +98,19 @@ public class ModelWrapper extends Model {
     	annotation.getExtension().setListOfIncludedSpecies(value);
     }
 
+    public void addIncludedSpecies(Species value){
+    	annotation.getExtension().getListOfIncludedSpecies().getSpecies().add(value);
+    }
+    
     /**
      * 
+     * @param <CompartmentAliases>
      * @return
      * ListOfCompartmentAliases
      * TODO
      */
-    public ListOfCompartmentAliases getListOfCompartmentAliases() {
-        return annotation.getExtension().getListOfCompartmentAliases();
+    public List<CompartmentAlias> getListOfCompartmentAliases() {
+        return annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias();
     }
 
     /**
@@ -111,8 +129,8 @@ public class ModelWrapper extends Model {
      * ListOfComplexSpeciesAliases
      * TODO
      */
-    public ListOfComplexSpeciesAliases getListOfComplexSpeciesAliases() {
-        return annotation.getExtension().getListOfComplexSpeciesAliases();
+    public List<ComplexSpeciesAlias> getListOfComplexSpeciesAliases() {
+        return annotation.getExtension().getListOfComplexSpeciesAliases().getComplexSpeciesAlias();
     }
 
     /**
@@ -131,8 +149,8 @@ public class ModelWrapper extends Model {
      * ListOfSpeciesAliases
      * TODO
      */
-    public ListOfSpeciesAliases getListOfSpeciesAliases() {
-        return annotation.getExtension().getListOfSpeciesAliases();
+    public List<SpeciesAlias> getListOfSpeciesAliases() {
+        return annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias();
     }
 
     /**
@@ -153,8 +171,8 @@ public class ModelWrapper extends Model {
      * ListOfGroups
      * TODO
      */
-    public ListOfGroups getListOfGroups() {
-        return annotation.getExtension().getListOfGroups();
+    public List<Group> getListOfGroups() {
+        return annotation.getExtension().getListOfGroups().getGroup();
     }
 
     /**
@@ -173,8 +191,8 @@ public class ModelWrapper extends Model {
      * ListOfProteins
      * TODO
      */
-    public ListOfProteins getListOfProteins() {
-        return annotation.getExtension().getListOfProteins();
+    public List<Protein> getListOfProteins() {
+        return annotation.getExtension().getListOfProteins().getProtein();
     }
 
     /**
@@ -193,8 +211,8 @@ public class ModelWrapper extends Model {
      * ListOfGenes
      * TODO
      */
-    public ListOfGenes getListOfGenes() {
-        return annotation.getExtension().getListOfGenes();
+    public List<Gene> getListOfGenes() {
+        return annotation.getExtension().getListOfGenes().getGene();
     }
 
     /**
@@ -213,8 +231,8 @@ public class ModelWrapper extends Model {
      * ListOfRNAs
      * TODO
      */
-    public ListOfRNAs getListOfRNAs() {
-        return annotation.getExtension().getListOfRNAs();
+    public List<RNA> getListOfRNAs() {
+        return annotation.getExtension().getListOfRNAs().getRNA();
     }
 
     /**
@@ -233,8 +251,8 @@ public class ModelWrapper extends Model {
      * ListOfAntisenseRNAs
      * TODO
      */
-    public ListOfAntisenseRNAs getListOfAntisenseRNAs() {
-        return annotation.getExtension().getListOfAntisenseRNAs();
+    public List<AntisenseRNA> getListOfAntisenseRNAs() {
+        return annotation.getExtension().getListOfAntisenseRNAs().getAntisenseRNA();
     }
 
     /**
@@ -253,8 +271,8 @@ public class ModelWrapper extends Model {
      * ListOfLayers
      * TODO
      */
-    public ListOfLayers getListOfLayers() {
-        return annotation.getExtension().getListOfLayers();
+    public List<Layer> getListOfLayers() {
+        return annotation.getExtension().getListOfLayers().getLayer();
     }
 
     /**
@@ -273,8 +291,8 @@ public class ModelWrapper extends Model {
      * ListOfBlockDiagrams
      * TODO
      */
-	public ListOfBlockDiagrams getListOfBlockDiagrams() {
-        return annotation.getExtension().getListOfBlockDiagrams();
+	public List<BlockDiagram> getListOfBlockDiagrams() {
+        return annotation.getExtension().getListOfBlockDiagrams().getBlockDiagram();
     }
 
     /**

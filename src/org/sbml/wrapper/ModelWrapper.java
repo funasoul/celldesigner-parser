@@ -35,8 +35,7 @@ import org.sbml.sbml.level2.version4.Model;
  * 
  */
 
-public class ModelWrapper extends Model {
-
+public class ModelWrapper extends Model {	
 	
 	/**
 	 * 
@@ -120,7 +119,6 @@ public class ModelWrapper extends Model {
     
     /**
      * 
-     * @param <CompartmentAliases>
      * @return
      * ListOfCompartmentAliases
      * TODO

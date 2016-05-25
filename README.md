@@ -68,5 +68,9 @@ public class APItest {
 ```
 
 ## So, what's next?
-- Based on this generated parser API, we will add several convenient APIs which will directly obtain CellDesigner-Extensions from SBML objects.
+- Based on this generated parser API, we will add several convenient APIs which will directly obtain CellDesigner-Extensions from SBML objects. For example:
+  * Create a Factory Class which will accept an SBML file as an input and returns an instance of ModelWrapper.
+  * Create a wrapper class for SpeciesAlias
+  * Add a reference to its parent Species instance for SpeciesAlias class.
+  * Add a reference to its parent Model instance for each SBase class.
 - Decide what to do with current implementation of [JSBML](https://github.com/sbmlteam/jsbml).

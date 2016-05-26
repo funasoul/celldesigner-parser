@@ -17,9 +17,29 @@ import org.sbml._2001.ns.celldesigner.SpeciesTag;
 
 public class SpeciesAliasWrapper extends SpeciesAlias {
 
+	ModelWrapper modelWrapper;
 	Species species;
+	SpeciesWrapper speciesWrapper;
 	CompartmentAlias compartmentAlias;
 	ComplexSpeciesAlias complexSpeciesAlias;
+	SpeciesAlias speciesAlias;
+	
+	public SpeciesAliasWrapper(SpeciesAlias speciesAlias, ModelWrapper modelWrapper){
+		this.modelWrapper = modelWrapper;
+		this.speciesAlias = speciesAlias;
+		this.activity = speciesAlias.getActivity();
+		this.bounds = speciesAlias.getBounds();
+		this.briefView = speciesAlias.getBriefView();
+		this.id = speciesAlias.getId();
+		this.info = speciesAlias.getInfo();
+		this.listOfSpeciesTag = speciesAlias.getListOfSpeciesTag();
+		this.structuralState = speciesAlias.getStructuralState();
+		this.usualView = speciesAlias.getUsualView();
+		this.compartmentAlias = modelWrapper.getCompartmentAliasById(speciesAlias.getCompartmentAlias());
+		this.complexSpeciesAlias = modelWrapper.getComplexSpeciesAliasById(speciesAlias.getComplexSpeciesAlias());
+		this.speciesWrapper = modelWrapper.getSpeciesWrapperById(speciesAlias.getSpecies());
+		
+	}
 	
 	/**
 	 * 
@@ -59,6 +79,11 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
      */
     public void setSpecies(Species value) {
         this.species = value;
+    }
+    
+    
+    public SpeciesWrapper getSpeciesWrapperAliased(){
+    	return speciesWrapper;
     }
     
     /**

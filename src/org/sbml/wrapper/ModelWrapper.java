@@ -1,6 +1,7 @@
 package org.sbml.wrapper;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.sbml._2001.ns.celldesigner.AntisenseRNA;
@@ -24,9 +25,16 @@ import org.sbml._2001.ns.celldesigner.ListOfSpeciesAliases;
 import org.sbml._2001.ns.celldesigner.ModelDisplay;
 import org.sbml._2001.ns.celldesigner.Protein;
 import org.sbml._2001.ns.celldesigner.RNA;
-import org.sbml._2001.ns.celldesigner.Species;
 import org.sbml._2001.ns.celldesigner.SpeciesAlias;
+import org.sbml.sbml.level2.version4.Compartment;
+import org.sbml.sbml.level2.version4.Event;
+import org.sbml.sbml.level2.version4.FunctionDefinition;
 import org.sbml.sbml.level2.version4.Model;
+import org.sbml.sbml.level2.version4.Parameter;
+import org.sbml.sbml.level2.version4.Reaction;
+import org.sbml.sbml.level2.version4.Rule;
+import org.sbml.sbml.level2.version4.Species;
+import org.sbml.sbml.level2.version4.UnitDefinition;
 
 /**
  * @author Kaito Ii
@@ -36,6 +44,249 @@ import org.sbml.sbml.level2.version4.Model;
  */
 
 public class ModelWrapper extends Model {	
+	
+	Model model;
+	List<CompartmentWrapper> cWrapperList;
+	List<ReactionWrapper> rWrapperList;
+	List<SpeciesWrapper> sWrapperList;
+	List<SpeciesAliasWrapper> sAliasWrapperList;
+	
+	List<Event> eventList;
+	List<FunctionDefinition> functionDefinitionList;
+	List<Parameter> parameterList;
+	List<Rule> ruleList;
+	List<UnitDefinition> unitDefinitionList;
+	
+	List<AntisenseRNA> antiSenseRNAList;
+	List<BlockDiagram> blockDiagramList;
+	List<CompartmentAlias> cAliasList;
+	List<ComplexSpeciesAlias> complexSAliasList;
+	List<Gene> geneList;
+	List<Species> includedSpeciesList;
+	List<Layer> layerList;
+	List<Protein> proteinList;
+	List<RNA> rnaList;
+	
+	
+	
+	public ModelWrapper(Model model){
+		this.model = model;
+		this.annotation = model.getAnnotation();
+		this.id = model.getId();
+		this.eventList = model.getListOfEvents().getEvent();
+		this.functionDefinitionList = model.getListOfFunctionDefinitions().getFunctionDefinition();
+		this.parameterList = model.getListOfParameters().getParameter();
+		this.ruleList = model.getListOfRules().getAlgebraicRuleOrAssignmentRuleOrRateRule();
+		this.unitDefinitionList = model.getListOfUnitDefinitions().getUnitDefinition();
+		this.metaid = model.getMetaid();
+		this.name = model.getName();
+		this.notes = model.getNotes();
+		
+		this.setListOfAntisenseRNAs(annotation.getExtension().getListOfAntisenseRNAs());
+		this.setListOfBlockDiagrams(annotation.getExtension().getListOfBlockDiagrams());
+		this.setListOfCompartmentAliases(annotation.getExtension().getListOfCompartmentAliases());
+		this.setListOfComplexSpeciesAliases(annotation.getExtension().getListOfComplexSpeciesAliases());
+		this.setListOfGenes(annotation.getExtension().getListOfGenes());
+		this.setListOfGroups(annotation.getExtension().getListOfGroups());
+		this.setListOfIncludedSpecies(annotation.getExtension().getListOfIncludedSpecies());
+		this.setListOfLayers(annotation.getExtension().getListOfLayers());
+		this.setListOfProteins(annotation.getExtension().getListOfProteins());
+		this.setListOfRNAs(annotation.getExtension().getListOfRNAs());
+		this.setModelDisplay(annotation.getExtension().getModelDisplay());
+		this.setModelVersion(annotation.getExtension().getModelVersion());
+	
+		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
+		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
+		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
+		this.sAliasWrapperList = createSpeciesAliasWrapperList(annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias());
+		
+	}
+
+	
+	/**
+	 * 
+	 * @param cList
+	 * @return
+	 * List<CompartmentWrapper>
+	 * TODO
+	 */
+	public List<CompartmentWrapper> createCompartmentWrapperList(List<Compartment> cList){
+		List<CompartmentWrapper> cwList = new ArrayList<CompartmentWrapper>(cList.size());
+		for(Compartment c : cList)
+			cwList.add(new CompartmentWrapper(c, this));
+		
+		return cwList;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * List<CompartmentWrapper>
+	 * TODO
+	 */
+	public List<CompartmentWrapper> getListOfCompartmentWrapper(){
+		return cWrapperList;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * CompartmentWrapper
+	 * TODO
+	 */
+	public CompartmentWrapper getCompartmentWrapperById(String id){
+		for(CompartmentWrapper cw : cWrapperList)
+			if(cw.getId().equals(id))
+				return cw;
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param rList
+	 * @return
+	 * List<ReactionWrapper>
+	 * TODO
+	 */
+	public List<ReactionWrapper> createReactionWrapperList(List<Reaction> rList){
+		List<ReactionWrapper> rwList = new ArrayList<ReactionWrapper>(rList.size());
+		for(Reaction r : rList)
+			rwList.add(new ReactionWrapper(r, this));
+		
+		return rwList;
+	}
+
+	/**
+	 * 
+	 * @return
+	 * List<ReactionWrapper>
+	 * TODO
+	 */
+	public List<ReactionWrapper> getListOfReactionWrapper(){
+		return rWrapperList;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * ReactionWrapper
+	 * TODO
+	 */
+	public ReactionWrapper getReactionWrapperById(String id){
+		for(ReactionWrapper rw : rWrapperList)
+			if(rw.getId().equals(id))
+				return rw;
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param sList
+	 * @return
+	 * List<SpeciesWrapper>
+	 * TODO
+	 */
+	public List<SpeciesWrapper> createSpeciesWrapperList(List<Species> sList){
+		List<SpeciesWrapper> swList = new ArrayList<SpeciesWrapper>(sList.size());
+		for(Species s : sList)
+			swList.add(new SpeciesWrapper(s, this));
+		
+		return swList;
+	}
+
+	public List<SpeciesWrapper> getListOfSpeciesWrapper(){
+		return sWrapperList;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * SpeciesWrapper
+	 * TODO
+	 */
+	public SpeciesWrapper getSpeciesWrapperById(String id){
+		for(SpeciesWrapper sw : sWrapperList)
+			if(sw.getId().equals(id))
+				return sw;
+		
+		return null;
+	}
+	
+	
+	/**
+	 * 
+	 * @param saList
+	 * @return
+	 * List<SpeciesAliasWrapper>
+	 * TODO
+	 */
+	public List<SpeciesAliasWrapper> createSpeciesAliasWrapperList(List<SpeciesAlias> saList){
+		List<SpeciesAliasWrapper> sawList = new ArrayList<SpeciesAliasWrapper>(saList.size());
+		for(SpeciesAlias sa : saList)
+			sawList.add(new SpeciesAliasWrapper(sa, this));
+		
+		return sawList;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * List<SpeciesAliasWrapper>
+	 * TODO
+	 */
+	public List<SpeciesAliasWrapper> getListOfSpeciesAliasWrapper(){
+		return sAliasWrapperList;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * SpeciesAliasWrapper
+	 * TODO
+	 */
+	public SpeciesAliasWrapper getSpeciesAliasWrapperById(String id){
+		for(SpeciesAliasWrapper saw : sAliasWrapperList)
+			if(saw.getId().equals(id))
+				return saw;
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * CompartmentAlias
+	 * TODO
+	 */
+	public CompartmentAlias getCompartmentAliasById(String id){
+		for(CompartmentAlias ca : cAliasList)
+			if(ca.getId().equals(id))
+				return ca;
+		
+		return null;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * ComplexSpeciesAlias
+	 * TODO
+	 */
+	public ComplexSpeciesAlias getComplexSpeciesAliasById(String id){
+		for(ComplexSpeciesAlias csa : complexSAliasList)
+			if(csa.getId().equals(id))
+				return csa;
+		
+		return null;
+	}
 	
 	/**
 	 * 
@@ -77,15 +328,15 @@ public class ModelWrapper extends Model {
     	annotation.getExtension().setModelDisplay(value);
     }
 
-    /**
-     * 
-     * @return
-     * ListOfIncludedSpecies
-     * TODO
-     */
-    public  List<Species> getListOfIncludedSpecies() {
-        return annotation.getExtension().getListOfIncludedSpecies().getSpecies();
-    }
+//    /**
+//     * 
+//     * @return
+//     * ListOfIncludedSpecies
+//     * TODO
+//     */
+//    public  List<Species> getListOfIncludedSpecies() {
+//        return annotation.getExtension().getListOfIncludedSpecies().getSpecies();
+//    }
 
     /**
      * 
@@ -94,29 +345,30 @@ public class ModelWrapper extends Model {
      * TODO
      */
     public void setListOfIncludedSpecies(ListOfIncludedSpecies value) {
+//    	includedSpeciesList = value.getSpecies();
     	annotation.getExtension().setListOfIncludedSpecies(value);
     }
 
-    /**
-     * 
-     * @param species
-     * void
-     * TODO
-     */
-    public void addIncludedSpecies(Species species){
-    	annotation.getExtension().getListOfIncludedSpecies().getSpecies().add(species);
-    }
-    
-    /**
-     * 
-     * @param species
-     * void
-     * TODO
-     */
-    public void removeIncludedSpecies(Species species){
-    	annotation.getExtension().getListOfIncludedSpecies().getSpecies().remove(species);
-    }
-    
+//    /**
+//     * 
+//     * @param species
+//     * void
+//     * TODO
+//     */
+//    public void addIncludedSpecies(Species species){
+//    	annotation.getExtension().getListOfIncludedSpecies().getSpecies().add(species);
+//    }
+//    
+//    /**
+//     * 
+//     * @param species
+//     * void
+//     * TODO
+//     */
+//    public void removeIncludedSpecies(Species species){
+//    	annotation.getExtension().getListOfIncludedSpecies().getSpecies().remove(species);
+//    }
+//    
     /**
      * 
      * @return
@@ -134,6 +386,7 @@ public class ModelWrapper extends Model {
      * TODO
      */
     public void setListOfCompartmentAliases(ListOfCompartmentAliases value) {
+    	cAliasList = value.getCompartmentAlias();
     	annotation.getExtension().setListOfCompartmentAliases(value);
     }
 
@@ -174,6 +427,7 @@ public class ModelWrapper extends Model {
      * TODO
      */
     public void setListOfComplexSpeciesAliases(ListOfComplexSpeciesAliases value) {
+    	complexSAliasList = value.getComplexSpeciesAlias();
     	annotation.getExtension().setListOfComplexSpeciesAliases(value);
     }
 
@@ -208,15 +462,14 @@ public class ModelWrapper extends Model {
     }
 
     /**
-     * Sets the value of the listOfSpeciesAliases property.
      * 
      * @param value
-     *     allowed object is
-     *     {@link ListOfSpeciesAliases }
-     *     
+     * void
+     * TODO
      */
     public void setListOfSpeciesAliases(ListOfSpeciesAliases value) {
-    	annotation.getExtension().setListOfSpeciesAliases(value);
+    	sAliasWrapperList = createSpeciesAliasWrapperList(value.getSpeciesAlias());
+    	annotation.getExtension().setListOfSpeciesAliases(value);	
     }
 
     /**
@@ -417,7 +670,7 @@ public class ModelWrapper extends Model {
      * void
      * TODO
      */
-    public void setListOfAntisenseRNAs(ListOfAntisenseRNAs value) {
+    private void setListOfAntisenseRNAs(ListOfAntisenseRNAs value) {
     	annotation.getExtension().setListOfAntisenseRNAs(value);
     }
 
@@ -440,7 +693,7 @@ public class ModelWrapper extends Model {
     public void removeAntisenseRNA(AntisenseRNA antisenseRNA){
     	annotation.getExtension().getListOfAntisenseRNAs().getAntisenseRNA().remove(antisenseRNA);
     }
-    
+        
     /**
      * 
      * @return

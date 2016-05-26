@@ -1,6 +1,7 @@
 package sample;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -46,11 +47,13 @@ public class APITest {
       str += sa.getBounds().getW() + " x " + sa.getBounds().getH() + "]";
       System.out.println(str);
     }
+    
     List<Species> sList = sbml.getModel().getListOfSpecies().getSpecies();
     for(Species s : sList){
       String str = s.getAnnotation().getExtension().getPositionToCompartment();
       System.out.println(s.getId() + ":" + str);
     }
+  
   }
 
 }

@@ -1,6 +1,7 @@
 package org.sbml.wrapper;
 
 import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
+import org.sbml.sbml.level2.version4.SpeciesReference;
 
 /**
  * @author Kaito Ii
@@ -9,7 +10,20 @@ import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
  */
 
 public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
-
+	
+	ModifierSpeciesReference sRef;
+	ModelWrapper modelWrapper;
+	SpeciesReference species;
+	
+	public ModifierSpeciesReferenceWrapper(ModifierSpeciesReference sRef, ModelWrapper modelWrapper){
+		 this.sRef =  sRef;
+		 this.modelWrapper = modelWrapper;
+		 this.annotation = sRef.getAnnotation();
+		 this.metaid = sRef.getMetaid();
+		 this.notes = sRef.getNotes();
+		 //this.species = sRef.getSpecies();
+	}
+	
 	/**
 	 * 
 	 * @return

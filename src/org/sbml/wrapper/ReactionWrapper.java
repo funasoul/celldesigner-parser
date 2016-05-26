@@ -27,6 +27,25 @@ import org.sbml.sbml.level2.version4.Reaction;
  */
 public class ReactionWrapper extends Reaction{
 				
+		Reaction reaction;
+		ModelWrapper modelWrapper;
+	
+		public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper){
+			this.reaction = reaction;
+			this.modelWrapper = modelWrapper;
+			this.annotation = reaction.getAnnotation();
+			this.fast = reaction.isFast();
+			this.id = reaction.getId();
+			this.kineticLaw = reaction.getKineticLaw();
+//			this.listOfModifiers = reaction.getListOfModifiers();
+//			this.listOfProducts = reaction.getListOfProducts();
+//			this.listOfReactants = reaction.getListOfReactants();
+			this.metaid = reaction.getMetaid();
+			this.name = reaction.getName();
+			this.notes = reaction.getNotes();
+			this.reversible = reaction.isReversible();
+		}
+		
 	   public String getName() {
            return annotation.getExtension().getName();
        }

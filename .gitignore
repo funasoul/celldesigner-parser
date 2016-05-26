@@ -25,10 +25,6 @@ hs_err_pid*
 
 /bin/
 
-<<<<<<< HEAD
-# eclipse
-=======
 # Eclipse
->>>>>>> c85489f57004c0847434c656a1ea3e3c2785f524
 .classpath
 .project

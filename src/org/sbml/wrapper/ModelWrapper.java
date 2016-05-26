@@ -73,14 +73,14 @@ public class ModelWrapper extends Model {
 		this.model = model;
 		this.annotation = model.getAnnotation();
 		this.id = model.getId();
-		this.eventList = model.getListOfEvents().getEvent();
-		this.functionDefinitionList = model.getListOfFunctionDefinitions().getFunctionDefinition();
-		this.parameterList = model.getListOfParameters().getParameter();
-		this.ruleList = model.getListOfRules().getAlgebraicRuleOrAssignmentRuleOrRateRule();
-		this.unitDefinitionList = model.getListOfUnitDefinitions().getUnitDefinition();
-		this.metaid = model.getMetaid();
-		this.name = model.getName();
-		this.notes = model.getNotes();
+//		this.eventList = model.getListOfEvents().getEvent();
+//		this.functionDefinitionList = model.getListOfFunctionDefinitions().getFunctionDefinition();
+//		this.parameterList = model.getListOfParameters().getParameter();
+//		this.ruleList = model.getListOfRules().getAlgebraicRuleOrAssignmentRuleOrRateRule();
+//		this.unitDefinitionList = model.getListOfUnitDefinitions().getUnitDefinition();
+//		this.metaid = model.getMetaid();
+//		this.name = model.getName();
+//		this.notes = model.getNotes();
 		
 		this.setListOfAntisenseRNAs(annotation.getExtension().getListOfAntisenseRNAs());
 		this.setListOfBlockDiagrams(annotation.getExtension().getListOfBlockDiagrams());

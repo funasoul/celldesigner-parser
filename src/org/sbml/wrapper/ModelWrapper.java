@@ -94,14 +94,31 @@ public class ModelWrapper extends Model {
 		this.setListOfRNAs(annotation.getExtension().getListOfRNAs());
 		this.setModelDisplay(annotation.getExtension().getModelDisplay());
 		this.setModelVersion(annotation.getExtension().getModelVersion());
-	
 		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
 		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
 		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
 		this.sAliasWrapperList = createSpeciesAliasWrapperList(annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias());
-		
 	}
 
+	/**
+	 * 
+	 * @return
+	 * short
+	 * TODO
+	 */
+	public short getSizeX(){
+		return annotation.getExtension().getModelDisplay().getSizeX();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * short
+	 * TODO
+	 */
+	public short getSizeY(){
+		return annotation.getExtension().getModelDisplay().getSizeY();
+	}
 	
 	/**
 	 * 

@@ -36,4 +36,11 @@ public class CompartmentWrapper extends Compartment {
 	public void setName(String value){
 		annotation.getExtension().setName(value);;
 	}
+	
+	public boolean isSetName(){
+		if(annotation == null || annotation.getExtension().getName() == null)
+			return false;
+		
+		return true;
+	}
 }

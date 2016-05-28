@@ -1,8 +1,11 @@
 package org.sbml.wrapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import org.sbml._2001.ns.celldesigner.BaseProduct;
 import org.sbml._2001.ns.celldesigner.BaseProducts;
+import org.sbml._2001.ns.celldesigner.BaseReactant;
 import org.sbml._2001.ns.celldesigner.BaseReactants;
 import org.sbml._2001.ns.celldesigner.ConnectScheme;
 import org.sbml._2001.ns.celldesigner.EditPoints;
@@ -14,7 +17,9 @@ import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml._2001.ns.celldesigner.Offset;
 import org.sbml._2001.ns.celldesigner.ProductLink;
 import org.sbml._2001.ns.celldesigner.ReactantLink;
+import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 import org.sbml.sbml.level2.version4.Reaction;
+import org.sbml.sbml.level2.version4.SpeciesReference;
 
 /**
  * @author Kaito Ii
@@ -29,7 +34,10 @@ public class ReactionWrapper extends Reaction{
 				
 		Reaction reaction;
 		ModelWrapper modelWrapper;
-	
+		List<SpeciesReferenceWrapper> reactantWrapperList;
+		List<SpeciesReferenceWrapper> productWrapperList;
+		List<ModifierSpeciesReferenceWrapper> modifierWrapperList;
+		
 		public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper){
 			this.reaction = reaction;
 			this.modelWrapper = modelWrapper;
@@ -37,13 +45,17 @@ public class ReactionWrapper extends Reaction{
 			this.fast = reaction.isFast();
 			this.id = reaction.getId();
 			this.kineticLaw = reaction.getKineticLaw();
-//			this.listOfModifiers = reaction.getListOfModifiers();
-//			this.listOfProducts = reaction.getListOfProducts();
-//			this.listOfReactants = reaction.getListOfReactants();
+			this.listOfModifiers = reaction.getListOfModifiers();
+			this.listOfProducts = reaction.getListOfProducts();
+			this.listOfReactants = reaction.getListOfReactants();
 			this.metaid = reaction.getMetaid();
 			this.name = reaction.getName();
 			this.notes = reaction.getNotes();
 			this.reversible = reaction.isReversible();
+			
+			reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
+			productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
+			//modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());					
 		}
 		
 	   public String getName() {
@@ -80,8 +92,8 @@ public class ReactionWrapper extends Reaction{
         * BaseReactants
         * TODO
         */
-       public BaseReactants getBaseReactants() {
-           return annotation.getExtension().getBaseReactants();
+       public List<BaseReactant> getBaseReactants() {
+           return annotation.getExtension().getBaseReactants().getBaseReactant();
        }
 
        /**
@@ -100,8 +112,8 @@ public class ReactionWrapper extends Reaction{
         * BaseProducts
         * TODO
         */
-       public BaseProducts getBaseProducts() {
-           return annotation.getExtension().getBaseProducts();
+       public List<BaseProduct> getBaseProducts() {
+           return annotation.getExtension().getBaseProducts().getBaseProduct();
        }
 
        /**
@@ -312,5 +324,29 @@ public class ReactionWrapper extends Reaction{
         */
        public void removeModification(Modification modification){
     	   annotation.getExtension().getListOfModification().getModification().remove(modification);
+       }
+       
+       public List<SpeciesReferenceWrapper> createReactantWrapperList(List<SpeciesReference> srList){
+    	   List<SpeciesReferenceWrapper> srwList = new ArrayList<SpeciesReferenceWrapper>(srList.size());
+    	   for(SpeciesReference sr : srList)
+    		   srwList.add(new SpeciesReferenceWrapper(sr, modelWrapper));
+    		   
+    	   return srwList;
+       }
+       
+       public List<SpeciesReferenceWrapper> createProductWrapperList(List<SpeciesReference> srList){
+    	   List<SpeciesReferenceWrapper> srwList = new ArrayList<SpeciesReferenceWrapper>(srList.size());
+    	   for(SpeciesReference sr : srList)
+    		   srwList.add(new SpeciesReferenceWrapper(sr, modelWrapper));
+    		   
+    	   return srwList;
+       }
+       
+       public List<ModifierSpeciesReferenceWrapper> createModifierWrapperList(List<ModifierSpeciesReference> msrList){
+    	   List<ModifierSpeciesReferenceWrapper> msrwList = new ArrayList<ModifierSpeciesReferenceWrapper>(msrList.size());
+    	   for(ModifierSpeciesReference msr : msrList)
+    		   msrwList.add(new ModifierSpeciesReferenceWrapper(msr, modelWrapper));
+    		   
+    	   return msrwList;
        }
 }

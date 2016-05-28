@@ -5,7 +5,6 @@ import java.util.List;
 import org.sbml._2001.ns.celldesigner.Catalyzed;
 import org.sbml._2001.ns.celldesigner.ListOfCatalyzedReactions;
 import org.sbml._2001.ns.celldesigner.SpeciesIdentity;
-import org.sbml.sbml.level2.version4.Compartment;
 import org.sbml.sbml.level2.version4.Species;
 
 /**
@@ -18,7 +17,7 @@ public class SpeciesWrapper extends Species{
 	
 	ModelWrapper modelWrapper;
 	Species species;
-	Compartment compartment;
+	CompartmentWrapper compartmentWrapper;
 	
 	public SpeciesWrapper(Species species, ModelWrapper modelWrapper){
 		this.modelWrapper = modelWrapper;
@@ -26,7 +25,6 @@ public class SpeciesWrapper extends Species{
 		this.annotation = species.getAnnotation();
 		this.boundaryCondition = species.isBoundaryCondition();
 		this.charge = species.getCharge();
-		//this.compartment = species.getCompartment();
 		this.constant = species.isConstant();
 		this.hasOnlySubstanceUnits = species.isHasOnlySubstanceUnits();
 		this.id = species.getId();
@@ -37,6 +35,8 @@ public class SpeciesWrapper extends Species{
 		this.notes = species.getNotes();
 		this.spatialSizeUnits = species.getSpatialSizeUnits();
 		this.substanceUnits = species.getSubstanceUnits();
+		
+		this.compartmentWrapper = modelWrapper.getCompartmentWrapperById(species.getCompartment());
 	}
 	
 	/**

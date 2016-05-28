@@ -38,7 +38,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.compartmentAlias = modelWrapper.getCompartmentAliasById(speciesAlias.getCompartmentAlias());
 		this.complexSpeciesAlias = modelWrapper.getComplexSpeciesAliasById(speciesAlias.getComplexSpeciesAlias());
 		this.speciesWrapper = modelWrapper.getSpeciesWrapperById(speciesAlias.getSpecies());
-		
+		this.view = speciesAlias.getView();
 	}
 	
 	/**

@@ -9,7 +9,9 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.JAXBIntrospector;
 import javax.xml.bind.Unmarshaller;
 
+import org.sbml._2001.ns.celldesigner.ConnectScheme;
 import org.sbml._2001.ns.celldesigner.SpeciesAlias;
+import org.sbml.sbml.level2.version4.Reaction;
 import org.sbml.sbml.level2.version4.Sbml;
 import org.sbml.sbml.level2.version4.Species;
 
@@ -53,7 +55,14 @@ public class APITest {
       String str = s.getAnnotation().getExtension().getPositionToCompartment();
       System.out.println(s.getId() + ":" + str);
     }
-  
+
+    List<Reaction> rList = sbml.getModel().getListOfReactions().getReaction();
+    for(Reaction r : rList){
+    	System.out.println(r.getId() + ":" + r.getAnnotation().getExtension().getReaction() + ", " + r.getAnnotation().getExtension().getName());
+    	ConnectScheme cs = r.getAnnotation().getExtension().getConnectScheme();
+    	System.out.println("connect policy " + cs.getConnectPolicy());
+    }
+    
   }
 
 }

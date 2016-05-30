@@ -1,65 +1,51 @@
 package sample;
 
-import java.io.File;
 import java.util.List;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.JAXBIntrospector;
-import javax.xml.bind.Unmarshaller;
 
 import org.sbml._2001.ns.celldesigner.ConnectScheme;
 import org.sbml._2001.ns.celldesigner.SpeciesAlias;
-import org.sbml.sbml.level2.version4.Reaction;
-import org.sbml.sbml.level2.version4.Sbml;
-import org.sbml.sbml.level2.version4.Species;
+import org.sbml.wrapper.ModelWrapper;
+import org.sbml.wrapper.ObjectFactory;
+import org.sbml.wrapper.ReactionWrapper;
 
 
 /**
  * @author Kaito Ii
- * @autho Akira Funahashi
+ * @author Akira Funahashi
  *
  * Date Created: May 20, 2016
- * Date Modified: May 24, 2016
+ * Date Modified: May 30, 2016
  */
 
 public class APITest {
 
   /**
+   * 
    * @param args
-   * void
    */
   public static void main(String[] args) {
-    JAXBContext context;
-    Sbml sbml = null;
+    ModelWrapper model = null;
     try {
-      context = JAXBContext.newInstance(Sbml.class);
-      Unmarshaller unmarshaller = context.createUnmarshaller();
-      Object schemaObject = JAXBIntrospector.getValue(unmarshaller.unmarshal(new File("sample/sample.xml")));
-      sbml = (Sbml) schemaObject;
+      model = ObjectFactory.unmarshalSBML("sample/sample.xml");
     } catch (JAXBException e) {
       e.printStackTrace();
-    }
-
-    List<SpeciesAlias> saList = sbml.getModel().getAnnotation().getExtension().getListOfSpeciesAliases().getSpeciesAlias();
+    } 
+    // ListOfSpeciesAlias
+    List<SpeciesAlias> saList = model.getListOfSpeciesAliases();
     for (SpeciesAlias sa : saList) {
       String str = sa.getId() + ":" + sa.getSpecies() + ":";
       str += "(" + sa.getBounds().getX() + "," + sa.getBounds().getY() + ") [";
       str += sa.getBounds().getW() + " x " + sa.getBounds().getH() + "]";
       System.out.println(str);
     }
-    
-    List<Species> sList = sbml.getModel().getListOfSpecies().getSpecies();
-    for(Species s : sList){
-      String str = s.getAnnotation().getExtension().getPositionToCompartment();
-      System.out.println(s.getId() + ":" + str);
-    }
-
-    List<Reaction> rList = sbml.getModel().getListOfReactions().getReaction();
-    for(Reaction r : rList){
-    	System.out.println(r.getId() + ":" + r.getAnnotation().getExtension().getReactionType() + ", " + r.getAnnotation().getExtension().getName());
-    	ConnectScheme cs = r.getAnnotation().getExtension().getConnectScheme();
-    	System.out.println("connect policy " + cs.getConnectPolicy());
+    // ListOfReactions
+    List<ReactionWrapper> rList = model.getListOfReactionWrapper();
+    for(ReactionWrapper r : rList){
+    	System.out.println(r.getId() + ": " + r.getReactionType());
+    	ConnectScheme cs = r.getConnectScheme();
+    	System.out.println("connect policy: " + cs.getConnectPolicy());
     }
     
   }

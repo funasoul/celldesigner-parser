@@ -72,8 +72,8 @@ public class ReactionWrapper extends Reaction{
         * String
         * TODO
         */
-       public String getReaction() {
-           return annotation.getExtension().getReaction();
+       public String getReactionType() {
+           return annotation.getExtension().getReactionType();
        }
        
        /**
@@ -82,8 +82,8 @@ public class ReactionWrapper extends Reaction{
         * void
         * TODO
         */
-       public void setReaction(String value) {
-           annotation.getExtension().setReaction(value);
+       public void setReactionType(String value) {
+           annotation.getExtension().setReactionType(value);
        }
 
        /**

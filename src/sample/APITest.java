@@ -1,7 +1,6 @@
 package sample;
 
 import java.io.File;
-import java.math.BigDecimal;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -58,7 +57,7 @@ public class APITest {
 
     List<Reaction> rList = sbml.getModel().getListOfReactions().getReaction();
     for(Reaction r : rList){
-    	System.out.println(r.getId() + ":" + r.getAnnotation().getExtension().getReaction() + ", " + r.getAnnotation().getExtension().getName());
+    	System.out.println(r.getId() + ":" + r.getAnnotation().getExtension().getReactionType() + ", " + r.getAnnotation().getExtension().getName());
     	ConnectScheme cs = r.getAnnotation().getExtension().getConnectScheme();
     	System.out.println("connect policy " + cs.getConnectPolicy());
     }

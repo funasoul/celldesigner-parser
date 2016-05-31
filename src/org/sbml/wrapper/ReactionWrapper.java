@@ -27,9 +27,6 @@ import org.sbml.sbml.level2.version4.SpeciesReference;
  * Date Created: May 24, 2016
  */
 
-/**
- * @author
- */
 public class ReactionWrapper extends Reaction{
 				
 		Reaction reaction;
@@ -37,6 +34,7 @@ public class ReactionWrapper extends Reaction{
 		List<SpeciesReferenceWrapper> reactantWrapperList;
 		List<SpeciesReferenceWrapper> productWrapperList;
 		List<ModifierSpeciesReferenceWrapper> modifierWrapperList;
+		boolean isSetModifiers = true;
 		
 		public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper){
 			this.reaction = reaction;
@@ -55,7 +53,10 @@ public class ReactionWrapper extends Reaction{
 			
 			reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
 			productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
-			//modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());					
+			if(listOfModifiers != null)
+				modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
+			else
+				isSetModifiers = false;
 		}
 		
 	   public String getName() {
@@ -326,6 +327,13 @@ public class ReactionWrapper extends Reaction{
     	   annotation.getExtension().getListOfModification().getModification().remove(modification);
        }
        
+       /**
+        * 
+        * @param srList
+        * @return
+        * List<SpeciesReferenceWrapper>
+        * TODO
+        */
        public List<SpeciesReferenceWrapper> createReactantWrapperList(List<SpeciesReference> srList){
     	   List<SpeciesReferenceWrapper> srwList = new ArrayList<SpeciesReferenceWrapper>(srList.size());
     	   for(SpeciesReference sr : srList)
@@ -333,7 +341,24 @@ public class ReactionWrapper extends Reaction{
     		   
     	   return srwList;
        }
+
+       /**
+        * 
+        * @return
+        * List<SpeciesReferenceWrapper>
+        * TODO
+        */
+       public List<SpeciesReferenceWrapper> getListOfReactantWrapper(){
+    	   return reactantWrapperList;
+       }
        
+       /**
+        * 
+        * @param srList
+        * @return
+        * List<SpeciesReferenceWrapper>
+        * TODO
+        */
        public List<SpeciesReferenceWrapper> createProductWrapperList(List<SpeciesReference> srList){
     	   List<SpeciesReferenceWrapper> srwList = new ArrayList<SpeciesReferenceWrapper>(srList.size());
     	   for(SpeciesReference sr : srList)
@@ -342,11 +367,48 @@ public class ReactionWrapper extends Reaction{
     	   return srwList;
        }
        
+       /**
+        * 
+        * @return
+        * List<SpeciesReferenceWrapper>
+        * TODO
+        */
+       public List<SpeciesReferenceWrapper> getListOfProductWrapper(){
+    	   return productWrapperList;
+       }
+       
+       /**
+        * 
+        * @param msrList
+        * @return
+        * List<ModifierSpeciesReferenceWrapper>
+        * TODO
+        */
        public List<ModifierSpeciesReferenceWrapper> createModifierWrapperList(List<ModifierSpeciesReference> msrList){
     	   List<ModifierSpeciesReferenceWrapper> msrwList = new ArrayList<ModifierSpeciesReferenceWrapper>(msrList.size());
     	   for(ModifierSpeciesReference msr : msrList)
     		   msrwList.add(new ModifierSpeciesReferenceWrapper(msr, modelWrapper));
     		   
     	   return msrwList;
+       }
+       
+       /**
+        * 
+        * @return
+        * List<SpeciesReferenceWrapper>
+        * TODO
+        */
+       public List<ModifierSpeciesReferenceWrapper> getListOfModifierWrapper(){
+    	   return modifierWrapperList;
+       }
+       
+       /**
+        * 
+        * @return
+        * boolean
+        * TODO
+        */
+       public boolean isSetModifier(){
+    	   return isSetModifiers;
        }
 }

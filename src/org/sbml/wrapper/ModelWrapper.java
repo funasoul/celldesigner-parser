@@ -95,9 +95,9 @@ public class ModelWrapper extends Model {
 		this.setModelDisplay(annotation.getExtension().getModelDisplay());
 		this.setModelVersion(annotation.getExtension().getModelVersion());
 		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
-		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
 		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
 		this.sAliasWrapperList = createSpeciesAliasWrapperList(annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias());
+		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
 	}
 
 	/**

@@ -13,7 +13,6 @@ public class SpeciesReferenceWrapper extends SpeciesReference{
 	
 	ModelWrapper modelWrapper;
 	SpeciesReference sRef;
-	SimpleSpeciesReference species;
 	
 	public SpeciesReferenceWrapper(SpeciesReference sRef, ModelWrapper modelWrapper){
 		this.sRef = sRef;
@@ -21,7 +20,7 @@ public class SpeciesReferenceWrapper extends SpeciesReference{
 		this.annotation = sRef.getAnnotation();
 		this.metaid = sRef.getMetaid();
 		this.notes = sRef.getNotes();
-		//this.species = sRef.getSpecies();
+		this.species = sRef.getSpecies();
 		this.stoichiometry = sRef.getStoichiometry();
 		this.stoichiometryMath = sRef.getStoichiometryMath();
 	}
@@ -46,4 +45,14 @@ public class SpeciesReferenceWrapper extends SpeciesReference{
         annotation.getExtension().setAlias(value);
     }
 
+	/**
+	 * 
+	 * @return
+	 * SpeciesAliasWrapper
+	 * TODO
+	 */
+	public SpeciesAliasWrapper getAliased(){
+		return modelWrapper.getSpeciesAliasWrapperById(getAlias());
+	}
+	
 }

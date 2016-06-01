@@ -37,6 +37,7 @@ import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 import org.sbml.jsbml.ext.layout.TextGlyph;
+import org.sbml.sbml.level2.version4.SpeciesReference;
 import org.sbml.wrapper.CompartmentWrapper;
 import org.sbml.wrapper.ModelWrapper;
 import org.sbml.wrapper.ModifierSpeciesReferenceWrapper;
@@ -75,63 +76,63 @@ public class LayoutConverter {
 		
 		
 	public void print(){
-		
-		System.out.println(mWrapper.getId());
-		rwList = mWrapper.getListOfReactionWrapper();
-		swList = mWrapper.getListOfSpeciesWrapper();
-		cwList  = mWrapper.getListOfCompartmentWrapper();
-		sawList  = mWrapper.getListOfSpeciesAliasWrapper();
-		
-		for(ReactionWrapper rw : rwList){
-			System.out.println(rw.getId());
-			System.out.println("reaction : " +  rw.getReactionType());
-			System.out.println("name " + rw.getName());
-			List<BaseReactant> rl = rw.getBaseReactants();
-			for(BaseReactant br : rl){
-				System.out.println("species : " + br.getSpecies());
-				System.out.println("alias : " + br.getAlias());
-				System.out.println("link anchor position : " + br.getLinkAnchor().getPosition());
-			}
-			
-			List<BaseProduct> pl = rw.getBaseProducts();
-			for(BaseProduct pr : pl){
-				System.out.println("species : " + pr.getSpecies());
-				System.out.println("alias : " + pr.getAlias());
-				System.out.println("link anchor position : " + pr.getLinkAnchor().getPosition());
-			}
-
-			List<SpeciesReferenceWrapper> rList = rw.getListOfReactantWrapper();			
-			for(SpeciesReferenceWrapper srw : rList){
-				System.out.println(srw.getAliased().getId());
-			}
-
-			List<SpeciesReferenceWrapper> pList = rw.getListOfProductWrapper();			
-			for(SpeciesReferenceWrapper srw : pList){
-				System.out.println(srw.getAliased().getId());
-			}
-
-			if(rw.isSetModifier()){
-				List<ModifierSpeciesReferenceWrapper> msrwList = rw.getListOfModifierWrapper();			
-					for(ModifierSpeciesReferenceWrapper msrw : msrwList)
-						System.out.println(msrw.getAliased().getId());
-			}
-			
-			ConnectScheme cs = rw.getConnectScheme();
-			System.out.println("connect policy : " + cs.getConnectPolicy());
-			System.out.println("rectangle index : " + cs.getRectangleIndex());
-			
-			List<LineDirection> ld = cs.getListOfLineDirection().getLineDirection();
-			for(LineDirection l : ld){
-				System.out.println("value : " + l.getValue());
-				System.out.println("index : " + l.getIndex());
-				System.out.println("arm : " + l.getArm());
-			}
-			
-			System.out.println("line color : " + rw.getLine().getColor());
-			System.out.println("width : " + rw.getLine().getWidth());
-			
-		}
-		
+//		
+//		System.out.println(mWrapper.getId());
+//		rwList = mWrapper.getListOfReactionWrapper();
+//		swList = mWrapper.getListOfSpeciesWrapper();
+//		cwList  = mWrapper.getListOfCompartmentWrapper();
+//		sawList  = mWrapper.getListOfSpeciesAliasWrapper();
+//		
+//		for(ReactionWrapper rw : rwList){
+//			System.out.println(rw.getId());
+//			System.out.println("reaction : " +  rw.getReactionType());
+//			System.out.println("name " + rw.getName());
+//			List<BaseReactant> rl = rw.getBaseReactants();
+//			for(BaseReactant br : rl){
+//				System.out.println("species : " + br.getSpecies());
+//				System.out.println("alias : " + br.getAlias());
+//				System.out.println("link anchor position : " + br.getLinkAnchor().getPosition());
+//			}
+//			
+//			List<BaseProduct> pl = rw.getBaseProducts();
+//			for(BaseProduct pr : pl){
+//				System.out.println("species : " + pr.getSpecies());
+//				System.out.println("alias : " + pr.getAlias());
+//				System.out.println("link anchor position : " + pr.getLinkAnchor().getPosition());
+//			}
+//
+//			List<SpeciesReferenceWrapper> rList = rw.getListOfReactantWrapper();			
+//			for(SpeciesReferenceWrapper srw : rList){
+//				System.out.println(srw.getAliased().getId());
+//			}
+//
+//			List<SpeciesReferenceWrapper> pList = rw.getListOfProductWrapper();			
+//			for(SpeciesReferenceWrapper srw : pList){
+//				System.out.println(srw.getAliased().getId());
+//			}
+//
+//			if(rw.isSetModifier()){
+//				List<ModifierSpeciesReferenceWrapper> msrwList = rw.getListOfModifierWrapper();			
+//					for(ModifierSpeciesReferenceWrapper msrw : msrwList)
+//						System.out.println(msrw.getAliased().getId());
+//			}
+//			
+//			ConnectScheme cs = rw.getConnectScheme();
+//			System.out.println("connect policy : " + cs.getConnectPolicy());
+//			System.out.println("rectangle index : " + cs.getRectangleIndex());
+//			
+//			List<LineDirection> ld = cs.getListOfLineDirection().getLineDirection();
+//			for(LineDirection l : ld){
+//				System.out.println("value : " + l.getValue());
+//				System.out.println("index : " + l.getIndex());
+//				System.out.println("arm : " + l.getArm());
+//			}
+//			
+//			System.out.println("line color : " + rw.getLine().getColor());
+//			System.out.println("width : " + rw.getLine().getWidth());
+//			
+//		}
+//		
 //		for(SpeciesWrapper sw : swList){
 //			System.out.println(sw.getId());
 //			System.out.println("position to compartment : " + sw.getPositionToCompartment());
@@ -274,6 +275,7 @@ public class LayoutConverter {
 				SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_" + rg.getReaction() + "_" + msrw.getSpecies());
 				srg.setSpeciesReference(msrw.getAlias());
 				srg.setRole(SpeciesReferenceRole.MODIFIER);
+				
 			}
 		}		
 		

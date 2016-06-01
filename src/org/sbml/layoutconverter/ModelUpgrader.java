@@ -11,7 +11,7 @@ import org.sbml.jsbml.SBMLDocument;
 public class ModelUpgrader {
 	
 	public static SBMLDocument upgrade(SBMLDocument document){
-		
+		document.setLevelAndVersion(3, 1);
 		
 		return document;
 	}

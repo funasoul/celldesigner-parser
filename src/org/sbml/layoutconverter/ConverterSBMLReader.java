@@ -24,13 +24,14 @@ public class ConverterSBMLReader {
 	
 	public static SBMLDocument read(File file) throws XMLStreamException, IOException{
 		SBMLDocument document = SBMLReader.read(file);
+		if(document.getLevel() < 3)
+			document = ModelUpgrader.upgrade(document);
+
 		int level = document.getLevel();
 		int version = document.getVersion();
 		
-		if(document.getLevel() < 3)
-			document = ModelUpgrader.upgrade(document);
-		
 		document.enablePackage(LayoutConstants.getNamespaceURI(level, version), true);
+		document.setPackageRequired(LayoutConstants.getNamespaceURI(level, version), true);
 //		document.enablePackage(GroupsConstants.getNamespaceURI(level, version), true);
 		
 		

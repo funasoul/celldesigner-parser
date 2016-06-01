@@ -53,10 +53,11 @@ public class ReactionWrapper extends Reaction{
 			
 			reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
 			productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
-			if(listOfModifiers != null)
+			if(listOfModifiers != null){
 				modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
-			else
+			} else {
 				isSetModifiers = false;
+			}	
 		}
 		
 	   public String getName() {

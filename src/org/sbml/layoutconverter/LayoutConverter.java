@@ -297,8 +297,8 @@ public class LayoutConverter {
 			point.setZ(0d);
 			bb.setPosition(point);
 			
-			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + saw.getId());
-			tg.setOriginOfText(saw.getId());
+			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + saw.getSpeciesWrapperAliased().getId());
+			tg.setOriginOfText( saw.getSpeciesWrapperAliased().getId());
 			tg.setGraphicalObject(sg);
 			BoundingBox bb2 = tg.createBoundingBox();;
 			Dimensions dimension2 = bb2.createDimensions();
@@ -306,8 +306,8 @@ public class LayoutConverter {
 			dimension2.setHeight(10);
 			dimension.setDepth(1d);
 			Point point2 = bb2.createPosition();
-			point2.setX(bound.getX().doubleValue());
-			point2.setY(bound.getY().doubleValue());
+			point2.setX(bound.getX().doubleValue() + dimension.getWidth()/2 - dimension2.getWidth()/2);
+			point2.setY(bound.getY().doubleValue() + dimension.getHeight()/2 - dimension2.getHeight()/2);
 			point2.setZ(0d);
 		}
 	}

@@ -18,7 +18,7 @@ import org.sbml._2001.ns.celldesigner.SpeciesTag;
 public class SpeciesAliasWrapper extends SpeciesAlias {
 
 	ModelWrapper modelWrapper;
-	Species species;
+	Species speciesAliased;
 	SpeciesWrapper speciesWrapper;
 	CompartmentAlias compartmentAlias;
 	ComplexSpeciesAlias complexSpeciesAlias;
@@ -39,6 +39,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.complexSpeciesAlias = modelWrapper.getComplexSpeciesAliasById(speciesAlias.getComplexSpeciesAlias());
 		this.speciesWrapper = modelWrapper.getSpeciesWrapperById(speciesAlias.getSpecies());
 		this.view = speciesAlias.getView();
+		this.species = speciesAlias.getSpecies();
 	}
 	
 	/**
@@ -68,7 +69,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
      * TODO
      */
     public Species getSpeciesAliased() {
-        return species;
+        return speciesAliased;
     }
 
     /**
@@ -78,7 +79,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
      * TODO
      */
     public void setSpecies(Species value) {
-        this.species = value;
+        this.speciesAliased = value;
     }
     
     

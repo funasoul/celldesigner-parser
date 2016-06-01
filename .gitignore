@@ -30,3 +30,7 @@ hs_err_pid*
 .project
 .settings/
 /target/
+
+
+# JSBML
+jsbml.log

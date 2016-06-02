@@ -8,7 +8,6 @@ import javax.xml.stream.XMLStreamException;
 
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
-import org.sbml.jsbml.ext.groups.GroupsConstants;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 
 /**
@@ -32,7 +31,8 @@ public class ConverterSBMLReader {
 		
 		document.enablePackage(LayoutConstants.getNamespaceURI(level, version), true);
 		document.setPackageRequired(LayoutConstants.getNamespaceURI(level, version), true);
-//		document.enablePackage(GroupsConstants.getNamespaceURI(level, version), true);
+
+		//		document.enablePackage(GroupsConstants.getNamespaceURI(level, version), true);
 		
 		
 		return document;

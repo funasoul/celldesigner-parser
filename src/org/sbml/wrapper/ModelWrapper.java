@@ -50,6 +50,7 @@ public class ModelWrapper extends Model {
 	List<ReactionWrapper> rWrapperList;
 	List<SpeciesWrapper> sWrapperList;
 	List<SpeciesAliasWrapper> sAliasWrapperList;
+	List<CompartmentAliasWrapper>  cAliasWrapperList;
 	
 	List<Event> eventList;
 	List<FunctionDefinition> functionDefinitionList;
@@ -66,8 +67,6 @@ public class ModelWrapper extends Model {
 	List<Layer> layerList;
 	List<Protein> proteinList;
 	List<RNA> rnaList;
-	
-	
 	
 	public ModelWrapper(Model model){
 		this.model = model;
@@ -96,8 +95,9 @@ public class ModelWrapper extends Model {
 		this.setModelVersion(annotation.getExtension().getModelVersion());
 		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
 		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
-		this.sAliasWrapperList = createSpeciesAliasWrapperList(annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias());
 		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
+		this.sAliasWrapperList = createSpeciesAliasWrapperList(annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias());
+		this.cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias());
 	}
 
 	/**
@@ -118,6 +118,31 @@ public class ModelWrapper extends Model {
 	 */
 	public short getSizeY(){
 		return annotation.getExtension().getModelDisplay().getSizeY();
+	}
+	
+	/**
+	 * 
+	 * @param cList
+	 * @return
+	 * List<CompartmentWrapper>
+	 * TODO
+	 */
+	public List<CompartmentAliasWrapper> createCompartmentAliasWrapperList(List<CompartmentAlias> caList){
+		List<CompartmentAliasWrapper> cawList = new ArrayList<CompartmentAliasWrapper>(caList.size());
+		for(CompartmentAlias ca : caList)
+			cawList.add(new CompartmentAliasWrapper(ca, this));
+		
+		return cawList;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * List<CompartmentWrapper>
+	 * TODO
+	 */
+	public List<CompartmentAliasWrapper> getListOfCompartmentAliasWrapper(){
+		return cAliasWrapperList;
 	}
 	
 	/**

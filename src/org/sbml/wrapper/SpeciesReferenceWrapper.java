@@ -1,6 +1,5 @@
 package org.sbml.wrapper;
 
-import org.sbml.sbml.level2.version4.SimpleSpeciesReference;
 import org.sbml.sbml.level2.version4.SpeciesReference;
 
 /**

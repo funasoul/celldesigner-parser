@@ -42,6 +42,51 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.species = speciesAlias.getSpecies();
 	}
 	
+	public int getSBOTerm(){
+		return 1;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * double
+	 * TODO
+	 */
+	public double getH(){
+		return bounds.getH().doubleValue();
+	}
+
+	/**
+	 * 
+	 * @return
+	 * double
+	 * TODO
+	 */
+	public double getW(){
+		return bounds.getW().doubleValue();
+	}
+
+	
+	/**
+	 * 
+	 * @return
+	 * double
+	 * TODO
+	 */
+	public double getX(){
+		return bounds.getX().doubleValue();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * double
+	 * TODO
+	 */
+	public double getY(){
+		return bounds.getY().doubleValue();
+	}
+	
 	/**
 	 * 
 	 * @return
@@ -82,7 +127,12 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
         this.speciesAliased = value;
     }
     
-    
+    /**
+     * 
+     * @return
+     * SpeciesWrapper
+     * TODO
+     */
     public SpeciesWrapper getSpeciesWrapperAliased(){
     	return speciesWrapper;
     }

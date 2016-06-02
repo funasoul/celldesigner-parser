@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<sbml xmlns="http://www.sbml.org/sbml/level2/version4" xmlns:mathml="http://www.w3.org/1998/Math/MathML" xmlns:celldesigner="http://www.sbml.org/2001/ns/celldesigner" level="2" version="4">
-<model metaid="ex1" id="ex1" sboTerm="SBO:0000231">
+<sbml xmlns="http://www.sbml.org/sbml/level2/version4" xmlns:celldesigner="http://www.sbml.org/2001/ns/celldesigner" level="2" version="4">
+<model metaid="untitled" id="ex4" sboTerm="SBO:0000231">
 <annotation>
 <celldesigner:extension>
 <celldesigner:modelVersion>4.0</celldesigner:modelVersion>
@@ -8,9 +8,9 @@
 <celldesigner:listOfCompartmentAliases/>
 <celldesigner:listOfComplexSpeciesAliases/>
 <celldesigner:listOfSpeciesAliases>
-<celldesigner:speciesAlias id="sa1" species="A">
+<celldesigner:speciesAlias id="sa1" species="s1">
 <celldesigner:activity>inactive</celldesigner:activity>
-<celldesigner:bounds x="150.0" y="156.0" w="80.0" h="40.0"/>
+<celldesigner:bounds x="223.0" y="25.0" w="80.0" h="40.0"/>
 <celldesigner:font size="12"/>
 <celldesigner:view state="usual"/>
 <celldesigner:usualView>
@@ -22,14 +22,14 @@
 <celldesigner:briefView>
 <celldesigner:innerPosition x="0.0" y="0.0"/>
 <celldesigner:boxSize width="80.0" height="60.0"/>
-<celldesigner:singleLine width="1.0"/>
+<celldesigner:singleLine width="0.0"/>
 <celldesigner:paint color="3fff0000" scheme="Color"/>
 </celldesigner:briefView>
 <celldesigner:info state="empty" angle="-1.5707963267948966"/>
 </celldesigner:speciesAlias>
-<celldesigner:speciesAlias id="sa2" species="B">
+<celldesigner:speciesAlias id="sa2" species="s2">
 <celldesigner:activity>inactive</celldesigner:activity>
-<celldesigner:bounds x="360.0" y="156.0" w="80.0" h="40.0"/>
+<celldesigner:bounds x="227.0" y="184.0" w="80.0" h="40.0"/>
 <celldesigner:font size="12"/>
 <celldesigner:view state="usual"/>
 <celldesigner:usualView>
@@ -41,7 +41,7 @@
 <celldesigner:briefView>
 <celldesigner:innerPosition x="0.0" y="0.0"/>
 <celldesigner:boxSize width="80.0" height="60.0"/>
-<celldesigner:singleLine width="1.0"/>
+<celldesigner:singleLine width="0.0"/>
 <celldesigner:paint color="3fff0000" scheme="Color"/>
 </celldesigner:briefView>
 <celldesigner:info state="empty" angle="-1.5707963267948966"/>
@@ -49,8 +49,8 @@
 </celldesigner:listOfSpeciesAliases>
 <celldesigner:listOfGroups/>
 <celldesigner:listOfProteins>
-<celldesigner:protein id="pr1" name="A" type="GENERIC"/>
-<celldesigner:protein id="pr2" name="B" type="GENERIC"/>
+<celldesigner:protein id="pr1" name="s1" type="GENERIC"/>
+<celldesigner:protein id="pr2" name="s2" type="GENERIC"/>
 </celldesigner:listOfProteins>
 <celldesigner:listOfGenes/>
 <celldesigner:listOfRNAs/>
@@ -90,7 +90,7 @@
 <compartment metaid="default" id="default" size="1" units="volume" sboTerm="SBO:0000240"/>
 </listOfCompartments>
 <listOfSpecies>
-<species metaid="s1" id="A" name="A" compartment="default" initialAmount="0.1" hasOnlySubstanceUnits="true" charge="0" sboTerm="SBO:0000252">
+<species metaid="s1" id="s1" name="s1" compartment="default" initialAmount="0" sboTerm="SBO:0000252">
 <annotation>
 <celldesigner:extension>
 <celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
@@ -101,7 +101,7 @@
 </celldesigner:extension>
 </annotation>
 </species>
-<species metaid="s2" id="B" name="B" compartment="default" initialAmount="0" sboTerm="SBO:0000252">
+<species metaid="s2" id="s2" name="s2" compartment="default" initialAmount="0" sboTerm="SBO:0000252">
 <annotation>
 <celldesigner:extension>
 <celldesigner:positionToCompartment>inside</celldesigner:positionToCompartment>
@@ -114,18 +114,18 @@
 </species>
 </listOfSpecies>
 <listOfReactions>
-<reaction metaid="re2" id="re2" reversible="false" fast="false" sboTerm="SBO:0000176">
+<reaction metaid="re1" id="re1" reversible="false" sboTerm="SBO:0000176">
 <annotation>
 <celldesigner:extension>
 <celldesigner:reactionType>STATE_TRANSITION</celldesigner:reactionType>
 <celldesigner:baseReactants>
-<celldesigner:baseReactant species="A" alias="sa1">
-<celldesigner:linkAnchor position="E"/>
+<celldesigner:baseReactant species="s1" alias="sa1">
+<celldesigner:linkAnchor position="S"/>
 </celldesigner:baseReactant>
 </celldesigner:baseReactants>
 <celldesigner:baseProducts>
-<celldesigner:baseProduct species="B" alias="sa2">
-<celldesigner:linkAnchor position="W"/>
+<celldesigner:baseProduct species="s2" alias="sa2">
+<celldesigner:linkAnchor position="N"/>
 </celldesigner:baseProduct>
 </celldesigner:baseProducts>
 <celldesigner:connectScheme connectPolicy="direct" rectangleIndex="0">
@@ -137,7 +137,7 @@
 </celldesigner:extension>
 </annotation>
 <listOfReactants>
-<speciesReference metaid="CDMT00001" sboTerm="SBO:0000010" species="A">
+<speciesReference metaid="CDMT00001" sboTerm="SBO:0000010" species="s1">
 <annotation>
 <celldesigner:extension>
 <celldesigner:alias>sa1</celldesigner:alias>
@@ -146,7 +146,7 @@
 </speciesReference>
 </listOfReactants>
 <listOfProducts>
-<speciesReference metaid="CDMT00002" sboTerm="SBO:0000011" species="B">
+<speciesReference metaid="CDMT00002" sboTerm="SBO:0000011" species="s2">
 <annotation>
 <celldesigner:extension>
 <celldesigner:alias>sa2</celldesigner:alias>
@@ -154,18 +154,6 @@
 </annotation>
 </speciesReference>
 </listOfProducts>
-<kineticLaw metaid="CDMT00008" sboTerm="SBO:0000001">
-<math xmlns="http://www.w3.org/1998/Math/MathML">
-<apply>
-<times/>
-<ci> k </ci>
-<ci> A </ci>
-</apply>
-</math>
-<listOfParameters>
-<parameter metaid="k" id="k" name="k" value="0.3" units="substance"/>
-</listOfParameters>
-</kineticLaw>
 </reaction>
 </listOfReactions>
 </model>

@@ -1,5 +1,6 @@
 package org.sbml.wrapper;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,6 +18,7 @@ import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml._2001.ns.celldesigner.Offset;
 import org.sbml._2001.ns.celldesigner.ProductLink;
 import org.sbml._2001.ns.celldesigner.ReactantLink;
+import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 import org.sbml.sbml.level2.version4.Reaction;
 import org.sbml.sbml.level2.version4.SpeciesReference;
@@ -35,6 +37,8 @@ public class ReactionWrapper extends Reaction{
 		List<SpeciesReferenceWrapper> productWrapperList;
 		List<ModifierSpeciesReferenceWrapper> modifierWrapperList;
 		boolean isSetModifiers = true;
+		List<Point> editPointList;
+		EditPoints editPoints;
 		
 		public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper){
 			this.reaction = reaction;
@@ -50,6 +54,8 @@ public class ReactionWrapper extends Reaction{
 			this.name = reaction.getName();
 			this.notes = reaction.getNotes();
 			this.reversible = reaction.isReversible();
+			this.editPoints = annotation.getExtension().getEditPoints();
+			this.editPointList = createEditPointsAsList();
 			
 			reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
 			productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
@@ -248,6 +254,14 @@ public class ReactionWrapper extends Reaction{
     	   annotation.getExtension().setOffset(value);
        }
 
+       public boolean isSetEditPoints(){
+    	   if(editPoints == null)
+    		   return false;
+    	   
+    	   return true;
+       }
+       
+       
        /**
         * 
         * @return
@@ -268,6 +282,36 @@ public class ReactionWrapper extends Reaction{
     	   annotation.getExtension().setEditPoints(value);
        }
 
+       /**
+        * 
+        * @return
+        * List<Point2D>
+        * TODO
+        */
+       public List<Point> getEditPointsAsList(){
+    	   return editPointList;
+       }
+       
+       
+       public List<Point> createEditPointsAsList(){
+    	  if(editPoints == null)
+    		  return null;
+    	   
+    	   List<String> str = annotation.getExtension().getEditPoints().getValue();
+    	   List<Point> list = new ArrayList<Point>();
+    	   
+    	   for(String s : str){
+    		   String[] points = s.split(",",0);
+    		   Point point = new Point();
+    		   point.setX(Double.valueOf(points[0]));
+    		   point.setY(Double.valueOf(points[1]));
+    		   list.add(point);
+    	   }
+    	   
+    	   
+    	   return list;
+       }
+       
        /**
         * 
         * @return

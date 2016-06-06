@@ -457,4 +457,15 @@ public class ReactionWrapper extends Reaction{
        public boolean isSetModifier(){
     	   return isSetModifiers;
        }
+       
+       
+       public String getModifierTypeByModifierId(String id){
+    	   List<Modification> mList = getListOfModification();
+    	   
+    	   for(Modification m : mList)
+    		   if(m.getModifiers().equals(id))
+    			   return m.getType();
+    	   
+    	   return "";
+       }
 }

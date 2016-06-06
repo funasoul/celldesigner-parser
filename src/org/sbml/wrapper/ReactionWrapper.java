@@ -1,6 +1,5 @@
 package org.sbml.wrapper;
 
-import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -294,11 +293,13 @@ public class ReactionWrapper extends Reaction{
        
        
        public List<Point> createEditPointsAsList(){
-    	  if(editPoints == null)
-    		  return null;
+    	   List<Point> list = new ArrayList<Point>();
+   
+    	   if(editPoints == null)
+    		  return list;
     	   
     	   List<String> str = annotation.getExtension().getEditPoints().getValue();
-    	   List<Point> list = new ArrayList<Point>();
+
     	   
     	   for(String s : str){
     		   String[] points = s.split(",",0);

@@ -452,6 +452,20 @@ public class ModelWrapper extends Model {
     	annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias().remove(compartmentAlias);
     }    
     
+	/**
+	 * @return
+	 * CompartmentAliasWrapper
+	 * TODO
+	 */
+	public CompartmentAliasWrapper getCompartmentAliasWrapperByCompartmentId(String id) {
+		for(CompartmentAliasWrapper caw: cAliasWrapperList){
+			if(caw.getCompartment().equals(id))
+				return caw;		
+		}
+		
+		return null;
+	}
+    
     /**
      * 
      * @return

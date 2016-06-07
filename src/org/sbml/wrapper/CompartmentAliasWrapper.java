@@ -26,6 +26,7 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 		this.namePoint = compartmentAlias.getNamePoint();
 		this.info = compartmentAlias.getInfo();
 		this.compartment = compartmentAlias.getCompartment();
+		this.compartmentWrapper = modelWrapper.getCompartmentWrapperById(compartment);
 	}
 	
 	/**

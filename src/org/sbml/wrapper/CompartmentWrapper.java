@@ -43,4 +43,36 @@ public class CompartmentWrapper extends Compartment {
 		
 		return true;
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * boolean
+	 * TODO
+	 */
+	public boolean isSetOutside(){
+		if(outside == null)
+			return false;
+		
+		return true;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * CompartmentWrapper
+	 * TODO
+	 */
+	public CompartmentWrapper getOutsideInstance(){
+		return modelWrapper.getCompartmentWrapperById(outside);
+	}
+
+	/**
+	 * @return
+	 * CompartmentAliasWrapper
+	 * TODO
+	 */
+	public CompartmentAliasWrapper getAliasWrapper() {
+		return modelWrapper.getCompartmentAliasWrapperByCompartmentId(id);
+	}
 }

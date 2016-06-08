@@ -457,7 +457,7 @@ public class ModelWrapper extends Model {
 	 * CompartmentAliasWrapper
 	 * TODO
 	 */
-	public CompartmentAliasWrapper getCompartmentAliasWrapperByCompartmentId(String id) {
+	public CompartmentAliasWrapper getCompartmentAliasWrapperByCompartmentId(String id) {	
 		for(CompartmentAliasWrapper caw: cAliasWrapperList){
 			if(caw.getCompartment().equals(id))
 				return caw;		

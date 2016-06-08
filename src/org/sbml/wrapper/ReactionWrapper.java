@@ -416,6 +416,30 @@ public class ReactionWrapper extends Reaction{
        /**
         * 
         * @return
+        * int
+        * TODO
+        */
+       public int getRectangleIndex(){
+    	   String index = annotation.getExtension().getConnectScheme().getRectangleIndex();
+    	   if(index == null)
+    		   return 0;
+    	   
+    	   return Integer.valueOf(index); 
+       }
+       
+       /**
+        * 
+        * @param index
+        * void
+        * TODO
+        */
+       public void setRectangleIndex(int index){
+    	   annotation.getExtension().getConnectScheme().setRectangleIndex(String.valueOf(index));
+       }
+       
+       /**
+        * 
+        * @return
         * List<SpeciesReferenceWrapper>
         * TODO
         */

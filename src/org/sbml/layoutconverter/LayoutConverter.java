@@ -12,8 +12,11 @@ import org.sbml._2001.ns.celldesigner.BaseReactant;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLError;
+import org.sbml.jsbml.SBMLErrorLog;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
+import org.sbml.jsbml.TidySBMLWriter;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Curve;
@@ -64,10 +67,18 @@ public class LayoutConverter {
 		layout = mplugin.createLayout();
 	}
 		
+	/**
+	 * 
+	 * 
+	 * void
+	 * TODO
+	 */
 	public void print(){
 		try {
-	    	SBMLWriter.write(document, System.out, ' ', (short) 2);
+			//SBMLWriter.write(document, System.out, ' ', (short) 2);
 	    	SBMLWriter.write(document, new File("CD_" + model.getId() + ".xml"), ' ', (short) 2);
+	    	String docStr = new TidySBMLWriter().writeSBMLToString(document);
+	    	System.out.println(docStr);
 		} catch (SBMLException e) {
 			e.printStackTrace();
 		} catch (XMLStreamException e) {
@@ -123,6 +134,13 @@ public class LayoutConverter {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param cawList
+	 * @return
+	 * List<CompartmentAliasWrapper>
+	 * TODO
+	 */
 	public List<CompartmentAliasWrapper> reorderCompartmentAccordingToPosition(List<CompartmentAliasWrapper> cawList){
 		for(int i = 1; i < cawList.size(); i++){
 			CompartmentAliasWrapper c = cawList.get(i);
@@ -202,7 +220,8 @@ public class LayoutConverter {
 				SpeciesReferenceGlyph srg1 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw1.getId());
 				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw2.getId());
 				SpeciesReferenceGlyph srg3 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + productsaw.getId());
-						
+
+				
 				LineSegment r1segment = srg1.createCurve().createLineSegment();
 				LineSegment r2segment = srg2.createCurve().createLineSegment();
 				LineSegment psegment = srg3.createCurve().createLineSegment();
@@ -288,6 +307,7 @@ public class LayoutConverter {
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + srw.getAlias());
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
+			srg.setSpeciesGlyph("speciesGlyph_" + srw.getAlias());
 		}
 
 		List<SpeciesReferenceWrapper> productList = rw.getListOfProductWrapper();
@@ -295,6 +315,7 @@ public class LayoutConverter {
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + srw.getAlias());
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.PRODUCT);
+			srg.setSpeciesGlyph("speciesGlyph_" + srw.getAlias());
 		}
 
 		if (rw.isSetModifier()) {
@@ -302,6 +323,7 @@ public class LayoutConverter {
 			for (ModifierSpeciesReferenceWrapper msrw : modifierList) {
 				SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_" + rg.getReaction() + "_" + msrw.getAlias());
 				srg.setSpeciesReference(msrw.getSpecies());
+				srg.setSpeciesGlyph("speciesGlyph_" + msrw.getAlias());
 				String s = rw.getModifierTypeByModifierId(msrw.getSpecies());
 				
 				if(s.equals("CATALYSIS") || s.equals("UNKNOWN_CATALYSIS")){
@@ -357,10 +379,19 @@ public class LayoutConverter {
 		}
 	}
 	
+	public void validate(){
+			document.checkConsistency();
+			SBMLErrorLog errorLog = document.getListOfErrors();
+			List<SBMLError> errorList = errorLog.getValidationErrors();
+			for(SBMLError e: errorList)
+				System.out.println(e.getMessage());
+	}
+	
 	public static void main(String[] args){
 		LayoutConverter converter;
 		try {
-			converter = new LayoutConverter(new File("sample/anchor.xml"));
+			converter = new LayoutConverter(new File("sample/anchor5.xml"));
+			
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();
@@ -373,6 +404,6 @@ public class LayoutConverter {
 		
 		converter.convertToLayout();
 		converter.print();
-
+		converter.validate();
 	}
 }

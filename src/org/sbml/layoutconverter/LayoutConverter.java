@@ -307,7 +307,7 @@ public class LayoutConverter {
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + srw.getAlias());
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
-			srg.setSpeciesGlyph("speciesGlyph_" + srw.getAlias());
+			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
 		}
 
 		List<SpeciesReferenceWrapper> productList = rw.getListOfProductWrapper();
@@ -315,7 +315,7 @@ public class LayoutConverter {
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + srw.getAlias());
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.PRODUCT);
-			srg.setSpeciesGlyph("speciesGlyph_" + srw.getAlias());
+			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
 		}
 
 		if (rw.isSetModifier()) {
@@ -323,7 +323,7 @@ public class LayoutConverter {
 			for (ModifierSpeciesReferenceWrapper msrw : modifierList) {
 				SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_" + rg.getReaction() + "_" + msrw.getAlias());
 				srg.setSpeciesReference(msrw.getSpecies());
-				srg.setSpeciesGlyph("speciesGlyph_" + msrw.getAlias());
+				srg.setSpeciesGlyph("SpeciesGlyph_" + msrw.getAlias());
 				String s = rw.getModifierTypeByModifierId(msrw.getSpecies());
 				
 				if(s.equals("CATALYSIS") || s.equals("UNKNOWN_CATALYSIS")){

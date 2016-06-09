@@ -25,7 +25,9 @@ public class ConverterSBMLReader {
 		SBMLDocument document = SBMLReader.read(file);
 		if(document.getLevel() < 3)
 			document = ModelUpgrader.upgrade(document);
-
+		
+		document = SBMLModelCompleter.autoCompleteRequiredAttributes(document);
+		
 		int level = document.getLevel();
 		int version = document.getVersion();
 		

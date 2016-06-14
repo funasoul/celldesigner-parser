@@ -1,5 +1,6 @@
 package org.sbml.layoutconverter;
 
+import java.awt.geom.Point2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -47,7 +48,7 @@ public class LayoutUtil {
 	 * Point
 	 * TODO
 	 */
-	public static Point getEditPointPosition(SpeciesGlyph origin, SpeciesGlyph axis1, SpeciesGlyph axis2, Point editPoint){
+	public static Point getEditPointPosition(SpeciesGlyph origin, SpeciesGlyph axis1, SpeciesGlyph axis2, Point2D.Double editPoint){
 		Point pOrigin = getCenterOfGlyph(origin);
 		Point pA1 = getCenterOfGlyph(axis1);
 		Point pA2  = getCenterOfGlyph(axis2);
@@ -66,7 +67,7 @@ public class LayoutUtil {
 	 * Point
 	 * TODO
 	 */
-	public static Point getEditPointPosition(Point origin, Point axis1, Point axis2, Point editPoint){
+	public static Point getEditPointPosition(Point origin, Point axis1, Point axis2, Point2D.Double editPoint){
 		Point point = origin.clone();
 
 		double x = (axis1.getX() - origin.getX()) * editPoint.getX();
@@ -247,7 +248,7 @@ public class LayoutUtil {
 	 * List<LineSegment>
 	 * TODO
 	 */
-	public static List<LineSegment> createListOfLineSegment(Point startPoint, Point endPoint, List<Point> editPointList, int rectangleIndex){
+	public static List<LineSegment> createListOfLineSegment(Point startPoint, Point endPoint, List<Point2D.Double> editPointList, int rectangleIndex){
 		List<LineSegment> lineList = new ArrayList<LineSegment>();
 		
 		Point perpPoint = createPerpendicularPoint(startPoint, endPoint);
@@ -283,4 +284,29 @@ public class LayoutUtil {
 		
 		return point;
 	}
+	
+    
+	/**
+	 * 
+	 * @param editPoints
+	 * @return
+	 * List<Point>
+	 * TODO
+	 */
+    public static List<Point2D.Double> createEditPointsAsList(List<String> editPoints){
+ 	   List<Point2D.Double> list = new ArrayList<Point2D.Double>();
+
+ 	   if(editPoints == null)
+ 		  return list;
+ 	   
+ 	   for(String s : editPoints){
+ 		   String[] points = s.split(",",0);
+ 		   Point2D.Double point = new Point2D.Double();
+ 		   point.x = Double.valueOf(points[0]);
+ 		   point.y = Double.valueOf(points[1]);
+ 		   list.add(point);
+ 	   }
+ 	    	   
+ 	   return list;
+    }
 }

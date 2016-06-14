@@ -1,5 +1,10 @@
 package org.sbml.wrapper;
 
+import java.awt.geom.Point2D;
+import java.util.List;
+
+import org.sbml._2001.ns.celldesigner.Modification;
+import org.sbml.layoutconverter.LayoutUtil;
 import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 
 /**
@@ -13,20 +18,34 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 	ModifierSpeciesReference sRef;
 	ModelWrapper modelWrapper;
 	SpeciesWrapper speciesWrapper;
+	Modification modification;
+	ReactionWrapper reactionWrapper;
+	String type;
+	String alias;
+	List<Point2D.Double> editPointList;
+	Point2D.Double targetLineIndex;
 	
 	/**
 	 * 
 	 * @param sRef
 	 * @param modelWrapper
+	 * @param reactionWrapper
 	 */
-	public ModifierSpeciesReferenceWrapper(ModifierSpeciesReference sRef, ModelWrapper modelWrapper){
+	public ModifierSpeciesReferenceWrapper(ModifierSpeciesReference sRef, ModelWrapper modelWrapper, ReactionWrapper reactionWrapper){
 		 this.sRef =  sRef;
 		 this.modelWrapper = modelWrapper;
+		 this.reactionWrapper = reactionWrapper;
 		 this.annotation = sRef.getAnnotation();
+		 this.alias = annotation.getExtension().getAlias();
 		 this.metaid = sRef.getMetaid();
 		 this.notes = sRef.getNotes();
 		 this.species = sRef.getSpecies();
 		 this.speciesWrapper = modelWrapper.getSpeciesWrapperById(sRef.getSpecies());
+		 this.modification = reactionWrapper.getModificationByModifierId(species);
+	
+		 this.type = modification.getType();
+		 this.editPointList = LayoutUtil.createEditPointsAsList(modification.getEditPoints());
+		 setTargetLineIndex(modification.getTargetLineIndex());
 	}
 	
 	/**
@@ -36,7 +55,7 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 	 * TODO
 	 */
 	public String getAlias() {
-        return annotation.getExtension().getAlias();
+        return alias;
     }
 	
 	/**
@@ -47,6 +66,7 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 	 */
 	public void setAlias(String value) {
         annotation.getExtension().setAlias(value);
+        this.alias = value;
     }
 	
 	/**
@@ -57,5 +77,68 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 	 */
 	public SpeciesWrapper getAliased(){
 		return speciesWrapper;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * Modification
+	 * TODO
+	 */
+	public void setModification(Modification value){
+		modification = value;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * Modification
+	 * TODO
+	 */
+	public Modification getModification(){
+		return modification;
+	}
+	
+	/**
+	 * 
+	 * @param type
+	 * void
+	 * TODO
+	 */
+	public void setType(String type){
+		this.type = type;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * String
+	 * TODO
+	 */
+	public String getType(){
+		return type;
+	}
+	
+	/**
+	 * 
+	 * @param index
+	 * void
+	 * TODO
+	 */
+	public void setTargetLineIndex(String index){
+		 String[] points = index.split(",",0);
+		 targetLineIndex = new Point2D.Double();
+		 targetLineIndex.x = Double.valueOf(points[0]);
+		 targetLineIndex.y = Double.valueOf(points[1]);
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * Point2D.Double
+	 * TODO
+	 */
+	public Point2D.Double getTargetLineIndex(){
+		return targetLineIndex;
 	}
 }

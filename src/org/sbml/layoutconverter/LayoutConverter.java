@@ -1,5 +1,6 @@
 package org.sbml.layoutconverter;
 
+import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -90,11 +91,19 @@ public class LayoutConverter {
 		}
 	}
 	
-	public void convertToLayout(){
+	/**
+	 * 
+	 * 
+	 * void
+	 * TODO
+	 */
+	public SBMLDocument convertToLayout(){
 		convertModelToLayout(mWrapper);
 		convertCompartmentsToLayout(mWrapper.getListOfCompartmentAliasWrapper());
 		convertSpeciesAliasToLayout(mWrapper.getListOfSpeciesAliasWrapper());
 		convertReactionsToLayout(mWrapper.getListOfReactionWrapper());
+	
+		return document;
 	}
 	
 	/**
@@ -149,7 +158,7 @@ public class LayoutConverter {
 			ListOf<SpeciesReferenceGlyph> srgList = createSpeciesReferenceGlyph(rg, rw);
 			List<BaseReactant> brsList = rw.getBaseReactants();
 			List<BaseProduct> prsList = rw.getBaseProducts();
-			List<Point> editPointList = rw.getEditPointsAsList();
+			List<Point2D.Double> editPointList = rw.getEditPointsAsList();
 			int rectangleIndex = rw.getRectangleIndex();
 			
 			List<LineSegment> lsList = null;
@@ -178,7 +187,7 @@ public class LayoutConverter {
 				}
 				
 			} else if(rw.getReactionType().equals("HETERODIMER_ASSOCIATION")){ 	// two to one
-				List<Point> editPoint = rw.getEditPointsAsList();
+				List<Point2D.Double> editPoint = rw.getEditPointsAsList();
 				BaseReactant br1 = brsList.get(0);
 				BaseReactant br2 = brsList.get(1);
 				BaseProduct bp1 = prsList.get(0);
@@ -207,7 +216,7 @@ public class LayoutConverter {
 				r2segment.setEnd(centerPoint.clone());
 								
 			} else if(rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")){ 	//one to two 	
-				List<Point> editPoint = rw.getEditPointsAsList();
+				List<Point2D.Double> editPoint = rw.getEditPointsAsList();
 				BaseReactant br1 = brsList.get(0);
 				BaseProduct bp1 = prsList.get(0);
 				BaseProduct bp2 = prsList.get(1);				
@@ -366,12 +375,11 @@ public class LayoutConverter {
 	 * TODO
 	 */
 	public void validate(){
-			document.checkConsistency();
-		
-			SBMLErrorLog errorLog = document.getListOfErrors();
-			List<SBMLError> errorList = errorLog.getValidationErrors();
-			for(SBMLError e: errorList)
-				System.out.println(e.getMessage());
+		document.checkConsistency();
+		SBMLErrorLog errorLog = document.getListOfErrors();
+		List<SBMLError> errorList = errorLog.getValidationErrors();
+		for(SBMLError e: errorList)
+			System.out.println(e.getMessage());
 	}
 	
 	public static void main(String[] args){

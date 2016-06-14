@@ -1,13 +1,14 @@
 package org.sbml.layoutconverter;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.LineSegment;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.wrapper.CompartmentAliasWrapper;
+import org.sbml.wrapper.CompartmentWrapper;
 
 /**
  * @author Kaito Ii
@@ -17,6 +18,9 @@ import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 public class LayoutUtil {
 
+	public static int DEFAULTSBMLLEVEL = 3;
+	public static int DEFAULTSBMLVERSION = 1;
+	
 	/**
 	 * 
 	 * @param sg
@@ -35,17 +39,44 @@ public class LayoutUtil {
 	
 	/**
 	 * 
-	 * @param p1
-	 * @param p2
+	 * @param origin
+	 * @param axis1
+	 * @param axis2
 	 * @param editPoint
 	 * @return
 	 * Point
 	 * TODO
 	 */
-	public static Point getAnchorPoint(Point p1, Point p2, Point editPoint){
-		Point point = new Point();
-		point.setX(p1.getX() + getLength(p1, p2, editPoint.getX()));
-		point.setY(p1.getY() + getLength(p1, p2, editPoint.getY()));
+	public static Point getEditPointPosition(SpeciesGlyph origin, SpeciesGlyph axis1, SpeciesGlyph axis2, Point editPoint){
+		Point pOrigin = getCenterOfGlyph(origin);
+		Point pA1 = getCenterOfGlyph(axis1);
+		Point pA2  = getCenterOfGlyph(axis2);
+		Point point = getEditPointPosition(pOrigin, pA1, pA2, editPoint);	
+		
+		return point;
+	}
+	
+	/**
+	 * 
+	 * @param origin
+	 * @param axis1
+	 * @param axis2
+	 * @param editPoint
+	 * @return
+	 * Point
+	 * TODO
+	 */
+	public static Point getEditPointPosition(Point origin, Point axis1, Point axis2, Point editPoint){
+		Point point = origin.clone();
+
+		double x = (axis1.getX() - origin.getX()) * editPoint.getX();
+		x += (axis2.getX() - origin.getX()) * editPoint.getY();
+		double y = (axis1.getY() - origin.getY()) * editPoint.getX();
+		y += (axis2.getY() - origin.getY()) * editPoint.getY();
+
+		point.setX(origin.getX() + x);
+		point.setY(origin.getY() + y);		
+		
 		return point;
 	}
 	
@@ -59,10 +90,10 @@ public class LayoutUtil {
 	 * TODO
 	 */
 	public static Point getDistanceFromEditPoint(Point p1, Point p2, double percentage){
-		Point point = new Point();
+		Point point = new Point(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
 		point.setX(getLength(p1, p2, percentage));
 		point.setY(getLength(p1, p2, percentage));
-		
+		point.setZ(0);
 		return point;
 	}
 	
@@ -76,9 +107,8 @@ public class LayoutUtil {
 	 * TODO
 	 */
 	public static double getLength(Point p1, Point p2, double proportion){
-		return  Math.hypot(p1.getX()-p2.getX(), p1.getY()-p2.getY()) * proportion;
+		return Math.hypot(p1.getX()-p2.getX(), p1.getY()-p2.getY()) * proportion;
 	}
-	
 	
 	/**
 	 * 
@@ -105,7 +135,9 @@ public class LayoutUtil {
 	 */
 	public static Point createAdjustedPoint(double x, double y, double width, double height, String direction){
 		Point point = new Point();
-		
+		point.setLevel(DEFAULTSBMLLEVEL);
+		point.setVersion(DEFAULTSBMLVERSION);
+		point.setZ(0);
 		if(direction.equals("NW")){
 			point.setX(x);
 			point.setY(y);
@@ -179,60 +211,61 @@ public class LayoutUtil {
 	
 	/**
 	 * 
-	 * @param origin
-	 * @param axis1
-	 * @param axis2
-	 * @param editPoint
+	 * @param point
+	 * @param direction
 	 * @return
 	 * Point
 	 * TODO
 	 */
-	public static Point getEditPointPosition(SpeciesGlyph origin, SpeciesGlyph axis1, SpeciesGlyph axis2, Point editPoint){
-		Point pOrigin = getCenterOfGlyph(origin);
-		Point pA1 = getCenterOfGlyph(axis1);
-		Point pA2  = getCenterOfGlyph(axis2);
-		Point point = pOrigin.clone();
-
-		Point displacement1 = getDistanceFromEditPoint(pOrigin, pA1, editPoint.getX());
-		Point displacement2 = getDistanceFromEditPoint(pOrigin, pA2, editPoint.getY());
+	public static Point adjustPoint(Point point, String direction){
+		if(direction.equals("INACTIVE")){
+			//point.setX(point.getX() + saw.getW() /2);
+		}
 		
-		point.setX(point.getX() + displacement1.getX() + displacement2.getX());
-		point.setY(point.getY() + displacement1.getY() + displacement2.getY());		
+		if(direction.contains("W")){
+			point.setX(point.getX() - 10);
+		} else if(direction.contains("E")){
+			point.setX(point.getX() + 10);
+		}
+		
+		if(direction.contains("N")){
+			point.setY(point.getY() - 10);
+		} else if(direction.contains("S")){
+			point.setY(point.getY() + 10);
+		}
 		
 		return point;
 	}
 
 	/**
 	 * 
-	 * @param reactantPoint
-	 * @param productPoint
+	 * @param startPoint
+	 * @param endPoint
 	 * @param editPointList
 	 * @param rectangleIndex
 	 * @return
 	 * List<LineSegment>
 	 * TODO
 	 */
-	public static List<LineSegment> createListOfLineSegment(Point reactantPoint, Point productPoint, List<Point> editPointList, int rectangleIndex){
+	public static List<LineSegment> createListOfLineSegment(Point startPoint, Point endPoint, List<Point> editPointList, int rectangleIndex){
 		List<LineSegment> lineList = new ArrayList<LineSegment>();
-
-		for(Point p : editPointList)
-			System.out.println("point " + p.getX() + " "  + p.getY());
 		
-		LineSegment line = new LineSegment();
-		line.setStart(reactantPoint);
+		Point perpPoint = createPerpendicularPoint(startPoint, endPoint);
+		LineSegment line = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+		line.setStart(startPoint);
 		for(int i = 0; i < editPointList.size(); i++){
-			Point point = getAnchorPoint(reactantPoint, productPoint, editPointList.get(i));
+			Point point = getEditPointPosition(startPoint, endPoint, perpPoint, editPointList.get(i));
 			line.setEnd(point.clone());
 			lineList.add(line);
-			line = new LineSegment();
+			line = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
 			line.setStart(point.clone());
 		}
 			
-		line.setEnd(productPoint);
+		line.setEnd(endPoint);
 		lineList.add(line);
 
 		LineSegment l1 = lineList.get(rectangleIndex);
-		LineSegment l2 = new LineSegment();
+		LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
 		Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
 		l2.setEnd(l1.getEnd().clone());
 		l1.setEnd(p.clone());
@@ -240,5 +273,14 @@ public class LayoutUtil {
 		lineList.add(rectangleIndex + 1, l2);
 	
 		return lineList;
+	}
+	
+	
+	public static Point createPerpendicularPoint(Point start, Point end){
+		Point point = start.clone();
+		point.setX(start.getX() + (end.getY() - start.getY()) * -1);
+		point.setY(start.getY() + end.getX() - start.getX());
+		
+		return point;
 	}
 }

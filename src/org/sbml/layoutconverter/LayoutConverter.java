@@ -9,6 +9,8 @@ import javax.xml.stream.XMLStreamException;
 
 import org.sbml._2001.ns.celldesigner.BaseProduct;
 import org.sbml._2001.ns.celldesigner.BaseReactant;
+import org.sbml._2001.ns.celldesigner.LinkTarget;
+import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
@@ -93,7 +95,6 @@ public class LayoutConverter {
 		convertCompartmentsToLayout(mWrapper.getListOfCompartmentAliasWrapper());
 		convertSpeciesAliasToLayout(mWrapper.getListOfSpeciesAliasWrapper());
 		convertReactionsToLayout(mWrapper.getListOfReactionWrapper());
-	
 	}
 	
 	/**
@@ -103,7 +104,7 @@ public class LayoutConverter {
 	 * TODO
 	 */
 	public void convertCompartmentsToLayout(List<CompartmentAliasWrapper> cawList){
-		cawList = reorderCompartmentAccordingToPosition(cawList);
+		cawList = ModelWrapper.reorderCompartmentAccordingToPosition(cawList);
 		
 		for(CompartmentAliasWrapper caw : cawList){
 			CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + caw.getId());
@@ -134,29 +135,6 @@ public class LayoutConverter {
 		}
 	}
 	
-	/**
-	 * 
-	 * @param cawList
-	 * @return
-	 * List<CompartmentAliasWrapper>
-	 * TODO
-	 */
-	public List<CompartmentAliasWrapper> reorderCompartmentAccordingToPosition(List<CompartmentAliasWrapper> cawList){
-		for(int i = 1; i < cawList.size(); i++){
-			CompartmentAliasWrapper c = cawList.get(i);
-			if(c.getCompartmentWrapperAliased().isSetOutside()){
-				CompartmentWrapper cw = c.getCompartmentWrapperAliased().getOutsideInstance();
-				CompartmentAliasWrapper outside = cw.getAliasWrapper();
-				int outIndex = cawList.indexOf(outside);
-				if(outIndex > i){
-					cawList.remove(c);
-					cawList.add(outIndex , c);
-				}
-			}
-		}
-		return cawList;
-	}
-	
 	public void convertModelToLayout(ModelWrapper mWrapper){
 		layout.setId("Layout_" + model.getId());
 		layout.createDimensions(mWrapper.getSizeX(), mWrapper.getSizeX(), 0);
@@ -174,6 +152,8 @@ public class LayoutConverter {
 			List<Point> editPointList = rw.getEditPointsAsList();
 			int rectangleIndex = rw.getRectangleIndex();
 			
+			List<LineSegment> lsList = null;
+			
 			if(brsList.size() == 1 && prsList.size() == 1){
 				BaseReactant br = brsList.get(0);
 				BaseProduct bp = prsList.get(0);
@@ -181,19 +161,10 @@ public class LayoutConverter {
 				SpeciesAliasWrapper reactantsaw = mWrapper.getSpeciesAliasWrapperById(br.getAlias());
 				SpeciesAliasWrapper productsaw = mWrapper.getSpeciesAliasWrapperById(bp.getAlias());
 				
-				Point reactantPoint;
-				Point productPoint;
-				if(br.getLinkAnchor() == null){
-					reactantPoint = LayoutUtil.createAdjustedPoint(reactantsaw.getX(), reactantsaw.getY(), reactantsaw.getW(), reactantsaw.getH(), "INACTIVE");
-				} else {
-					reactantPoint = LayoutUtil.createAdjustedPoint(reactantsaw.getX(), reactantsaw.getY(), reactantsaw.getW(), reactantsaw.getH(), br.getLinkAnchor().getPosition());
-				}
-				if(bp.getLinkAnchor() == null){
-					productPoint = LayoutUtil.createAdjustedPoint(productsaw.getX(), productsaw.getY(), productsaw.getW(), productsaw.getH(), "INACTIVE");
-				} else{
-					productPoint = LayoutUtil.createAdjustedPoint(productsaw.getX(), productsaw.getY(), productsaw.getW(), productsaw.getH(), bp.getLinkAnchor().getPosition());
-				}
-				List<LineSegment> lsList = LayoutUtil.createListOfLineSegment(reactantPoint, productPoint, editPointList, rectangleIndex);
+				Point reactantPoint  = LayoutUtil.createAdjustedPoint(reactantsaw.getX(), reactantsaw.getY(), reactantsaw.getW(), reactantsaw.getH(), br.getLinkAnchor().getPosition()); 
+				Point productPoint = LayoutUtil.createAdjustedPoint(productsaw.getX(), productsaw.getY(), productsaw.getW(), productsaw.getH(), bp.getLinkAnchor().getPosition());
+				lsList = LayoutUtil.createListOfLineSegment(reactantPoint, productPoint, editPointList, rectangleIndex);
+				
 				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw.getId());
 				Curve curve = srg.createCurve();
 				for(int i = 0; i <= rectangleIndex; i++){
@@ -220,7 +191,6 @@ public class LayoutConverter {
 				SpeciesReferenceGlyph srg1 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw1.getId());
 				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw2.getId());
 				SpeciesReferenceGlyph srg3 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + productsaw.getId());
-
 				
 				LineSegment r1segment = srg1.createCurve().createLineSegment();
 				LineSegment r2segment = srg2.createCurve().createLineSegment();
@@ -270,8 +240,20 @@ public class LayoutConverter {
 			if(rw.isSetModifier()){
 				List<ModifierSpeciesReferenceWrapper> msrwList = rw.getListOfModifierWrapper();
 				for(ModifierSpeciesReferenceWrapper msrw : msrwList){
+					Modification m = rw.getModificationByModifierId(msrw.getSpecies());
 					SpeciesReferenceGlyph srg = rg.getSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_" + rg.getReaction() + "_" + msrw.getAlias());
+					SpeciesGlyph sg = layout.getSpeciesGlyph("SpeciesGlyph_" + msrw.getAlias());
+					SpeciesAliasWrapper modifiersaw = mWrapper.getSpeciesAliasWrapperById(msrw.getAlias());
+					Point modifier = sg.getBoundingBox().getPosition();
+					LinkTarget lt = rw.getLinkTargetByModifierId(m.getModifiers());
 					
+					modifier = LayoutUtil.createAdjustedPoint(modifiersaw.getX(), modifiersaw.getY(), modifiersaw.getW(), modifiersaw.getH(), lt.getLinkAnchor().getPosition());
+					Point reaction = lsList.get(rectangleIndex).getEnd().clone();
+					lsList = LayoutUtil.createListOfLineSegment(modifier, reaction, editPointList, rectangleIndex);
+					Curve curve = srg.createCurve();
+					for(LineSegment ls : lsList){
+						curve.addCurveSegment(ls);
+					}
 				}
 			}
 			
@@ -280,9 +262,8 @@ public class LayoutConverter {
 			BaseReactant br = brsList.get(0);
 			SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperById(br.getAlias());
 			Point point = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), br.getLinkAnchor().getPosition());
-			if(br.getLinkAnchor().getPosition().equals("INACTIVE")){
-				point.setX(point.getX() + saw.getW() /2);
-			}
+			point = LayoutUtil.adjustPoint(point, br.getLinkAnchor().getPosition());
+
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + rw.getId());
 			tg.setOriginOfText(rw.getId());
 			tg.setGraphicalObject(rg);
@@ -349,8 +330,7 @@ public class LayoutConverter {
 		for(SpeciesAliasWrapper saw : saList){
 			SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + saw.getId());	
 			sg.setReference(saw.getSpecies());
-			sg.setSBOTerm(model.getSpecies(sg.getReference()).getSBOTerm());
-			
+
 			BoundingBox bb = sg.createBoundingBox();
 			Dimensions dimension = bb.createDimensions();
 			dimension.setWidth(saw.getW());
@@ -362,8 +342,8 @@ public class LayoutConverter {
 			point.setY(saw.getY());
 			point.setZ(0d);
 			bb.setPosition(point);
-			
-			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + saw.getSpeciesWrapperAliased().getId());
+
+			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + saw.getId());
 			tg.setOriginOfText(saw.getSpeciesWrapperAliased().getId());
 			tg.setGraphicalObject(sg);
 			BoundingBox bb2 = tg.createBoundingBox();;
@@ -379,8 +359,15 @@ public class LayoutConverter {
 		}
 	}
 	
+	/**
+	 * 
+	 * 
+	 * void
+	 * TODO
+	 */
 	public void validate(){
 			document.checkConsistency();
+		
 			SBMLErrorLog errorLog = document.getListOfErrors();
 			List<SBMLError> errorList = errorLog.getValidationErrors();
 			for(SBMLError e: errorList)
@@ -390,8 +377,7 @@ public class LayoutConverter {
 	public static void main(String[] args){
 		LayoutConverter converter;
 		try {
-			converter = new LayoutConverter(new File("sample/anchor5.xml"));
-			
+			converter = new LayoutConverter(new File("sample/cat.xml"));		
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

@@ -10,6 +10,8 @@ import org.sbml._2001.ns.celldesigner.BaseReactants;
 import org.sbml._2001.ns.celldesigner.ConnectScheme;
 import org.sbml._2001.ns.celldesigner.EditPoints;
 import org.sbml._2001.ns.celldesigner.Line;
+import org.sbml._2001.ns.celldesigner.LinkAnchor;
+import org.sbml._2001.ns.celldesigner.LinkTarget;
 import org.sbml._2001.ns.celldesigner.ListOfModification;
 import org.sbml._2001.ns.celldesigner.ListOfProductLinks;
 import org.sbml._2001.ns.celldesigner.ListOfReactantLinks;
@@ -38,11 +40,11 @@ public class ReactionWrapper extends Reaction{
 		boolean isSetModifiers = true;
 		List<Point> editPointList;
 		EditPoints editPoints;
+		List<Modification> modificationList;
 		
 		public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper){
 			this.reaction = reaction;
 			this.modelWrapper = modelWrapper;
-			this.annotation = reaction.getAnnotation();
 			this.fast = reaction.isFast();
 			this.id = reaction.getId();
 			this.kineticLaw = reaction.getKineticLaw();
@@ -53,16 +55,23 @@ public class ReactionWrapper extends Reaction{
 			this.name = reaction.getName();
 			this.notes = reaction.getNotes();
 			this.reversible = reaction.isReversible();
+			
+			this.annotation = reaction.getAnnotation();
 			this.editPoints = annotation.getExtension().getEditPoints();
 			this.editPointList = createEditPointsAsList();
 			
+			if(annotation.getExtension().getListOfModification() != null && annotation.getExtension().getListOfModification().getModification() != null)
+				this.modificationList = annotation.getExtension().getListOfModification().getModification();
+			
+			
+			
 			reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
 			productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
-			if(listOfModifiers != null){
+			if(listOfModifiers != null)
 				modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
-			} else {
+			else 
 				isSetModifiers = false;
-			}	
+				
 		}
 		
 	   public String getName() {
@@ -100,7 +109,15 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public List<BaseReactant> getBaseReactants() {
-           return annotation.getExtension().getBaseReactants().getBaseReactant();
+    	   List<BaseReactant> brList = annotation.getExtension().getBaseReactants().getBaseReactant(); 
+           for(BaseReactant br: brList)
+        	   if(br.getLinkAnchor() == null || br.getLinkAnchor().getPosition() == null){
+        		   LinkAnchor anchor = new LinkAnchor();
+        		   anchor.setPosition("INACTIVE");
+        		   br.setLinkAnchor(anchor);
+        	   }
+        		   
+    	   return brList;
        }
 
        /**
@@ -120,7 +137,15 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public List<BaseProduct> getBaseProducts() {
-           return annotation.getExtension().getBaseProducts().getBaseProduct();
+    	   List<BaseProduct> bpList = annotation.getExtension().getBaseProducts().getBaseProduct(); 
+           for(BaseProduct bp: bpList)
+        	   if(bp.getLinkAnchor() == null || bp.getLinkAnchor().getPosition() == null){
+        		   LinkAnchor anchor = new LinkAnchor();
+        		   anchor.setPosition("INACTIVE");
+        		   bp.setLinkAnchor(anchor);
+        	   }
+        		   
+    	   return bpList;
        }
 
        /**
@@ -253,13 +278,18 @@ public class ReactionWrapper extends Reaction{
     	   annotation.getExtension().setOffset(value);
        }
 
+       /**
+        * 
+        * @return
+        * boolean
+        * TODO
+        */
        public boolean isSetEditPoints(){
     	   if(editPoints == null)
     		   return false;
     	   
     	   return true;
-       }
-       
+       }  
        
        /**
         * 
@@ -300,7 +330,6 @@ public class ReactionWrapper extends Reaction{
     	   
     	   List<String> str = annotation.getExtension().getEditPoints().getValue();
 
-    	   
     	   for(String s : str){
     		   String[] points = s.split(",",0);
     		   Point point = new Point();
@@ -308,8 +337,7 @@ public class ReactionWrapper extends Reaction{
     		   point.setY(Double.valueOf(points[1]));
     		   list.add(point);
     	   }
-    	   
-    	   
+    	    	   
     	   return list;
        }
        
@@ -340,7 +368,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public List<Modification> getListOfModification() {
-           return annotation.getExtension().getListOfModification().getModification();
+           return modificationList;
        }
 
        /**
@@ -371,6 +399,16 @@ public class ReactionWrapper extends Reaction{
         */
        public void removeModification(Modification modification){
     	   annotation.getExtension().getListOfModification().getModification().remove(modification);
+       }
+       
+       
+       public Modification getModificationByModifierId(String id){
+    	   for(Modification m : modificationList){
+    		   if(m.getModifiers().equals(id))
+    			   return m;
+    	   }
+    	   
+    	   return null;
        }
        
        /**
@@ -482,7 +520,13 @@ public class ReactionWrapper extends Reaction{
     	   return isSetModifiers;
        }
        
-       
+       /**
+        * 
+        * @param id
+        * @return
+        * String
+        * TODO
+        */
        public String getModifierTypeByModifierId(String id){
     	   List<Modification> mList = getListOfModification();
     	   
@@ -491,5 +535,23 @@ public class ReactionWrapper extends Reaction{
     			   return m.getType();
     	   
     	   return "";
+       }
+       
+       /**
+        * 
+        * @param id
+        * @return
+        * LinkTarget
+        * TODO
+        */
+       public LinkTarget getLinkTargetByModifierId(String id){
+    	   Modification m = getModificationByModifierId(id);
+    	   List<LinkTarget> ltList = m.getLinkTarget();
+    	   for(LinkTarget lt: ltList){
+    		   if(lt.getSpecies().equals(id))
+    			   return lt;
+    	   }
+    	   
+    	   return null;
        }
 }

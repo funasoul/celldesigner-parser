@@ -72,14 +72,8 @@ public class ModelWrapper extends Model {
 		this.model = model;
 		this.annotation = model.getAnnotation();
 		this.id = model.getId();
-//		this.eventList = model.getListOfEvents().getEvent();
-//		this.functionDefinitionList = model.getListOfFunctionDefinitions().getFunctionDefinition();
-//		this.parameterList = model.getListOfParameters().getParameter();
-//		this.ruleList = model.getListOfRules().getAlgebraicRuleOrAssignmentRuleOrRateRule();
-//		this.unitDefinitionList = model.getListOfUnitDefinitions().getUnitDefinition();
-//		this.metaid = model.getMetaid();
-//		this.name = model.getName();
-//		this.notes = model.getNotes();
+		this.name = model.getName();
+		this.notes = model.getNotes();
 		
 		this.setListOfAntisenseRNAs(annotation.getExtension().getListOfAntisenseRNAs());
 		this.setListOfBlockDiagrams(annotation.getExtension().getListOfBlockDiagrams());
@@ -830,4 +824,28 @@ public class ModelWrapper extends Model {
     public void removeBlockDiagram(BlockDiagram blockDiagram){
     	annotation.getExtension().getListOfBlockDiagrams().getBlockDiagram().remove(blockDiagram);
     }
+    
+	/**
+	 * 
+	 * @param cawList
+	 * @return
+	 * List<CompartmentAliasWrapper>
+	 * TODO
+	 */
+	public static List<CompartmentAliasWrapper> reorderCompartmentAccordingToPosition(List<CompartmentAliasWrapper> cawList){
+		for(int i = 1; i < cawList.size(); i++){
+			CompartmentAliasWrapper c = cawList.get(i);
+			if(c.getCompartmentWrapperAliased().isSetOutside()){
+				CompartmentWrapper cw = c.getCompartmentWrapperAliased().getOutsideInstance();
+				CompartmentAliasWrapper outside = cw.getAliasWrapper();
+				int outIndex = cawList.indexOf(outside);
+				if(outIndex > i){
+					cawList.remove(c);
+					cawList.add(outIndex , c);
+				}
+			}
+		}
+		
+		return cawList;
+	}
 }

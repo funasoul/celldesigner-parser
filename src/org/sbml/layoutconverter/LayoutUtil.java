@@ -8,8 +8,6 @@ import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.LineSegment;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
-import org.sbml.wrapper.CompartmentAliasWrapper;
-import org.sbml.wrapper.CompartmentWrapper;
 
 /**
  * @author Kaito Ii

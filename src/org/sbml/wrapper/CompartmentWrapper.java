@@ -16,20 +16,21 @@ public class CompartmentWrapper extends Compartment {
 	public CompartmentWrapper(Compartment compartment, ModelWrapper modelWrapper){
 		this.compartment = compartment;
 		this.modelWrapper = modelWrapper;
-		this.annotation = compartment.getAnnotation();
 		this.constant = compartment.isConstant();
 		this.id = compartment.getId();
 		this.metaid = compartment.getMetaid();
-		this.name = compartment.getName();
+		this.name = compartment.getName();	 // TODO same as annotation.getExtension().getName()?
 		this.notes = compartment.getNotes();
 		this.outside = compartment.getOutside();
 		this.size = compartment.getSize();
 		this.spatialDimensions = compartment.getSpatialDimensions();
 		this.units = compartment.getUnits();
+
+		this.annotation = compartment.getAnnotation();
 	}
 	
 	public String getName(){
-		return annotation.getExtension().getName();
+		return name;
 	}
 	
 	

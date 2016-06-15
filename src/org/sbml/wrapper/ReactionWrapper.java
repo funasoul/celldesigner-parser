@@ -42,6 +42,14 @@ public class ReactionWrapper extends Reaction{
 		List<Point2D.Double> editPointList;
 		EditPoints editPoints;
 		List<Modification> modificationList;
+		String type;
+		List<BaseReactant> baseReactants;
+		List<BaseProduct> baseProducts;
+		List<ReactantLink> reactantLinks;
+		List<ProductLink> productLinks;
+		ConnectScheme connectScheme;
+		Offset offset;
+		int rectangleIndex;
 		
 		public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper){
 			this.reaction = reaction;
@@ -53,7 +61,7 @@ public class ReactionWrapper extends Reaction{
 			this.listOfProducts = reaction.getListOfProducts();
 			this.listOfReactants = reaction.getListOfReactants();
 			this.metaid = reaction.getMetaid();
-			this.name = reaction.getName();
+			this.name = reaction.getName();		//same as annotation.getExtension().getName()?
 			this.notes = reaction.getNotes();
 			this.reversible = reaction.isReversible();
 			
@@ -71,15 +79,50 @@ public class ReactionWrapper extends Reaction{
 				modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
 			else 
 				isSetModifiers = false;
-				
+			
+			if(annotation.getExtension().getBaseReactants() != null) {
+				baseReactants = annotation.getExtension().getBaseReactants().getBaseReactant();
+				for (BaseReactant br : baseReactants) {
+					if (br.getLinkAnchor() == null || br.getLinkAnchor().getPosition() == null) {
+						LinkAnchor anchor = new LinkAnchor();
+						anchor.setPosition("INACTIVE");
+						br.setLinkAnchor(anchor);
+					}
+				}
+			}
+			
+			if(annotation.getExtension().getBaseProducts() != null) {	
+				baseProducts = annotation.getExtension().getBaseProducts().getBaseProduct(); 
+				for(BaseProduct bp: baseProducts){
+					if(bp.getLinkAnchor() == null || bp.getLinkAnchor().getPosition() == null){
+						LinkAnchor anchor = new LinkAnchor();
+						anchor.setPosition("INACTIVE");
+						bp.setLinkAnchor(anchor);
+					}
+				}
+			}
+			
+			if(annotation.getExtension().getListOfReactantLinks() != null)
+				reactantLinks = annotation.getExtension().getListOfReactantLinks().getReactantLink();
+		
+			if(annotation.getExtension().getListOfProductLinks() != null)
+				productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
+			
+			connectScheme = annotation.getExtension().getConnectScheme();
+			offset = annotation.getExtension().getOffset();
+		
+			if(connectScheme != null)
+				rectangleIndex = Integer.valueOf(annotation.getExtension().getConnectScheme().getRectangleIndex());
+
 		}
 		
 	   public String getName() {
-           return annotation.getExtension().getName();
+           return name;
        }
 	   
-       public void setName(String value) {
-           annotation.getExtension().setName(value);
+       public void setName(String name) {
+           annotation.getExtension().setName(name);
+           this.name = name;
        }
        
        /**
@@ -89,17 +132,18 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public String getReactionType() {
-           return annotation.getExtension().getReactionType();
+           return type;
        }
        
        /**
         * 
-        * @param value
+        * @param type
         * void
         * TODO
         */
-       public void setReactionType(String value) {
-           annotation.getExtension().setReactionType(value);
+       public void setReactionType(String type) {
+           annotation.getExtension().setReactionType(type);
+           this.type = type;
        }
 
        /**
@@ -108,16 +152,8 @@ public class ReactionWrapper extends Reaction{
         * BaseReactants
         * TODO
         */
-       public List<BaseReactant> getBaseReactants() {
-    	   List<BaseReactant> brList = annotation.getExtension().getBaseReactants().getBaseReactant(); 
-           for(BaseReactant br: brList)
-        	   if(br.getLinkAnchor() == null || br.getLinkAnchor().getPosition() == null){
-        		   LinkAnchor anchor = new LinkAnchor();
-        		   anchor.setPosition("INACTIVE");
-        		   br.setLinkAnchor(anchor);
-        	   }
-        		   
-    	   return brList;
+       public List<BaseReactant> getBaseReactants() {	   
+    	   return baseReactants;
        }
 
        /**
@@ -137,15 +173,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public List<BaseProduct> getBaseProducts() {
-    	   List<BaseProduct> bpList = annotation.getExtension().getBaseProducts().getBaseProduct(); 
-           for(BaseProduct bp: bpList)
-        	   if(bp.getLinkAnchor() == null || bp.getLinkAnchor().getPosition() == null){
-        		   LinkAnchor anchor = new LinkAnchor();
-        		   anchor.setPosition("INACTIVE");
-        		   bp.setLinkAnchor(anchor);
-        	   }
-        		   
-    	   return bpList;
+    	   return baseProducts;
        }
 
        /**
@@ -165,7 +193,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public List<ReactantLink> getListOfReactantLinks() {
-           return annotation.getExtension().getListOfReactantLinks().getReactantLink();
+           return reactantLinks;
        }
 
        /**
@@ -185,7 +213,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public void addReactantLink(ReactantLink link){
-    	   annotation.getExtension().getListOfReactantLinks().getReactantLink().add(link);
+    	  reactantLinks.add(link);
        }
 
        /**
@@ -195,7 +223,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public void removeReactantLink(ReactantLink link){
-    	   annotation.getExtension().getListOfReactantLinks().getReactantLink().remove(link);
+    	  reactantLinks.remove(link);
        }
        
        /**
@@ -205,7 +233,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public List<ProductLink> getListOfProductLinks() {
-           return annotation.getExtension().getListOfProductLinks().getProductLink();
+           return productLinks;
        }
 
        /**
@@ -225,7 +253,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public void addProductLink(ProductLink link){
-    	   annotation.getExtension().getListOfProductLinks().getProductLink().add(link);
+    	   productLinks.add(link);
        }
 
        /**
@@ -235,7 +263,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public void removeProductLink(ProductLink link){
-    	   annotation.getExtension().getListOfProductLinks().getProductLink().remove(link);
+    	   productLinks.remove(link);
        }
 
        /**
@@ -245,7 +273,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public ConnectScheme getConnectScheme() {
-           return annotation.getExtension().getConnectScheme();
+           return connectScheme;
        }
 
        /**
@@ -254,8 +282,9 @@ public class ReactionWrapper extends Reaction{
         * void
         * TODO
         */
-       public void setConnectScheme(ConnectScheme value) {
-    	   annotation.getExtension().setConnectScheme(value);
+       public void setConnectScheme(ConnectScheme connectScheme) {
+    	   annotation.getExtension().setConnectScheme(connectScheme);
+    	   this.connectScheme = connectScheme;
        }
 
        /**
@@ -265,17 +294,18 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public Offset getOffset() {
-    	   return annotation.getExtension().getOffset();
+    	   return offset;
        }
 
        /**
         * 
-        * @param value
+        * @param offset
         * void
         * TODO
         */
-       public void setOffset(Offset value) {
-    	   annotation.getExtension().setOffset(value);
+       public void setOffset(Offset offset) {
+    	   annotation.getExtension().setOffset(offset);
+    	   this.offset = offset;
        }
 
        /**
@@ -368,7 +398,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public void addModification(Modification modification){
-    	   annotation.getExtension().getListOfModification().getModification().add(modification);
+    	  modificationList.add(modification);
        }
 
        /**
@@ -378,10 +408,16 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public void removeModification(Modification modification){
-    	   annotation.getExtension().getListOfModification().getModification().remove(modification);
+    	   modificationList.remove(modification);
        }
        
-       
+       /**
+        * 
+        * @param id
+        * @return
+        * Modification
+        * TODO
+        */
        public Modification getModificationByModifierId(String id){
     	   for(Modification m : modificationList){
     		   if(m.getModifiers().equals(id))
@@ -438,11 +474,7 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public int getRectangleIndex(){
-    	   String index = annotation.getExtension().getConnectScheme().getRectangleIndex();
-    	   if(index == null)
-    		   return 0;
-    	   
-    	   return Integer.valueOf(index); 
+    	   return rectangleIndex;
        }
        
        /**
@@ -453,6 +485,7 @@ public class ReactionWrapper extends Reaction{
         */
        public void setRectangleIndex(int index){
     	   annotation.getExtension().getConnectScheme().setRectangleIndex(String.valueOf(index));
+    	   this.rectangleIndex = index;
        }
        
        /**

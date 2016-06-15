@@ -12,6 +12,7 @@ public class SpeciesReferenceWrapper extends SpeciesReference{
 	
 	ModelWrapper modelWrapper;
 	SpeciesReference sRef;
+	String alias;
 	
 	public SpeciesReferenceWrapper(SpeciesReference sRef, ModelWrapper modelWrapper){
 		this.sRef = sRef;
@@ -22,6 +23,8 @@ public class SpeciesReferenceWrapper extends SpeciesReference{
 		this.species = sRef.getSpecies();
 		this.stoichiometry = sRef.getStoichiometry();
 		this.stoichiometryMath = sRef.getStoichiometryMath();
+		
+		this.alias = annotation.getExtension().getAlias();
 	}
 	
 	/**
@@ -31,17 +34,18 @@ public class SpeciesReferenceWrapper extends SpeciesReference{
 	 * TODO
 	 */
 	public String getAlias() {
-        return annotation.getExtension().getAlias();
+        return alias;
     }
 	
 	/**
 	 * 
-	 * @param value
+	 * @param alias
 	 * void
 	 * TODO
 	 */
-	public void setAlias(String value) {
-        annotation.getExtension().setAlias(value);
+	public void setAlias(String alias) {
+        annotation.getExtension().setAlias(alias);
+        this.alias = alias;
     }
 
 	/**

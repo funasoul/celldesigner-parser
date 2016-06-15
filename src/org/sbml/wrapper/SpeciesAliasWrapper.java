@@ -1,5 +1,6 @@
 package org.sbml.wrapper;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.sbml._2001.ns.celldesigner.CompartmentAlias;
@@ -23,6 +24,11 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	CompartmentAlias compartmentAlias;
 	ComplexSpeciesAlias complexSpeciesAlias;
 	SpeciesAlias speciesAlias;
+	List<SpeciesTag> speciesTags;
+	double H;
+	double W;
+	double X;
+	double Y;
 	
 	public SpeciesAliasWrapper(SpeciesAlias speciesAlias, ModelWrapper modelWrapper){
 		this.modelWrapper = modelWrapper;
@@ -32,7 +38,6 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.briefView = speciesAlias.getBriefView();
 		this.id = speciesAlias.getId();
 		this.info = speciesAlias.getInfo();
-		this.listOfSpeciesTag = speciesAlias.getListOfSpeciesTag();
 		this.structuralState = speciesAlias.getStructuralState();
 		this.usualView = speciesAlias.getUsualView();
 		this.compartmentAlias = modelWrapper.getCompartmentAliasById(speciesAlias.getCompartmentAlias());
@@ -40,10 +45,16 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.speciesWrapper = modelWrapper.getSpeciesWrapperById(speciesAlias.getSpecies());
 		this.view = speciesAlias.getView();
 		this.species = speciesAlias.getSpecies();
-	}
 	
-	public int getSBOTerm(){
-		return 1;
+		this.listOfSpeciesTag = speciesAlias.getListOfSpeciesTag();
+		
+		if(listOfSpeciesTag != null)
+			this.speciesTags = listOfSpeciesTag.getSpeciesTag();
+		
+		this.H = bounds.getH().doubleValue();
+		this.W = bounds.getW().doubleValue();
+		this.X = bounds.getX().doubleValue();
+		this.Y = bounds.getY().doubleValue();
 	}
 	
 	/**
@@ -53,9 +64,20 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	 * TODO
 	 */
 	public double getH(){
-		return bounds.getH().doubleValue();
+		return H;
 	}
 
+	/**
+	 * 
+	 * @param h
+	 * void
+	 * TODO
+	 */
+	public void setH(double h){
+		bounds.setH(new BigDecimal(h));
+		this.H = h;
+	}
+	
 	/**
 	 * 
 	 * @return
@@ -63,9 +85,19 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	 * TODO
 	 */
 	public double getW(){
-		return bounds.getW().doubleValue();
+		return W;
 	}
 
+	/**
+	 * 
+	 * @param w
+	 * void
+	 * TODO
+	 */
+	public void setW(double w){
+		bounds.setW(new BigDecimal(w));
+		this.W = w;
+	}
 	
 	/**
 	 * 
@@ -74,7 +106,18 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	 * TODO
 	 */
 	public double getX(){
-		return bounds.getX().doubleValue();
+		return X;
+	}
+	
+	/**
+	 * 
+	 * @param x
+	 * void
+	 * TODO
+	 */
+	public void setX(double x){
+		bounds.setX(new BigDecimal(x));
+		this.X = x;
 	}
 	
 	/**
@@ -84,8 +127,20 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	 * TODO
 	 */
 	public double getY(){
-		return bounds.getY().doubleValue();
+		return Y;
 	}
+	
+	/**
+	 * 
+	 * @param y
+	 * void
+	 * TODO
+	 */
+	public void setY(double y){
+		bounds.setY(new BigDecimal(y));
+		this.Y = y;
+	}
+	
 	
 	/**
 	 * 
@@ -94,7 +149,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	 * TODO
 	 */
 	public List<SpeciesTag> getListOfSpeciesTags() {
-        return listOfSpeciesTag.getSpeciesTag();
+        return speciesTags;
     }
 
 	/**

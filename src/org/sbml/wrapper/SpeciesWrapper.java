@@ -18,11 +18,14 @@ public class SpeciesWrapper extends Species{
 	ModelWrapper modelWrapper;
 	Species species;
 	CompartmentWrapper compartmentWrapper;
+	String positionToCompartment;
+	String complexSpecies; // TODO
+	SpeciesIdentity speciesIdentity;
+	List<Catalyzed> catalyzedReactions;
 	
 	public SpeciesWrapper(Species species, ModelWrapper modelWrapper){
 		this.modelWrapper = modelWrapper;
 		this.species = species;
-		this.annotation = species.getAnnotation();
 		this.boundaryCondition = species.isBoundaryCondition();
 		this.charge = species.getCharge();
 		this.constant = species.isConstant();
@@ -37,6 +40,13 @@ public class SpeciesWrapper extends Species{
 		this.substanceUnits = species.getSubstanceUnits();
 		
 		this.compartmentWrapper = modelWrapper.getCompartmentWrapperById(species.getCompartment());
+		this.annotation = species.getAnnotation();
+		this.positionToCompartment = annotation.getExtension().getPositionToCompartment();
+		this.complexSpecies = annotation.getExtension().getComplexSpecies();
+		this.speciesIdentity = annotation.getExtension().getSpeciesIdentity();
+
+		if(annotation.getExtension().getListOfCatalyzedReactions() != null)
+			this.catalyzedReactions = annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
 	}
 	
 	/**
@@ -46,17 +56,31 @@ public class SpeciesWrapper extends Species{
 	 * TODO
 	 */
 	public String getPositionToCompartment(){	
-		return annotation.getExtension().getPositionToCompartment();
+		return positionToCompartment;
 	}
 	
 	/**
 	 * 
-	 * @param value
+	 * @param position
 	 * void
 	 * TODO
 	 */
-	public void setPositionToCompartment(String value){	
-		annotation.getExtension().setPositionToCompartment(value);
+	public void setPositionToCompartment(String position){	
+		annotation.getExtension().setPositionToCompartment(position);
+		positionToCompartment = position;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * boolean
+	 * TODO
+	 */
+	public boolean isSetPositionToCompatment(){
+		if(positionToCompartment == null)
+			return false;
+		else
+			return true;
 	}
 	
 	/**
@@ -66,17 +90,31 @@ public class SpeciesWrapper extends Species{
 	 * TODO
 	 */
 	public String getComplexSpecies(){
-		return annotation.getExtension().getComplexSpecies();
+		return complexSpecies;
 	}
 	
 	/**
 	 * 
-	 * @param value
+	 * @param complexSpecies
 	 * void
 	 * TODO
 	 */
-	public void setComplexSpecies(String value){
-		annotation.getExtension().setComplexSpecies(value);
+	public void setComplexSpecies(String complexSpecies){
+		annotation.getExtension().setComplexSpecies(complexSpecies);
+		this.complexSpecies = complexSpecies;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * boolean
+	 * TODO
+	 */
+	public boolean isSetComplexSpecies(){
+		if(complexSpecies == null)
+			return false;
+		else
+			return true;
 	}
 	
 	/**
@@ -86,17 +124,31 @@ public class SpeciesWrapper extends Species{
 	 * TODO
 	 */
 	public SpeciesIdentity getSpeciesIdentity(){
-		return annotation.getExtension().getSpeciesIdentity();
+		return speciesIdentity;
 	}
 	
 	/**
 	 * 
-	 * @param value
+	 * @param speciesIdentity
 	 * void
 	 * TODO
 	 */
-	public void setSpeciesIdentity(SpeciesIdentity value){
-		annotation.getExtension().setSpeciesIdentity(value);
+	public void setSpeciesIdentity(SpeciesIdentity speciesIdentity){
+		annotation.getExtension().setSpeciesIdentity(speciesIdentity);
+		this.speciesIdentity = speciesIdentity;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * boolean
+	 * TODO
+	 */
+	public boolean isSetSpeciesIdentity(){
+		if(speciesIdentity == null)
+			return false;
+		else
+			return true;
 	}
 	
 	/**
@@ -106,7 +158,7 @@ public class SpeciesWrapper extends Species{
 	 * TODO
 	 */
 	public List<Catalyzed> getListOfCatalyzedReactions() {
-		return annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
+		return catalyzedReactions;
 	}
 
 	/**
@@ -121,12 +173,25 @@ public class SpeciesWrapper extends Species{
 	
 	/**
 	 * 
+	 * 
+	 * void
+	 * TODO
+	 */
+	public boolean isSetListOfCatalyzedReactions(){
+		if(catalyzedReactions == null)
+			return false;
+		else
+			return true;
+	}
+	
+	/**
+	 * 
 	 * @param catalyzed
 	 * void
 	 * TODO
 	 */
 	public void addCatalyzedReaction(Catalyzed catalyzed){
-		annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed().add(catalyzed);
+		catalyzedReactions.add(catalyzed);
 	}
 	
 	/**
@@ -136,6 +201,34 @@ public class SpeciesWrapper extends Species{
 	 * TODO
 	 */
 	public void removeCatalyzedReaction(Catalyzed catalyzed){
-		annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed().remove(catalyzed);
+		catalyzedReactions.remove(catalyzed);
 	}
+	
+	/**
+	 * 
+	 * @return
+	 * Catalyzed
+	 * TODO
+	 */
+	public Catalyzed createCatalyzedReaction(){
+		Catalyzed catalyzed = new Catalyzed();
+		catalyzedReactions.add(catalyzed);
+		
+		return catalyzed;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * Catalyzed
+	 * TODO
+	 */
+	public Catalyzed createCatalyzedReaction(String reaction){
+		Catalyzed catalyzed = createCatalyzedReaction();
+		catalyzed.setReaction(reaction);
+		
+		return catalyzed;
+	}
+	
+	//TODO species identity handling
 }

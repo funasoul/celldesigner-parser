@@ -250,6 +250,7 @@ public class LayoutConverter {
 				List<ModifierSpeciesReferenceWrapper> msrwList = rw.getListOfModifierWrapper();
 				for(ModifierSpeciesReferenceWrapper msrw : msrwList){
 					Modification m = rw.getModificationByModifierId(msrw.getSpecies());
+					editPointList = msrw.getEditPoints();
 					SpeciesReferenceGlyph srg = rg.getSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_" + rg.getReaction() + "_" + msrw.getAlias());
 					SpeciesGlyph sg = layout.getSpeciesGlyph("SpeciesGlyph_" + msrw.getAlias());
 					SpeciesAliasWrapper modifiersaw = mWrapper.getSpeciesAliasWrapperById(msrw.getAlias());
@@ -385,7 +386,7 @@ public class LayoutConverter {
 	public static void main(String[] args){
 		LayoutConverter converter;
 		try {
-			converter = new LayoutConverter(new File("sample/cat.xml"));		
+			converter = new LayoutConverter(new File("sample/anchor.xml"));		
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

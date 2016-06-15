@@ -44,8 +44,10 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 this.modification = reactionWrapper.getModificationByModifierId(species);
 	
 		 this.type = modification.getType();
-		 this.editPointList = LayoutUtil.createEditPointsAsList(modification.getEditPoints());
-		 setTargetLineIndex(modification.getTargetLineIndex());
+		 if(modification.getEditPoints() != null)
+			 this.editPointList = LayoutUtil.createEditPointsAsList(modification.getEditPoints());
+		 if(modification.getTargetLineIndex() != null)
+			setTargetLineIndex(modification.getTargetLineIndex());
 	}
 	
 	/**
@@ -140,5 +142,25 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 	 */
 	public Point2D.Double getTargetLineIndex(){
 		return targetLineIndex;
+	}
+	
+	/**
+	 * 
+	 * @param editPoints
+	 * void
+	 * TODO
+	 */
+	public void setEditPoints(List<Point2D.Double> editPoints){
+		this.editPointList = editPoints;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * List<Point2D.Double>
+	 * TODO
+	 */
+	public List<Point2D.Double> getEditPoints(){
+		return editPointList;
 	}
 }

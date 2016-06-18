@@ -15,15 +15,28 @@ import org.sbml.jsbml.SBase;
 
 public class ModelUpgrader {
 	
+	/**
+	 * 
+	 * @param document
+	 * @return
+	 * SBMLDocument
+	 * TODO
+	 */
 	public static SBMLDocument upgrade(SBMLDocument document){
 		document.setLevelAndVersion(3, 1);
-		
-		if(isSetSBOTerm(document))
-			System.out.println("sboterm is set ");
+		if(!isSetSBOTerm(document))
+			System.err.println("Missing sboterms");
 		
 		return document;
 	}
 	
+	/**
+	 * 
+	 * @param document
+	 * @return
+	 * boolean
+	 * TODO
+	 */
 	public static boolean isSetSBOTerm(SBMLDocument document){
 		boolean species = checkSBOTermFromList(document.getModel().getListOfSpecies());
 		boolean compartment = checkSBOTermFromList(document.getModel().getListOfCompartments());
@@ -45,7 +58,13 @@ public class ModelUpgrader {
 		return species && compartment && reaction && reactant && product && modifier;
 	}
 	
-	
+	/**
+	 * 
+	 * @param list
+	 * @return
+	 * boolean
+	 * TODO
+	 */
 	public static boolean checkSBOTermFromList(ListOf<?> list){
 		@SuppressWarnings("unchecked")
 		Iterator<SBase> iterator = (Iterator<SBase>) list.iterator();

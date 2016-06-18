@@ -1,9 +1,14 @@
 package org.sbml.layoutconverter;
 
+import javax.swing.tree.TreeNode;
+
 import org.sbml.jsbml.Compartment;
+import org.sbml.jsbml.Event;
+import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ModifierSpeciesReference;
+import org.sbml.jsbml.Parameter;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.Species;
@@ -22,7 +27,16 @@ public class SBMLModelCompleter {
 	
 	static SBMLDocument document;
 	static Model model;
+	static final int level = 3;
+	static final int version = 1;
 	
+	/**
+	 * 
+	 * @param doc
+	 * @return
+	 * SBMLDocument
+	 * TODO
+	 */
 	public static SBMLDocument autoCompleteRequiredAttributes(SBMLDocument doc){
 		document = doc;
 		model = document.getModel();
@@ -33,6 +47,45 @@ public class SBMLModelCompleter {
 		
 		return document;
 	}
+	
+	public static void autocomplete(TreeNode node){
+		System.out.println(node.getClass());
+		
+		for(int i = 0; i < node.getChildCount(); i++){
+			TreeNode n = node.getChildAt(i);
+			     
+			if(n instanceof Model){
+				Model model = (Model) n;
+				model.initDefaults(level, version);
+			} else if(n instanceof Compartment){
+				Compartment compartment = (Compartment) n;
+				compartment.initDefaults(level, version);
+			} else if(n instanceof Parameter){
+				Parameter parameter = (Parameter) n;
+				parameter.initDefaults(level, version);
+			} else if(n instanceof Species){
+				Species species = (Species) n;
+				species.initDefaults(level, version);
+			}  else if(n instanceof Unit){
+				Unit unit = (Unit) n;
+				unit.initDefaults(level, version);
+			} else if(n instanceof Reaction){
+				Reaction reaction = (Reaction) n;
+				reaction.initDefaults(level, version);
+			} else if(n instanceof Event){
+				Event event = (Event) n;
+				event.initDefaults(level, version);
+			} else if(n instanceof KineticLaw){
+				KineticLaw kineticLaw = (KineticLaw) n;
+				kineticLaw.initDefaults();
+			} 
+			
+			
+			
+			autocomplete(n);
+		}
+	}
+	
 	
 	/**
 	 * 
@@ -53,6 +106,7 @@ public class SBMLModelCompleter {
 					u.setKind(Kind.INVALID);
 				if(!u.isSetScale())
 					u.setScale(0);
+			
 			}
 		}
 		

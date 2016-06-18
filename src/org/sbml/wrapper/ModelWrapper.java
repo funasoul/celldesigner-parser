@@ -58,8 +58,8 @@ public class ModelWrapper extends Model {
 	List<Layer> layerList;
 	List<Protein> proteinList;
 	List<RNA> rnaList;
-	short sizeX;
-	short sizeY;
+	double width;
+	double height;
 	
 	ModelDisplay modelDisplay;
 	int version;
@@ -113,8 +113,8 @@ public class ModelWrapper extends Model {
 		modelDisplay = annotation.getExtension().getModelDisplay();
 		version = annotation.getExtension().getModelVersion().intValue();
 		
-		this.sizeX = modelDisplay.getSizeX();
-		this.sizeY = modelDisplay.getSizeY();
+		this.width = modelDisplay.getSizeX();
+		this.height = modelDisplay.getSizeY();
 		
 	
 	}
@@ -140,11 +140,11 @@ public class ModelWrapper extends Model {
 	/**
 	 * 
 	 * @return
-	 * short
+	 * double
 	 * TODO
 	 */
-	public short getSizeX(){
-		return sizeX;
+	public double getW(){
+		return width;
 	}
 	
 	/**
@@ -153,19 +153,19 @@ public class ModelWrapper extends Model {
 	 * void
 	 * TODO
 	 */
-	public void setSizeX(short x){
-		this.sizeX = x;
-		annotation.getExtension().getModelDisplay().setSizeX(x);
+	public void setW(double w){
+		this.width = w;
+		annotation.getExtension().getModelDisplay().setSizeX((short) width);
 	}
 	
 	/**
 	 * 
 	 * @return
-	 * short
+	 * double
 	 * TODO
 	 */
-	public short getSizeY(){
-		return sizeY;
+	public double getH(){
+		return height;
 	}
 	
 	/**
@@ -174,9 +174,9 @@ public class ModelWrapper extends Model {
 	 * void
 	 * TODO
 	 */
-	public void setSizeY(short y){
-		this.sizeY = y;
-		annotation.getExtension().getModelDisplay().setSizeY(y);
+	public void setSizeY(double h){
+		this.height = h;
+		annotation.getExtension().getModelDisplay().setSizeY((short) h);
 	}
 
 	

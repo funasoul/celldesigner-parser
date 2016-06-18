@@ -62,6 +62,17 @@ public class LayoutConverter {
 	Model model;
 	Layout layout;
 	
+	static final double DEFAULT_SPECIES_WIDTH = 80.0;
+	static final double DEFAULT_SPECIES_HEIGHT = 40.0;
+	static final double DEFAULT_SPECIES_DEPTH = 1.0;
+	
+	/**
+	 * 
+	 * @param file
+	 * @throws JAXBException
+	 * @throws XMLStreamException
+	 * @throws IOException
+	 */
 	public LayoutConverter(File file) throws JAXBException, XMLStreamException, IOException{
 		mWrapper = ObjectFactory.unmarshalSBML(file);	
 		document = ConverterSBMLReader.read(file);
@@ -127,7 +138,6 @@ public class LayoutConverter {
 			point.setX(caw.getX());
 			point.setY(caw.getY());
 			point.setZ(0d);
-			bb.setPosition(point);
 			
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + caw.getId());
 			tg.setOriginOfText(caw.getId());
@@ -138,15 +148,41 @@ public class LayoutConverter {
 			dimension2.setHeight(10);
 			dimension.setDepth(1d);
 			Point point2 = bb2.createPosition();
-			point2.setX(caw.getNamePoint().getX().doubleValue());
-			point2.setY(caw.getNamePoint().getY().doubleValue());
+			point2.setX(caw.getNameX());
+			point2.setY(caw.getNameY());
 			point2.setZ(0d);
+		}
+		
+		CompartmentWrapper cw = mWrapper.getCompartmentWrapperById("default");
+		if(cw != null){
+			CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + cw.getId());
+			cg.setCompartment(cw.getId());
+			BoundingBox bb = cg.createBoundingBox();
+			Dimensions dimension = bb.createDimensions();
+			dimension.setWidth(mWrapper.getW());
+			dimension.setHeight(mWrapper.getH());
+			dimension.setDepth(1d);
+			bb.createPosition(0, 0, 0);
+			
+			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + cw.getId());
+			tg.setOriginOfText(cw.getId());
+			tg.setGraphicalObject(cg);
+			BoundingBox bb2 = tg.createBoundingBox();;
+			Dimensions dimension2 = bb2.createDimensions();
+			dimension2.setWidth(cw.getId().length() * 3);
+			dimension2.setHeight(10);
+			dimension.setDepth(1d);
+			Point point2 = bb2.createPosition();
+			point2.setX(mWrapper.getW() / 2 - cw.getId().length() * 3 / 2);
+			point2.setY(mWrapper.getH() - 10);
+			point2.setZ(0d);
+			
 		}
 	}
 	
 	public void convertModelToLayout(ModelWrapper mWrapper){
 		layout.setId("Layout_" + model.getId());
-		layout.createDimensions(mWrapper.getSizeX(), mWrapper.getSizeX(), 0);
+		layout.createDimensions(mWrapper.getW(), mWrapper.getH(), 1d);
 		
 	}
 	
@@ -160,7 +196,7 @@ public class LayoutConverter {
 			List<BaseProduct> prsList = rw.getBaseProducts();
 			List<Point2D.Double> editPointList = rw.getEditPointsAsList();
 			int rectangleIndex = rw.getRectangleIndex();
-			
+			rg.createBoundingBox();
 			List<LineSegment> lsList = null;
 			
 			if(brsList.size() == 1 && prsList.size() == 1){
@@ -299,6 +335,8 @@ public class LayoutConverter {
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
+			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH,DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
+			bb.createPosition(0,0,0);
 		}
 
 		List<SpeciesReferenceWrapper> productList = rw.getListOfProductWrapper();
@@ -307,6 +345,8 @@ public class LayoutConverter {
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.PRODUCT);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
+			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH,DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);	
+			bb.createPosition(0,0,0);
 		}
 
 		if (rw.isSetModifier()) {
@@ -315,6 +355,8 @@ public class LayoutConverter {
 				SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_" + rg.getReaction() + "_" + msrw.getAlias());
 				srg.setSpeciesReference(msrw.getSpecies());
 				srg.setSpeciesGlyph("SpeciesGlyph_" + msrw.getAlias());
+				BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH,DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
+				bb.createPosition(0,0,0);
 				String s = rw.getModifierTypeByModifierId(msrw.getSpecies());
 				
 				if(s.equals("CATALYSIS") || s.equals("UNKNOWN_CATALYSIS")){

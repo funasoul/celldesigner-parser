@@ -21,6 +21,8 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 	double W;
 	double X;
 	double Y;
+	double nameX;
+	double nameY;
 	
 	public CompartmentAliasWrapper(CompartmentAlias compartmentAlias, ModelWrapper modelWrapper){
 		this.modelWrapper = modelWrapper;
@@ -39,6 +41,51 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 		this.X = bounds.getX().doubleValue();
 		this.Y = bounds.getY().doubleValue();
 		
+		this.nameX = compartmentAlias.getNamePoint().getX().doubleValue();
+		this.nameY = compartmentAlias.getNamePoint().getY().doubleValue();
+		
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * double
+	 * TODO
+	 */
+	public double getNameX(){
+		return nameX;
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * void
+	 * TODO
+	 */
+	public void setNameX(double value){
+		nameX = value;
+		compartmentAlias.getNamePoint().setX(new BigDecimal(value));
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * double
+	 * TODO
+	 */
+	public double getNameY(){
+		return nameY;
+	}
+	
+	/**
+	 * 
+	 * @param value
+	 * void
+	 * TODO
+	 */
+	public void setNameY(double value){
+		nameY = value;
+		compartmentAlias.getNamePoint().setY(new BigDecimal(value));
 	}
 	
 	/**

@@ -22,6 +22,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	Species speciesAliased;
 	SpeciesWrapper speciesWrapper;
 	CompartmentAlias compartmentAlias;
+	CompartmentAliasWrapper compatmentAliasWrapper;
 	ComplexSpeciesAlias complexSpeciesAlias;
 	SpeciesAlias speciesAlias;
 	List<SpeciesTag> speciesTags;
@@ -29,6 +30,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	double W;
 	double X;
 	double Y;
+	private CompartmentAliasWrapper compartmentAliasWrapper;
 	
 	public SpeciesAliasWrapper(SpeciesAlias speciesAlias, ModelWrapper modelWrapper){
 		this.modelWrapper = modelWrapper;
@@ -45,9 +47,11 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.speciesWrapper = modelWrapper.getSpeciesWrapperById(speciesAlias.getSpecies());
 		this.view = speciesAlias.getView();
 		this.species = speciesAlias.getSpecies();
-	
-		this.listOfSpeciesTag = speciesAlias.getListOfSpeciesTag();
+
+		if(compartmentAlias != null)
+			this.compartmentAliasWrapper = modelWrapper.getCompartmentAliasWrapperByCompartmentId(compartmentAlias.getId());
 		
+		this.listOfSpeciesTag = speciesAlias.getListOfSpeciesTag();
 		if(listOfSpeciesTag != null)
 			this.speciesTags = listOfSpeciesTag.getSpeciesTag();
 		
@@ -140,8 +144,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		bounds.setY(new BigDecimal(y));
 		this.Y = y;
 	}
-	
-	
+
 	/**
 	 * 
 	 * @return
@@ -194,11 +197,21 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
     
     /**
      * 
+     * @param speciesWrapper
+     * void
+     * TODO
+     */
+    public void setSpeciesWrapperAliased(SpeciesWrapper speciesWrapper){
+    	this.speciesWrapper = speciesWrapper;
+    }
+    
+    /**
+     * 
      * @return
      * CompartmentAlias
      * TODO
      */
-    public CompartmentAlias getCompartmentAliased() {
+    public CompartmentAlias getCompartmentAliasAliased() {
         return compartmentAlias;
     }
 
@@ -208,8 +221,29 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
      * void
      * TODO
      */
-    public void setCompartmentAliased(CompartmentAlias value) {
+    public void setCompartmentAliasAliased(CompartmentAlias value) {
         this.compartmentAlias = value;
+    }
+    
+    
+    /**
+     * 
+     * @return
+     * CompartmentAlias
+     * TODO
+     */
+    public CompartmentAliasWrapper getCompartmentAliasWrapper() {
+        return compartmentAliasWrapper;
+    }
+
+    /**
+     * 
+     * @param value
+     * void
+     * TODO
+     */
+    public void setCompartmentAliasWrapper(CompartmentAliasWrapper value) {
+        this.compartmentAliasWrapper = value;
     }
 
     /**
@@ -231,5 +265,17 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
     public void setComplexSpeciesAliased(ComplexSpeciesAlias value) {
         this.complexSpeciesAlias = value;
     }
-
+    
+    /**
+     * 
+     * @return
+     * boolean
+     * TODO
+     */
+    public boolean isSetComplexSpeciesAlias(){
+    	if(complexSpeciesAlias == null)
+    		return false;
+    	else
+    		return true;
+    }
 }

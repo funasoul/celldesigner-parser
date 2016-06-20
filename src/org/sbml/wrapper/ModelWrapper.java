@@ -46,6 +46,7 @@ public class ModelWrapper extends Model {
 	List<SpeciesWrapper> sWrapperList;
 	List<SpeciesAliasWrapper> sAliasWrapperList;
 	List<CompartmentAliasWrapper>  cAliasWrapperList;
+	List<ComplexSpeciesAliasWrapper> complexWrapperList;
 	
 	List<AntisenseRNA> antiSenseRNAList;
 	List<BlockDiagram> blockDiagramList;
@@ -80,9 +81,6 @@ public class ModelWrapper extends Model {
 		if(annotation.getExtension().getListOfCompartmentAliases() != null)
 			this.cAliasList = annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias();
 		
-		if(annotation.getExtension().getListOfComplexSpeciesAliases() != null)
-			this.complexSpeciesAliasList = annotation.getExtension().getListOfComplexSpeciesAliases().getComplexSpeciesAlias();
-		
 		if(annotation.getExtension().getListOfGenes() != null)
 			this.geneList = annotation.getExtension().getListOfGenes().getGene();
 		
@@ -105,10 +103,16 @@ public class ModelWrapper extends Model {
 			this.sAliasList = annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias();
 		
 		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
+		this.cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias());
 		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
 		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
+		if(annotation.getExtension().getListOfComplexSpeciesAliases() != null) {
+			this.complexSpeciesAliasList = annotation.getExtension().getListOfComplexSpeciesAliases().getComplexSpeciesAlias();
+			this.complexWrapperList = createComplexWrapperList(complexSpeciesAliasList);
+		}
+	
 		this.sAliasWrapperList = createSpeciesAliasWrapperList(sAliasList);
-		this.cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias());
+		
 	
 		modelDisplay = annotation.getExtension().getModelDisplay();
 		version = annotation.getExtension().getModelVersion().intValue();
@@ -118,6 +122,7 @@ public class ModelWrapper extends Model {
 		
 	
 	}
+
 //
 //	/**
 //	 * @param species
@@ -362,6 +367,46 @@ public class ModelWrapper extends Model {
 		for(SpeciesAliasWrapper saw : sAliasWrapperList)
 			if(saw.getId().equals(id))
 				return saw;
+		
+		return null;
+	}
+	
+	/**
+	 * @param complexSpeciesAliasList2
+	 * @return
+	 * List<ComplexSpeciesAliasWrapper>
+	 * TODO
+	 */
+	private List<ComplexSpeciesAliasWrapper> createComplexWrapperList(List<ComplexSpeciesAlias> complexSpeciesAliasList) {
+		List<ComplexSpeciesAliasWrapper> csawList = new ArrayList<ComplexSpeciesAliasWrapper>(complexSpeciesAliasList.size());
+
+		for(ComplexSpeciesAlias csa : complexSpeciesAliasList)
+			csawList.add(new ComplexSpeciesAliasWrapper(csa, this));
+			
+		return csawList;
+	}
+	
+	/**
+	 * 
+	 * @return
+	 * List<ComplexSpeciesAliasWrapper>
+	 * TODO
+	 */
+	public List<ComplexSpeciesAliasWrapper> getListOfComplexSpeciesAliasWrapper(){
+		return complexWrapperList;
+	}
+	
+	/**
+	 * 
+	 * @param id
+	 * @return
+	 * ComplexSpeciesAliasWrapper
+	 * TODO
+	 */
+	public ComplexSpeciesAliasWrapper getComplexAliasWrapperById(String id){
+		for(ComplexSpeciesAliasWrapper csaw: complexWrapperList)
+			if(csaw.getId().equals(id))
+				return csaw;
 		
 		return null;
 	}
@@ -922,7 +967,7 @@ public class ModelWrapper extends Model {
 				}
 			}
 		}
-		
+
 		return cawList;
 	}
 }

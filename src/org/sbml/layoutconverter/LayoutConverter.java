@@ -35,6 +35,7 @@ import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.wrapper.CompartmentAliasWrapper;
 import org.sbml.wrapper.CompartmentWrapper;
+import org.sbml.wrapper.ComplexSpeciesAliasWrapper;
 import org.sbml.wrapper.ModelWrapper;
 import org.sbml.wrapper.ModifierSpeciesReferenceWrapper;
 import org.sbml.wrapper.ObjectFactory;
@@ -89,7 +90,6 @@ public class LayoutConverter {
 	 */
 	public void print(){
 		try {
-			//SBMLWriter.write(document, System.out, ' ', (short) 2);
 	    	SBMLWriter.write(document, new File("CD_" + model.getId() + ".xml"), ' ', (short) 2);
 	    	String docStr = new TidySBMLWriter().writeSBMLToString(document);
 	    	System.out.println(docStr);
@@ -111,6 +111,7 @@ public class LayoutConverter {
 	public SBMLDocument convertToLayout(){
 		convertModelToLayout(mWrapper);
 		convertCompartmentsToLayout(mWrapper.getListOfCompartmentAliasWrapper());
+		convertComplexAliasToLayout(mWrapper.getListOfComplexSpeciesAliasWrapper());
 		convertSpeciesAliasToLayout(mWrapper.getListOfSpeciesAliasWrapper());
 		convertReactionsToLayout(mWrapper.getListOfReactionWrapper());
 	
@@ -124,6 +125,32 @@ public class LayoutConverter {
 	 * TODO
 	 */
 	public void convertCompartmentsToLayout(List<CompartmentAliasWrapper> cawList){
+		CompartmentWrapper cw = mWrapper.getCompartmentWrapperById("default");
+		if(cw != null){
+			CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + cw.getId());
+			cg.setCompartment(cw.getId());
+			BoundingBox bb = cg.createBoundingBox();
+			Dimensions dimension = bb.createDimensions();
+			dimension.setWidth(mWrapper.getW());
+			dimension.setHeight(mWrapper.getH());
+			dimension.setDepth(1d);
+			bb.createPosition(0, 0, 0);
+			
+			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + cw.getId());
+			tg.setOriginOfText(cw.getId());
+			tg.setGraphicalObject(cg);
+			BoundingBox bb2 = tg.createBoundingBox();;
+			Dimensions dimension2 = bb2.createDimensions();
+			dimension2.setWidth(cw.getId().length() * 3);
+			dimension2.setHeight(10);
+			dimension.setDepth(1d);
+			Point point2 = bb2.createPosition();
+			point2.setX(mWrapper.getW() / 2 - cw.getId().length() * 3 / 2);
+			point2.setY(mWrapper.getH() - 10);
+			point2.setZ(0d);
+			
+		}
+		
 		cawList = ModelWrapper.reorderCompartmentAccordingToPosition(cawList);
 		
 		for(CompartmentAliasWrapper caw : cawList){
@@ -152,32 +179,6 @@ public class LayoutConverter {
 			point2.setY(caw.getNameY());
 			point2.setZ(0d);
 		}
-		
-		CompartmentWrapper cw = mWrapper.getCompartmentWrapperById("default");
-		if(cw != null){
-			CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + cw.getId());
-			cg.setCompartment(cw.getId());
-			BoundingBox bb = cg.createBoundingBox();
-			Dimensions dimension = bb.createDimensions();
-			dimension.setWidth(mWrapper.getW());
-			dimension.setHeight(mWrapper.getH());
-			dimension.setDepth(1d);
-			bb.createPosition(0, 0, 0);
-			
-			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + cw.getId());
-			tg.setOriginOfText(cw.getId());
-			tg.setGraphicalObject(cg);
-			BoundingBox bb2 = tg.createBoundingBox();;
-			Dimensions dimension2 = bb2.createDimensions();
-			dimension2.setWidth(cw.getId().length() * 3);
-			dimension2.setHeight(10);
-			dimension.setDepth(1d);
-			Point point2 = bb2.createPosition();
-			point2.setX(mWrapper.getW() / 2 - cw.getId().length() * 3 / 2);
-			point2.setY(mWrapper.getH() - 10);
-			point2.setZ(0d);
-			
-		}
 	}
 	
 	public void convertModelToLayout(ModelWrapper mWrapper){
@@ -190,7 +191,6 @@ public class LayoutConverter {
 		for(ReactionWrapper rw: rList){
 			ReactionGlyph rg = layout.createReactionGlyph("ReactionGlyph_" + rw.getId());
 			rg.setReference(rw.getId());
-			rg.setSBOTerm(model.getReaction(rw.getId()).getSBOTerm());
 			ListOf<SpeciesReferenceGlyph> srgList = createSpeciesReferenceGlyph(rg, rw);
 			List<BaseReactant> brsList = rw.getBaseReactants();
 			List<BaseProduct> prsList = rw.getBaseProducts();
@@ -225,24 +225,39 @@ public class LayoutConverter {
 			} else if(rw.getReactionType().equals("HETERODIMER_ASSOCIATION")){ 	// two to one
 				List<Point2D.Double> editPoint = rw.getEditPointsAsList();
 				BaseReactant br1 = brsList.get(0);
-				BaseReactant br2 = brsList.get(1);
-				BaseProduct bp1 = prsList.get(0);
-				SpeciesAliasWrapper reactantsaw1 = mWrapper.getSpeciesAliasWrapperById(br1.getAlias());
-				SpeciesAliasWrapper reactantsaw2 = mWrapper.getSpeciesAliasWrapperById(br2.getAlias());
-				SpeciesAliasWrapper productsaw = mWrapper.getSpeciesAliasWrapperById(bp1.getAlias());
 				SpeciesGlyph sg1 = layout.getSpeciesGlyph("SpeciesGlyph_" + br1.getAlias());
-				SpeciesGlyph sg2 = layout.getSpeciesGlyph("SpeciesGlyph_" + br2.getAlias());
-				SpeciesGlyph sg3 = layout.getSpeciesGlyph("SpeciesGlyph_" + bp1.getAlias());
+				SpeciesAliasWrapper reactantsaw1 = mWrapper.getSpeciesAliasWrapperById(br1.getAlias());
 				SpeciesReferenceGlyph srg1 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw1.getId());
-				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw2.getId());
-				SpeciesReferenceGlyph srg3 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + productsaw.getId());
-				
-				LineSegment r1segment = srg1.createCurve().createLineSegment();
-				LineSegment r2segment = srg2.createCurve().createLineSegment();
-				LineSegment psegment = srg3.createCurve().createLineSegment();
 				Point reactantPoint1 = LayoutUtil.createAdjustedPoint(reactantsaw1.getX(), reactantsaw1.getY(), reactantsaw1.getW(), reactantsaw1.getH(), br1.getLinkAnchor().getPosition());
+				LineSegment r1segment = srg1.createCurve().createLineSegment();
+				
+				
+				BaseReactant br2 = brsList.get(1);
+				SpeciesGlyph sg2 = layout.getSpeciesGlyph("SpeciesGlyph_" + br2.getAlias());
+				SpeciesAliasWrapper reactantsaw2 = mWrapper.getSpeciesAliasWrapperById(br2.getAlias());
+				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw2.getId());
 				Point reactantPoint2 = LayoutUtil.createAdjustedPoint(reactantsaw2.getX(), reactantsaw2.getY(), reactantsaw2.getW(), reactantsaw2.getH(), br1.getLinkAnchor().getPosition());
-				Point productPoint = LayoutUtil.createAdjustedPoint(productsaw.getX(), productsaw.getY(), productsaw.getW(), productsaw.getH(), bp1.getLinkAnchor().getPosition());
+				LineSegment r2segment = srg2.createCurve().createLineSegment();
+				
+				
+				BaseProduct bp1 = prsList.get(0);
+				SpeciesGlyph sg3 = layout.getSpeciesGlyph("SpeciesGlyph_" + bp1.getAlias());
+				SpeciesAliasWrapper productsaw = mWrapper.getSpeciesAliasWrapperById(bp1.getAlias());
+				SpeciesReferenceGlyph srg3;
+				Point productPoint;
+				if(productsaw != null){
+					// not complex species
+					srg3 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + productsaw.getId());				
+					productPoint = LayoutUtil.createAdjustedPoint(productsaw.getX(), productsaw.getY(), productsaw.getW(), productsaw.getH(), bp1.getLinkAnchor().getPosition());
+				}  else { 
+					//product is complex species
+					ComplexSpeciesAliasWrapper csaw = mWrapper.getComplexAliasWrapperById(bp1.getAlias());
+					srg3 =  srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + csaw.getId());
+					productPoint = LayoutUtil.createAdjustedPoint(csaw.getX(), csaw.getY(), csaw.getW(), csaw.getH(), bp1.getLinkAnchor().getPosition());
+				}
+				LineSegment psegment = srg3.createCurve().createLineSegment();
+				
+				
 				Point centerPoint = LayoutUtil.getEditPointPosition(sg1, sg2, sg3, editPoint.get(0));
 				r1segment.setStart(reactantPoint1);
 				r2segment.setStart(reactantPoint2);
@@ -254,26 +269,39 @@ public class LayoutConverter {
 			} else if(rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")){ 	//one to two 	
 				List<Point2D.Double> editPoint = rw.getEditPointsAsList();
 				BaseReactant br1 = brsList.get(0);
-				BaseProduct bp1 = prsList.get(0);
-				BaseProduct bp2 = prsList.get(1);				
-				SpeciesAliasWrapper reactantsaw1 = mWrapper.getSpeciesAliasWrapperById(br1.getAlias());
-				SpeciesAliasWrapper productsaw1 = mWrapper.getSpeciesAliasWrapperById(bp1.getAlias());
-				SpeciesAliasWrapper productsaw2 = mWrapper.getSpeciesAliasWrapperById(bp2.getAlias());
 				SpeciesGlyph sg1 = layout.getSpeciesGlyph("SpeciesGlyph_" + br1.getAlias());
-				SpeciesGlyph sg2 = layout.getSpeciesGlyph("SpeciesGlyph_" + bp1.getAlias());
-				SpeciesGlyph sg3 = layout.getSpeciesGlyph("SpeciesGlyph_" + bp2.getAlias());
-				SpeciesReferenceGlyph srg1 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw1.getId());
-				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + productsaw1.getId());
-				SpeciesReferenceGlyph srg3 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + productsaw2.getId());
-
+				SpeciesAliasWrapper reactantsaw = mWrapper.getSpeciesAliasWrapperById(br1.getAlias());
+				
+				SpeciesReferenceGlyph srg1;
+				Point reactantPoint;
+				if(reactantsaw != null){
+					// not complex species
+					srg1 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + reactantsaw.getId());
+					reactantPoint = LayoutUtil.createAdjustedPoint(reactantsaw.getX(), reactantsaw.getY(), reactantsaw.getW(), reactantsaw.getH(), br1.getLinkAnchor().getPosition());
+				}  else { 
+					//product is complex species
+					ComplexSpeciesAliasWrapper csaw = mWrapper.getComplexAliasWrapperById(br1.getAlias());
+					srg1 =  srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + csaw.getId());
+					reactantPoint = LayoutUtil.createAdjustedPoint(csaw.getX(), csaw.getY(), csaw.getW(), csaw.getH(), br1.getLinkAnchor().getPosition());
+				}
 				LineSegment r1segment = srg1.createCurve().createLineSegment();
+				
+				BaseProduct bp1 = prsList.get(0);
+				SpeciesAliasWrapper productsaw1 = mWrapper.getSpeciesAliasWrapperById(bp1.getAlias());
+				SpeciesGlyph sg2 = layout.getSpeciesGlyph("SpeciesGlyph_" + bp1.getAlias());
+				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + productsaw1.getId());
 				LineSegment p1segment = srg2.createCurve().createLineSegment();
-				LineSegment p2segment = srg3.createCurve().createLineSegment();
-				Point reactantPoint1 = LayoutUtil.createAdjustedPoint(reactantsaw1.getX(), reactantsaw1.getY(), reactantsaw1.getW(), reactantsaw1.getH(), br1.getLinkAnchor().getPosition());
 				Point productPoint1 = LayoutUtil.createAdjustedPoint(productsaw1.getX(), productsaw1.getY(), productsaw1.getW(), productsaw1.getH(), bp1.getLinkAnchor().getPosition());
+				
+				BaseProduct bp2 = prsList.get(1);				
+				SpeciesAliasWrapper productsaw2 = mWrapper.getSpeciesAliasWrapperById(bp2.getAlias());
+				SpeciesGlyph sg3 = layout.getSpeciesGlyph("SpeciesGlyph_" + bp2.getAlias());
+				SpeciesReferenceGlyph srg3 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + productsaw2.getId());
+				LineSegment p2segment = srg3.createCurve().createLineSegment();
+				
 				Point productPoint2 = LayoutUtil.createAdjustedPoint(productsaw2.getX(), productsaw2.getY(), productsaw2.getW(), productsaw2.getH(), bp2.getLinkAnchor().getPosition());
 				Point centerPoint = LayoutUtil.getEditPointPosition(sg1, sg2, sg3, editPoint.get(0));
-				r1segment.setStart(reactantPoint1);
+				r1segment.setStart(reactantPoint);
 				r1segment.setEnd(centerPoint.clone());
 				p1segment.setStart(centerPoint.clone());
 				p1segment.setEnd(productPoint1);
@@ -291,7 +319,7 @@ public class LayoutConverter {
 					SpeciesGlyph sg = layout.getSpeciesGlyph("SpeciesGlyph_" + msrw.getAlias());
 					SpeciesAliasWrapper modifiersaw = mWrapper.getSpeciesAliasWrapperById(msrw.getAlias());
 					Point modifier = sg.getBoundingBox().getPosition();
-					LinkTarget lt = rw.getLinkTargetByModifierId(m.getModifiers());
+					LinkTarget lt = rw.getLinkTargetByModifier(m);
 					
 					modifier = LayoutUtil.createAdjustedPoint(modifiersaw.getX(), modifiersaw.getY(), modifiersaw.getW(), modifiersaw.getH(), lt.getLinkAnchor().getPosition());
 					Point reaction = lsList.get(rectangleIndex).getEnd().clone();
@@ -307,7 +335,15 @@ public class LayoutConverter {
 			//create textglyph near the first base reactant 
 			BaseReactant br = brsList.get(0);
 			SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperById(br.getAlias());
-			Point point = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), br.getLinkAnchor().getPosition());
+			Point point;
+			if(saw != null){
+				// not complex species
+				point = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), br.getLinkAnchor().getPosition());
+			}  else { 
+				//product is complex species
+				ComplexSpeciesAliasWrapper csaw = mWrapper.getComplexAliasWrapperById(br.getAlias());
+				point = LayoutUtil.createAdjustedPoint(csaw.getX(), csaw.getY(), csaw.getW(), csaw.getH(), br.getLinkAnchor().getPosition());
+			}
 			point = LayoutUtil.adjustPoint(point, br.getLinkAnchor().getPosition());
 
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + rw.getId());
@@ -395,10 +431,15 @@ public class LayoutConverter {
 			point.setZ(0d);
 			bb.setPosition(point);
 
+			
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + saw.getId());
-			tg.setOriginOfText(saw.getSpeciesWrapperAliased().getId());
+			if(!saw.isSetComplexSpeciesAlias())
+				tg.setOriginOfText(saw.getSpeciesWrapperAliased().getId());
+			else
+				tg.setOriginOfText(saw.getSpecies());
+			
 			tg.setGraphicalObject(sg);
-			BoundingBox bb2 = tg.createBoundingBox();;
+			BoundingBox bb2 = tg.createBoundingBox();
 			Dimensions dimension2 = bb2.createDimensions();
 			dimension2.setWidth(saw.getId().length() * 3);
 			dimension2.setHeight(10);
@@ -406,6 +447,47 @@ public class LayoutConverter {
 			Point point2 = bb2.createPosition();
 			point2.setX(saw.getX() + saw.getW()/2 - dimension2.getWidth()/2);
 			point2.setY(saw.getY() + saw.getH()/2 - dimension2.getHeight()/2);
+			point2.setZ(0d);
+			
+		}
+	}
+	
+	/**
+	 * 
+	 * @param csaList
+	 * void
+	 * TODO
+	 */
+	public void convertComplexAliasToLayout(List<ComplexSpeciesAliasWrapper> csaList){
+		for(ComplexSpeciesAliasWrapper csaw : csaList){
+			SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + csaw.getId());	
+			sg.setReference(csaw.getSpecies());
+
+			BoundingBox bb = sg.createBoundingBox();
+			Dimensions dimension = bb.createDimensions();
+			dimension.setWidth(csaw.getW());
+			dimension.setHeight(csaw.getH());
+			dimension.setDepth(1d);
+			bb.setDimensions(dimension);
+			Point point = bb.createPosition();
+			point.setX(csaw.getX());
+			point.setY(csaw.getY());
+			point.setZ(0d);
+			bb.setPosition(point);
+
+			
+			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + csaw.getId());
+			tg.setOriginOfText(csaw.getId());
+			
+			tg.setGraphicalObject(sg);
+			BoundingBox bb2 = tg.createBoundingBox();
+			Dimensions dimension2 = bb2.createDimensions();
+			dimension2.setWidth(csaw.getId().length() * 3);
+			dimension2.setHeight(10);
+			dimension.setDepth(1d);
+			Point point2 = bb2.createPosition();
+			point2.setX(csaw.getX() + csaw.getW()/2 - dimension2.getWidth()/2);
+			point2.setY(csaw.getY() + csaw.getH()  );
 			point2.setZ(0d);
 			
 		}
@@ -421,14 +503,16 @@ public class LayoutConverter {
 		document.checkConsistency();
 		SBMLErrorLog errorLog = document.getListOfErrors();
 		List<SBMLError> errorList = errorLog.getValidationErrors();
-		for(SBMLError e: errorList)
-			System.out.println(e.getMessage());
+		for(SBMLError e: errorList){
+			System.out.println(e.getLine() + " " + e.getMessage());
+		}
 	}
 	
 	public static void main(String[] args){
 		LayoutConverter converter;
 		try {
-			converter = new LayoutConverter(new File("sample/anchor.xml"));		
+			//converter = new LayoutConverter(new File("sample/phosphorylation.xml"));		
+			converter = new LayoutConverter(new File("sample/complex.xml"));		
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

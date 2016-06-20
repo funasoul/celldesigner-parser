@@ -64,10 +64,16 @@ public class ReactionWrapper extends Reaction{
 			this.name = reaction.getName();		//same as annotation.getExtension().getName()?
 			this.notes = reaction.getNotes();
 			this.reversible = reaction.isReversible();
+
 			
 			this.annotation = reaction.getAnnotation();
+			this.type  = annotation.getExtension().getReactionType();
+			
 			this.editPoints = annotation.getExtension().getEditPoints();
-			this.editPointList = LayoutUtil.createEditPointsAsList(editPoints.getValue());
+			if(editPoints != null)
+				this.editPointList = LayoutUtil.createEditPointsAsList(editPoints.getValue());
+			else
+				this.editPointList = new ArrayList<Point2D.Double>();
 			
 			if(annotation.getExtension().getListOfModification() != null && annotation.getExtension().getListOfModification().getModification() != null)
 				this.modificationList = annotation.getExtension().getListOfModification().getModification();
@@ -111,7 +117,7 @@ public class ReactionWrapper extends Reaction{
 			connectScheme = annotation.getExtension().getConnectScheme();
 			offset = annotation.getExtension().getOffset();
 		
-			if(connectScheme != null)
+			if(connectScheme != null && connectScheme.getRectangleIndex() != null)
 				rectangleIndex = Integer.valueOf(annotation.getExtension().getConnectScheme().getRectangleIndex());
 
 		}
@@ -557,14 +563,22 @@ public class ReactionWrapper extends Reaction{
         * LinkTarget
         * TODO
         */
-       public LinkTarget getLinkTargetByModifierId(String id){
-    	   Modification m = getModificationByModifierId(id);
+       public LinkTarget getLinkTargetByModifier(Modification modification){
+    	   Modification m = getModificationByModifierId(modification.getModifiers());
     	   List<LinkTarget> ltList = m.getLinkTarget();
     	   for(LinkTarget lt: ltList){
     		   if(lt.getSpecies().equals(id))
     			   return lt;
     	   }
     	   
-    	   return null;
+    	   // link target missing = positioned at inactive
+    	   LinkTarget lt = new LinkTarget();
+    	   lt.setSpecies(m.getModifiers());
+    	   lt.setAlias(m.getAliases());
+    	   LinkAnchor la = new LinkAnchor();
+    	   la.setPosition("INACTIVE");
+    	   lt.setLinkAnchor(la);
+    	   
+    	   return lt;
        }
 }

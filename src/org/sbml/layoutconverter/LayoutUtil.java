@@ -358,14 +358,14 @@ public class LayoutUtil {
 	}
 	
 	/**
-	 * create line segments with 2 vectors 
-	 * @param startPoint
-	 * @param endPoint
-	 * @param reactantPoint
-	 * @param productPoint
-	 * @param editPointList
-	 * @return
-	 * List<LineSegment>
+	 * create line segments with 2 vectors .
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint the end point
+	 * @param reactantPoint the reactant point
+	 * @param productPoint the product point
+	 * @param editPointList the edit point list
+	 * @return List<LineSegment>
 	 * TODO
 	 */
 	public static List<LineSegment> createListOfLineSegment(Point startPoint, Point endPoint, Point reactantPoint, Point productPoint, List<Point2D.Double> editPointList){
@@ -441,6 +441,23 @@ public class LayoutUtil {
 		Point point = new Point();
 		point.setX(x + width / 2);
 		point.setY(y + height / 2);
+		
+		return point;
+	}
+	
+	/**
+	 * Creates the center point.
+	 *
+	 * @param sg the sg
+	 * @return the point
+	 */
+	public static Point createCenterPoint(SpeciesGlyph sg) {
+		Point point = new Point();
+		Point p = sg.getBoundingBox().getPosition();
+		Dimensions d = sg.getBoundingBox().getDimensions();
+		
+		point.setX(p.getX() + d.getWidth() / 2);
+		point.setY(p.getY() + d.getHeight() / 2);
 		
 		return point;
 	}

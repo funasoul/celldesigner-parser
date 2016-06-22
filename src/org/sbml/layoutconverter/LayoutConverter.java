@@ -6,6 +6,7 @@ package org.sbml.layoutconverter;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -15,6 +16,8 @@ import org.sbml._2001.ns.celldesigner.BaseProduct;
 import org.sbml._2001.ns.celldesigner.BaseReactant;
 import org.sbml._2001.ns.celldesigner.LinkTarget;
 import org.sbml._2001.ns.celldesigner.Modification;
+import org.sbml._2001.ns.celldesigner.ProductLink;
+import org.sbml._2001.ns.celldesigner.ReactantLink;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.SBMLDocument;
@@ -45,9 +48,9 @@ import org.sbml.wrapper.ObjectFactory;
 import org.sbml.wrapper.ReactionWrapper;
 import org.sbml.wrapper.SpeciesAliasWrapper;
 import org.sbml.wrapper.SpeciesReferenceWrapper;
-import org.sbml.wrapper.SpeciesWrapper;
 
 
+// TODO: Auto-generated Javadoc
 /**
  * The Class LayoutConverter.
  *
@@ -57,8 +60,6 @@ import org.sbml.wrapper.SpeciesWrapper;
  */
 
 public class LayoutConverter {
-
-
 	/** The m wrapper. */
 	private	ModelWrapper mWrapper;
 	
@@ -219,7 +220,8 @@ public class LayoutConverter {
 			List<BaseProduct> prsList = rw.getBaseProducts();
 			List<Point2D.Double> editPointList = rw.getEditPointsAsList();
 			int rectangleIndex = rw.getRectangleIndex();
-			rg.createBoundingBox();
+			BoundingBox reactionBB = rg.createBoundingBox();
+			reactionBB.setDimensions(new Dimensions(0, 0, 0, LayoutUtil.DEFAULTSBMLLEVEL, LayoutUtil.DEFAULTSBMLVERSION));
 			List<LineSegment> lsList = null;
 
 			if(brsList.size() == 1 && prsList.size() == 1){
@@ -246,7 +248,9 @@ public class LayoutConverter {
 				for(int i = rectangleIndex + 1; i < lsList.size(); i++){
 					curve.addCurveSegment(lsList.get(i));
 				}
-
+				
+				reactionBB.setPosition(new Point(curve.getCurveSegment(0).getStart()));
+				
 			} else if(rw.getReactionType().equals("HETERODIMER_ASSOCIATION")){ 	// two to one
 				BaseReactant br1 = brsList.get(0);
 				SpeciesAliasWrapper reactantsaw1 = mWrapper.getSpeciesAliasWrapperById(br1.getAlias());
@@ -272,9 +276,9 @@ public class LayoutConverter {
 					endPoint2 = LayoutUtil.createAdjustedPoint(csaw.getX(), csaw.getY(), csaw.getW(), csaw.getH(), bp1.getLinkAnchor().getPosition());
 				}
 
-				Point reactantPoint1 =  LayoutUtil.createCenterPoint(sg1.getBoundingBox().getPosition().getX(), sg1.getBoundingBox().getPosition().getY(), sg1.getBoundingBox().getDimensions().getWidth(), sg1.getBoundingBox().getDimensions().getHeight());
-				Point reactantPoint2 =  LayoutUtil.createCenterPoint(sg2.getBoundingBox().getPosition().getX(), sg2.getBoundingBox().getPosition().getY(), sg2.getBoundingBox().getDimensions().getWidth(), sg2.getBoundingBox().getDimensions().getHeight());
-				Point productPoint1 =  LayoutUtil.createCenterPoint(sg3.getBoundingBox().getPosition().getX(), sg3.getBoundingBox().getPosition().getY(), sg3.getBoundingBox().getDimensions().getWidth(), sg3.getBoundingBox().getDimensions().getHeight());
+				Point reactantPoint1 = LayoutUtil.createCenterPoint(sg1.getBoundingBox().getPosition().getX(), sg1.getBoundingBox().getPosition().getY(), sg1.getBoundingBox().getDimensions().getWidth(), sg1.getBoundingBox().getDimensions().getHeight());
+				Point reactantPoint2 = LayoutUtil.createCenterPoint(sg2.getBoundingBox().getPosition().getX(), sg2.getBoundingBox().getPosition().getY(), sg2.getBoundingBox().getDimensions().getWidth(), sg2.getBoundingBox().getDimensions().getHeight());
+				Point productPoint1 = LayoutUtil.createCenterPoint(sg3.getBoundingBox().getPosition().getX(), sg3.getBoundingBox().getPosition().getY(), sg3.getBoundingBox().getDimensions().getWidth(), sg3.getBoundingBox().getDimensions().getHeight());
 				int num0 = rw.getEditPoints().getNum0(); 
 				int num1 = rw.getEditPoints().getNum1(); 
 				int num2 = rw.getEditPoints().getNum2(); 
@@ -308,6 +312,9 @@ public class LayoutConverter {
 					curve.addCurveSegment(lsList.get(i));
 				}
 				
+				int tshapeIndex = rw.getEditPoints().getTShapeIndex();
+				LineSegment ls = lsList.get(num0 + 1 + num1 + 1 + tshapeIndex);
+				reactionBB.setPosition(new Point(ls.getStart()));
 			} else if(rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")){ 	//one to two
 				BaseReactant br1 = brsList.get(0);
 				SpeciesGlyph sg1 = layout.getSpeciesGlyph("SpeciesGlyph_" + br1.getAlias());
@@ -368,9 +375,44 @@ public class LayoutConverter {
 				for(int i = reactant2 + 1; i < lsList.size(); i++){
 					curve.addCurveSegment(lsList.get(i));
 				}
+				
+				int tshapeIndex = rw.getEditPoints().getTShapeIndex();
+				LineSegment ls = lsList.get(num0 - tshapeIndex + 1);
+				reactionBB.setPosition(new Point(ls.getStart()));
 			}
 
+			List<ReactantLink> rlList = rw.getListOfReactantLinks();
+			List<ProductLink> plList = rw.getListOfProductLinks();
 
+			for(ReactantLink link : rlList){  //complexだと死ぬかも
+				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperById(link.getAlias());
+				Point startPoint  = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), link.getLinkAnchor().getPosition());
+				Point endPoint = reactionBB.getPosition();
+				editPointList= new ArrayList<Point2D.Double>();
+				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint, startPoint, endPoint, editPointList);
+
+				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + saw.getId());
+				Curve curve = srg.createCurve();
+				for(int i = 0; i <= rectangleIndex; i++){
+					curve.addCurveSegment(lsList.get(i));
+				}
+			}
+
+			for(ProductLink link : plList){
+				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperById(link.getAlias());
+				Point endPoint  = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), link.getLinkAnchor().getPosition());
+				Point startPoint = reactionBB.getPosition();
+				editPointList= new ArrayList<Point2D.Double>();
+				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint, startPoint, endPoint, editPointList);
+
+				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + saw.getId());
+				Curve curve = srg.createCurve();
+				for(int i = 0; i <= rectangleIndex; i++){
+					curve.addCurveSegment(lsList.get(i));
+				}
+			}
+
+			
 			if(rw.isSetModifier()){
 				List<ModifierSpeciesReferenceWrapper> msrwList = rw.getListOfModifierWrapper();
 				for(ModifierSpeciesReferenceWrapper msrw : msrwList){
@@ -572,7 +614,8 @@ public class LayoutConverter {
 	public static void main(String[] args){
 		LayoutConverter converter;
 		try {
-			converter = new LayoutConverter(new File("sample/complex2.xml"));
+			//converter = new LayoutConverter(new File("sample/sample.xml"));
+			converter = new LayoutConverter(new File("sample/link.xml"));
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

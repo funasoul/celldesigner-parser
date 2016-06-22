@@ -3,11 +3,7 @@
  */
 package org.sbml.layoutconverter;
 
-import javax.swing.tree.TreeNode;
-
 import org.sbml.jsbml.Compartment;
-import org.sbml.jsbml.Event;
-import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ModifierSpeciesReference;

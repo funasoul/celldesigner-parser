@@ -87,82 +87,85 @@ public class ReactionWrapper extends Reaction{
   /** The rectangle index. */
   private int rectangleIndex;
 
-		/**
-		 * Instantiates a new reaction wrapper.
-		 *
-		 * @param reaction the reaction
-		 * @param modelWrapper the model wrapper
-		 */
-		public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper){
-			this.reaction = reaction;
-			this.modelWrapper = modelWrapper;
-			this.fast = reaction.isFast();
-			this.id = reaction.getId();
-			this.kineticLaw = reaction.getKineticLaw();
-			this.listOfModifiers = reaction.getListOfModifiers();
-			this.listOfProducts = reaction.getListOfProducts();
-			this.listOfReactants = reaction.getListOfReactants();
-			this.metaid = reaction.getMetaid();
-			this.name = reaction.getName();		//same as annotation.getExtension().getName()?
-			this.notes = reaction.getNotes();
-			this.reversible = reaction.isReversible();
+	/**
+	 * Instantiates a new reaction wrapper.
+	 *
+	 * @param reaction the reaction
+	 * @param modelWrapper the model wrapper
+	 */
+	public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper) {
+		this.reaction = reaction;
+		this.modelWrapper = modelWrapper;
+		this.fast = reaction.isFast();
+		this.id = reaction.getId();
+		this.kineticLaw = reaction.getKineticLaw();
+		this.listOfModifiers = reaction.getListOfModifiers();
+		this.listOfProducts = reaction.getListOfProducts();
+		this.listOfReactants = reaction.getListOfReactants();
+		this.metaid = reaction.getMetaid();
+		this.name = reaction.getName(); // same as annotation.getExtension().getName()?
+		this.notes = reaction.getNotes();
+		this.reversible = reaction.isReversible();
 
+		this.annotation = reaction.getAnnotation();
+		this.type = annotation.getExtension().getReactionType();
 
-			this.annotation = reaction.getAnnotation();
-			this.type  = annotation.getExtension().getReactionType();
+		this.editPoints = annotation.getExtension().getEditPoints();
+		if (editPoints != null)
+			this.editPointList = LayoutUtil.createEditPointsAsList(editPoints.getValue());
+		else
+			this.editPointList = new ArrayList<Point2D.Double>();
 
-			this.editPoints = annotation.getExtension().getEditPoints();
-			if(editPoints != null)
-				this.editPointList = LayoutUtil.createEditPointsAsList(editPoints.getValue());
-			else
-				this.editPointList = new ArrayList<Point2D.Double>();
+		if (annotation.getExtension().getListOfModification() != null && annotation.getExtension().getListOfModification().getModification() != null)
+			this.modificationList = annotation.getExtension().getListOfModification().getModification();
 
-			if(annotation.getExtension().getListOfModification() != null && annotation.getExtension().getListOfModification().getModification() != null)
-				this.modificationList = annotation.getExtension().getListOfModification().getModification();
+		reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
+		productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
 
-			reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
-			productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
+		if (listOfModifiers != null)
+			modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
+		else
+			isSetModifiers = false;
 
-			if(listOfModifiers != null)
-				modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
-			else
-				isSetModifiers = false;
-
-			if(annotation.getExtension().getBaseReactants() != null) {
-				baseReactants = annotation.getExtension().getBaseReactants().getBaseReactant();
-				for (BaseReactant br : baseReactants) {
-					if (br.getLinkAnchor() == null || br.getLinkAnchor().getPosition() == null) {
-						LinkAnchor anchor = new LinkAnchor();
-						anchor.setPosition("INACTIVE");
-						br.setLinkAnchor(anchor);
-					}
+		if (annotation.getExtension().getBaseReactants() != null) {
+			baseReactants = annotation.getExtension().getBaseReactants().getBaseReactant();
+			for (BaseReactant br : baseReactants) {
+				if (br.getLinkAnchor() == null || br.getLinkAnchor().getPosition() == null) {
+					LinkAnchor anchor = new LinkAnchor();
+					anchor.setPosition("INACTIVE");
+					br.setLinkAnchor(anchor);
 				}
 			}
-
-			if(annotation.getExtension().getBaseProducts() != null) {
-				baseProducts = annotation.getExtension().getBaseProducts().getBaseProduct();
-				for(BaseProduct bp: baseProducts){
-					if(bp.getLinkAnchor() == null || bp.getLinkAnchor().getPosition() == null){
-						LinkAnchor anchor = new LinkAnchor();
-						anchor.setPosition("INACTIVE");
-						bp.setLinkAnchor(anchor);
-					}
-				}
-			}
-
-			if(annotation.getExtension().getListOfReactantLinks() != null)
-				reactantLinks = annotation.getExtension().getListOfReactantLinks().getReactantLink();
-
-			if(annotation.getExtension().getListOfProductLinks() != null)
-				productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
-
-			connectScheme = annotation.getExtension().getConnectScheme();
-			offset = annotation.getExtension().getOffset();
-
-			if(connectScheme != null && connectScheme.getRectangleIndex() != null)
-				rectangleIndex = Integer.valueOf(annotation.getExtension().getConnectScheme().getRectangleIndex());
-
 		}
+
+		if (annotation.getExtension().getBaseProducts() != null) {
+			baseProducts = annotation.getExtension().getBaseProducts().getBaseProduct();
+			for (BaseProduct bp : baseProducts) {
+				if (bp.getLinkAnchor() == null || bp.getLinkAnchor().getPosition() == null) {
+					LinkAnchor anchor = new LinkAnchor();
+					anchor.setPosition("INACTIVE");
+					bp.setLinkAnchor(anchor);
+				}
+			}
+		}
+
+		if (annotation.getExtension().getListOfReactantLinks() != null)
+			reactantLinks = annotation.getExtension().getListOfReactantLinks().getReactantLink();
+		else
+			reactantLinks = new ArrayList<ReactantLink>();
+
+		if (annotation.getExtension().getListOfProductLinks() != null)
+			productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
+		else
+			productLinks = new ArrayList<ProductLink>();
+
+		connectScheme = annotation.getExtension().getConnectScheme();
+		offset = annotation.getExtension().getOffset();
+
+		if (connectScheme != null && connectScheme.getRectangleIndex() != null)
+			rectangleIndex = Integer.valueOf(annotation.getExtension().getConnectScheme().getRectangleIndex());
+
+	}
 
 	   /* (non-Javadoc)
    	 * @see org.sbml.sbml.level2.version4.OriginalReaction#getName()

@@ -387,14 +387,16 @@ public class LayoutConverter {
 			for(ReactantLink link : rlList){  //complexだと死ぬかも
 				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperById(link.getAlias());
 				SpeciesReferenceGlyph srg;
+				Point startPoint;
 				
 				if(saw != null){
 					srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + saw.getId());
+					startPoint  = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), link.getLinkAnchor().getPosition());
 				} else {
-					ComplexSpeciesAliasWrapper csaw = mWrapper.getComplexAliasWrapperById(link.getAlias());
+					final ComplexSpeciesAliasWrapper csaw = mWrapper.getComplexAliasWrapperById(link.getAlias());
 					srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + csaw.getId());
+					startPoint  = LayoutUtil.createAdjustedPoint(csaw.getX(), csaw.getY(), csaw.getW(), csaw.getH(), link.getLinkAnchor().getPosition());
 				}
-				Point startPoint  = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), link.getLinkAnchor().getPosition());
 				Point endPoint = reactionBB.getPosition();
 				editPointList= new ArrayList<Point2D.Double>();
 				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint, startPoint, endPoint, editPointList);
@@ -408,14 +410,16 @@ public class LayoutConverter {
 			for(ProductLink link : plList){
 				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperById(link.getAlias());
 				SpeciesReferenceGlyph srg;
+				Point endPoint;
 				
 				if(saw != null){
 					srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + saw.getId());
+					endPoint  = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), link.getLinkAnchor().getPosition());
 				} else {
 					ComplexSpeciesAliasWrapper csaw = mWrapper.getComplexAliasWrapperById(link.getAlias());
 					srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + csaw.getId());
+					endPoint = LayoutUtil.createAdjustedPoint(csaw.getX(), csaw.getY(), csaw.getW(), csaw.getH(), link.getLinkAnchor().getPosition());
 				}
-				Point endPoint  = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), link.getLinkAnchor().getPosition());
 				Point startPoint = reactionBB.getPosition();
 				editPointList= new ArrayList<Point2D.Double>();
 				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint, startPoint, endPoint, editPointList);
@@ -551,8 +555,9 @@ public class LayoutConverter {
 
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + saw.getId());
 			if(model.getSpecies(saw.getSpecies()) != null)
-				sg.setReference(saw.getSpecies());
-
+				tg.setReference(saw.getSpecies());
+			else 
+				tg.setText(saw.getSpecies());
 			
 			tg.setGraphicalObject(sg);
 			BoundingBox bb2 = tg.createBoundingBox();
@@ -629,7 +634,7 @@ public class LayoutConverter {
 		LayoutConverter converter;
 		try {
 			//converter = new LayoutConverter(new File("sample/sample.xml"));
-			converter = new LayoutConverter(new File("sample/complex.xml"));
+			converter = new LayoutConverter(new File("sample/c.xml"));
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

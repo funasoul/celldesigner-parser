@@ -386,12 +386,19 @@ public class LayoutConverter {
 
 			for(ReactantLink link : rlList){  //complexだと死ぬかも
 				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperById(link.getAlias());
+				SpeciesReferenceGlyph srg;
+				
+				if(saw != null){
+					srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + saw.getId());
+				} else {
+					ComplexSpeciesAliasWrapper csaw = mWrapper.getComplexAliasWrapperById(link.getAlias());
+					srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + csaw.getId());
+				}
 				Point startPoint  = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), link.getLinkAnchor().getPosition());
 				Point endPoint = reactionBB.getPosition();
 				editPointList= new ArrayList<Point2D.Double>();
 				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint, startPoint, endPoint, editPointList);
 
-				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + saw.getId());
 				Curve curve = srg.createCurve();
 				for(int i = 0; i <= rectangleIndex; i++){
 					curve.addCurveSegment(lsList.get(i));
@@ -400,12 +407,19 @@ public class LayoutConverter {
 
 			for(ProductLink link : plList){
 				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperById(link.getAlias());
+				SpeciesReferenceGlyph srg;
+				
+				if(saw != null){
+					srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + saw.getId());
+				} else {
+					ComplexSpeciesAliasWrapper csaw = mWrapper.getComplexAliasWrapperById(link.getAlias());
+					srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + csaw.getId());
+				}
 				Point endPoint  = LayoutUtil.createAdjustedPoint(saw.getX(), saw.getY(), saw.getW(), saw.getH(), link.getLinkAnchor().getPosition());
 				Point startPoint = reactionBB.getPosition();
 				editPointList= new ArrayList<Point2D.Double>();
 				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint, startPoint, endPoint, editPointList);
 
-				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + saw.getId());
 				Curve curve = srg.createCurve();
 				for(int i = 0; i <= rectangleIndex; i++){
 					curve.addCurveSegment(lsList.get(i));
@@ -520,7 +534,8 @@ public class LayoutConverter {
 	public void convertSpeciesAliasToLayout(List<SpeciesAliasWrapper> saList){
 		for(SpeciesAliasWrapper saw : saList){
 			SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + saw.getId());
-			sg.setReference(saw.getSpecies());
+			if(model.getSpecies(saw.getSpecies()) != null)
+				sg.setReference(saw.getSpecies());
 
 			BoundingBox bb = sg.createBoundingBox();
 			Dimensions dimension = bb.createDimensions();
@@ -535,11 +550,10 @@ public class LayoutConverter {
 			bb.setPosition(point);
 
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + saw.getId());
-			if(!saw.isSetComplexSpeciesAlias())
-				tg.setOriginOfText(saw.getSpeciesWrapperAliased().getId());
-			else
-				tg.setOriginOfText(saw.getSpecies());
+			if(model.getSpecies(saw.getSpecies()) != null)
+				sg.setReference(saw.getSpecies());
 
+			
 			tg.setGraphicalObject(sg);
 			BoundingBox bb2 = tg.createBoundingBox();
 			Dimensions dimension2 = bb2.createDimensions();
@@ -578,7 +592,7 @@ public class LayoutConverter {
 			bb.setPosition(point);
 
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + csaw.getId());
-			tg.setOriginOfText(csaw.getId());
+			tg.setOriginOfText(csaw.getSpecies());
 			tg.setGraphicalObject(sg);
 			BoundingBox bb2 = tg.createBoundingBox();
 			Dimensions dimension2 = bb2.createDimensions();
@@ -615,7 +629,7 @@ public class LayoutConverter {
 		LayoutConverter converter;
 		try {
 			//converter = new LayoutConverter(new File("sample/sample.xml"));
-			converter = new LayoutConverter(new File("sample/link.xml"));
+			converter = new LayoutConverter(new File("sample/complex.xml"));
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

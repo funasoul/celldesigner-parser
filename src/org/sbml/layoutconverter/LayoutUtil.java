@@ -84,7 +84,7 @@ public class LayoutUtil {
 
 		point.setX(origin.getX() + x);
 		point.setY(origin.getY() + y);		
-		
+		point.setZ(0);
 		return point;
 	}
 	
@@ -102,6 +102,7 @@ public class LayoutUtil {
 		point.setX(getLength(p1, p2, percentage));
 		point.setY(getLength(p1, p2, percentage));
 		point.setZ(0);
+		
 		return point;
 	}
 	

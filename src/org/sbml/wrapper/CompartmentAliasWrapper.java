@@ -5,25 +5,53 @@ import java.math.BigDecimal;
 import org.sbml._2001.ns.celldesigner.CompartmentAlias;
 import org.sbml.jsbml.Compartment;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class CompartmentAliasWrapper.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: Jun 2, 2016
  */
 
 public class CompartmentAliasWrapper extends CompartmentAlias {
+
+	/** The model wrapper. */
+	private ModelWrapper modelWrapper;
 	
-	ModelWrapper modelWrapper;
-	Compartment compartmentAliased;
-	CompartmentWrapper compartmentWrapper;
-	CompartmentAlias compartmentAlias;
-	double H;
-	double W;
-	double X;
-	double Y;
-	double nameX;
-	double nameY;
+	/** The compartment aliased. */
+	private	Compartment compartmentAliased;
 	
+	/** The compartment wrapper. */
+	private	CompartmentWrapper compartmentWrapper;
+	
+	/** The compartment alias. */
+	private	CompartmentAlias compartmentAlias;
+  	
+	  /** The h. */
+	  private	double H;
+  	
+	  /** The w. */
+	  private	double W;
+  	
+	  /** The x. */
+	  private	double X;
+  	
+	  /** The y. */
+	  private	double Y;
+  	
+	  /** The name X. */
+	  private	double nameX;
+  	
+	  /** The name Y. */
+	  private	double nameY;
+
+	/**
+	 * Instantiates a new compartment alias wrapper.
+	 *
+	 * @param compartmentAlias the compartment alias
+	 * @param modelWrapper the model wrapper
+	 */
 	public CompartmentAliasWrapper(CompartmentAlias compartmentAlias, ModelWrapper modelWrapper){
 		this.modelWrapper = modelWrapper;
 		this.compartmentAlias = compartmentAlias;
@@ -35,63 +63,63 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 		this.info = compartmentAlias.getInfo();
 		this.compartment = compartmentAlias.getCompartment();
 		this.compartmentWrapper = modelWrapper.getCompartmentWrapperById(compartment);
-		
+
 		this.H = bounds.getH().doubleValue();
 		this.W = bounds.getW().doubleValue();
 		this.X = bounds.getX().doubleValue();
 		this.Y = bounds.getY().doubleValue();
-		
+
 		this.nameX = compartmentAlias.getNamePoint().getX().doubleValue();
 		this.nameY = compartmentAlias.getNamePoint().getY().doubleValue();
-		
+
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the name X.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getNameX(){
 		return nameX;
 	}
-	
+
 	/**
-	 * 
-	 * @param value
-	 * void
+	 * Sets the name X.
+	 *
+	 * @param value void
 	 * TODO
 	 */
 	public void setNameX(double value){
 		nameX = value;
 		compartmentAlias.getNamePoint().setX(new BigDecimal(value));
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the name Y.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getNameY(){
 		return nameY;
 	}
-	
+
 	/**
-	 * 
-	 * @param value
-	 * void
+	 * Sets the name Y.
+	 *
+	 * @param value void
 	 * TODO
 	 */
 	public void setNameY(double value){
 		nameY = value;
 		compartmentAlias.getNamePoint().setY(new BigDecimal(value));
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the h.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getH(){
@@ -99,20 +127,20 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 	}
 
 	/**
-	 * 
-	 * @param h
-	 * void
+	 * Sets the h.
+	 *
+	 * @param h void
 	 * TODO
 	 */
 	public void setH(Double h){
 		bounds.setH(new BigDecimal(h));
 		this.H = h;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the w.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getW(){
@@ -120,41 +148,41 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 	}
 
 	/**
-	 * 
-	 * @param w
-	 * void
+	 * Sets the w.
+	 *
+	 * @param w void
 	 * TODO
 	 */
 	public void setW(Double w){
 		bounds.setW(new BigDecimal(w));
 		this.W = w;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the x.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getX(){
 		return X;
 	}
-	
+
 	/**
-	 * 
-	 * @param x
-	 * void
+	 * Sets the x.
+	 *
+	 * @param x void
 	 * TODO
 	 */
 	public void setX(Double x){
 		bounds.setX(new BigDecimal(x));
 		this.X = x;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the y.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getY(){
@@ -162,40 +190,40 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 	}
 
 	/**
-	 * 
-	 * @param y
-	 * void
+	 * Sets the y.
+	 *
+	 * @param y void
 	 * TODO
 	 */
 	public void setY(Double y){
 		bounds.setY(new BigDecimal(y));
 		this.Y = y;
 	}
-	
+
     /**
-     * 
-     * @return
-     * Species
+     * Gets the compartment aliased.
+     *
+     * @return Species
      * TODO
      */
     public Compartment getCompartmentAliased() {
         return compartmentAliased;
     }
-	
+
     /**
-     * 
-     * @param compartment
-     * void
+     * Sets the compartment aliased.
+     *
+     * @param compartment void
      * TODO
      */
     public void setCompartmentAliased(Compartment compartment){
     	this.compartmentAliased = compartment;
     }
-    
+
     /**
-     * 
-     * @return
-     * CompartmentWrapper
+     * Gets the compartment wrapper aliased.
+     *
+     * @return CompartmentWrapper
      * TODO
      */
     public CompartmentWrapper getCompartmentWrapperAliased(){

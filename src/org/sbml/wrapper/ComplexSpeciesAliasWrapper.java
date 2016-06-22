@@ -9,24 +9,50 @@ import org.sbml._2001.ns.celldesigner.ListOfSpeciesTag;
 import org.sbml._2001.ns.celldesigner.SpeciesAlias;
 import org.sbml._2001.ns.celldesigner.SpeciesTag;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class ComplexSpeciesAliasWrapper.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: Jun 20, 2016
  */
 
 public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	
+	/** The complex species alias. */
 	private ComplexSpeciesAlias complexSpeciesAlias;
+	
+	/** The model wrapper. */
 	private ModelWrapper modelWrapper;
+	
+	/** The h. */
 	private double H;
+	
+	/** The w. */
 	private double W;
+	
+	/** The x. */
 	private double X;
+	
+	/** The y. */
 	private double Y;
+	
+	/** The species wrapper. */
 	private SpeciesWrapper speciesWrapper;
+	
+	/** The compartment alias wrapper. */
 	private CompartmentAliasWrapper compartmentAliasWrapper;
+	
+	/** The species tags. */
 	private List<SpeciesTag> speciesTags;
 	
+	/**
+	 * Instantiates a new complex species alias wrapper.
+	 *
+	 * @param complexSpeciesAlias the complex species alias
+	 * @param modelWrapper the model wrapper
+	 */
 	public ComplexSpeciesAliasWrapper(ComplexSpeciesAlias complexSpeciesAlias, ModelWrapper modelWrapper){
 		this.modelWrapper = modelWrapper;
 		this.complexSpeciesAlias = complexSpeciesAlias;
@@ -55,9 +81,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the h.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getH(){
@@ -65,9 +91,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	}
 
 	/**
-	 * 
-	 * @param h
-	 * void
+	 * Sets the h.
+	 *
+	 * @param h void
 	 * TODO
 	 */
 	public void setH(double h){
@@ -76,9 +102,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the w.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getW(){
@@ -86,9 +112,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	}
 
 	/**
-	 * 
-	 * @param w
-	 * void
+	 * Sets the w.
+	 *
+	 * @param w void
 	 * TODO
 	 */
 	public void setW(double w){
@@ -97,9 +123,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the x.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getX(){
@@ -107,9 +133,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	}
 	
 	/**
-	 * 
-	 * @param x
-	 * void
+	 * Sets the x.
+	 *
+	 * @param x void
 	 * TODO
 	 */
 	public void setX(double x){
@@ -118,9 +144,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	}
 	
 	/**
-	 * 
-	 * @return
-	 * double
+	 * Gets the y.
+	 *
+	 * @return double
 	 * TODO
 	 */
 	public double getY(){
@@ -128,9 +154,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	}
 	
 	/**
-	 * 
-	 * @param y
-	 * void
+	 * Sets the y.
+	 *
+	 * @param y void
 	 * TODO
 	 */
 	public void setY(double y){
@@ -140,9 +166,9 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 	
 
 	/**
-	 * 
-	 * @return
-	 * List<SpeciesTag>
+	 * Gets the list of species tags.
+	 *
+	 * @return List<SpeciesTag>
 	 * TODO
 	 */
 	public List<SpeciesTag> getListOfSpeciesTags() {
@@ -150,20 +176,19 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
     }
 
 	/**
-	 * 
-	 * @param value
-	 * void
+	 * Sets the list of species tags.
+	 *
+	 * @param value void
 	 * TODO
 	 */
     public void setListOfSpeciesTags(ListOfSpeciesTag value) {
         this.listOfSpeciesTag = value;
     }
 
-
     /**
-     * 
-     * @return
-     * ComplexSpeciesAlias
+     * Gets the complex species aliased.
+     *
+     * @return ComplexSpeciesAlias
      * TODO
      */
     public ComplexSpeciesAlias getComplexSpeciesAliased() {

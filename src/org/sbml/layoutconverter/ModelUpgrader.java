@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package org.sbml.layoutconverter;
 
 import java.util.Iterator;
@@ -7,19 +10,22 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBase;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class ModelUpgrader.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: May 26, 2016
  */
 
 public class ModelUpgrader {
 	
 	/**
-	 * 
-	 * @param document
-	 * @return
-	 * SBMLDocument
+	 * Upgrade.
+	 *
+	 * @param document the document
+	 * @return SBMLDocument
 	 * TODO
 	 */
 	public static SBMLDocument upgrade(SBMLDocument document){
@@ -31,10 +37,10 @@ public class ModelUpgrader {
 	}
 	
 	/**
-	 * 
-	 * @param document
-	 * @return
-	 * boolean
+	 * Checks if is sets the SBO term.
+	 *
+	 * @param document the document
+	 * @return boolean
 	 * TODO
 	 */
 	public static boolean isSetSBOTerm(SBMLDocument document){
@@ -59,10 +65,10 @@ public class ModelUpgrader {
 	}
 	
 	/**
-	 * 
-	 * @param list
-	 * @return
-	 * boolean
+	 * Check SBO term from list.
+	 *
+	 * @param list the list
+	 * @return boolean
 	 * TODO
 	 */
 	public static boolean checkSBOTermFromList(ListOf<?> list){

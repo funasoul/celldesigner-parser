@@ -7,29 +7,50 @@ import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml.layoutconverter.LayoutUtil;
 import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class ModifierSpeciesReferenceWrapper.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: May 24, 2016
  */
 
 public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
-	
-	ModifierSpeciesReference sRef;
-	ModelWrapper modelWrapper;
-	SpeciesWrapper speciesWrapper;
-	Modification modification;
-	ReactionWrapper reactionWrapper;
-	String type;
-	String alias;
-	List<Point2D.Double> editPointList;
-	Point2D.Double targetLineIndex;
-	
+
+  /** The s ref. */
+  private	ModifierSpeciesReference sRef;
+  
+  /** The model wrapper. */
+  private	ModelWrapper modelWrapper;
+  
+  /** The species wrapper. */
+  private	SpeciesWrapper speciesWrapper;
+  
+  /** The modification. */
+  private	Modification modification;
+  
+  /** The reaction wrapper. */
+  private	ReactionWrapper reactionWrapper;
+  
+  /** The type. */
+  private	String type;
+  
+  /** The alias. */
+  private	String alias;
+  
+  /** The edit point list. */
+  private	List<Point2D.Double> editPointList;
+  
+  /** The target line index. */
+  private	Point2D.Double targetLineIndex;
+
 	/**
-	 * 
-	 * @param sRef
-	 * @param modelWrapper
-	 * @param reactionWrapper
+	 * Instantiates a new modifier species reference wrapper.
+	 *
+	 * @param sRef the s ref
+	 * @param modelWrapper the model wrapper
+	 * @param reactionWrapper the reaction wrapper
 	 */
 	public ModifierSpeciesReferenceWrapper(ModifierSpeciesReference sRef, ModelWrapper modelWrapper, ReactionWrapper reactionWrapper){
 		 this.sRef =  sRef;
@@ -42,89 +63,90 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 this.species = sRef.getSpecies();
 		 this.speciesWrapper = modelWrapper.getSpeciesWrapperById(sRef.getSpecies());
 		 this.modification = reactionWrapper.getModificationByModifierId(species);
-	
+
 		 this.type = modification.getType();
 		 if(modification.getEditPoints() != null)
 			 this.editPointList = LayoutUtil.createEditPointsAsList(modification.getEditPoints());
 		 if(modification.getTargetLineIndex() != null)
 			setTargetLineIndex(modification.getTargetLineIndex());
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * String
+	 * Gets the alias.
+	 *
+	 * @return String
 	 * TODO
 	 */
 	public String getAlias() {
         return alias;
     }
-	
+
 	/**
-	 * 
-	 * @param value
-	 * void
+	 * Sets the alias.
+	 *
+	 * @param value void
 	 * TODO
 	 */
 	public void setAlias(String value) {
         annotation.getExtension().setAlias(value);
         this.alias = value;
     }
-	
+
 	/**
-	 * 
-	 * @return
-	 * SpeciesWrapper
+	 * Gets the aliased.
+	 *
+	 * @return SpeciesWrapper
 	 * TODO
 	 */
 	public SpeciesWrapper getAliased(){
 		return speciesWrapper;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * Modification
+	 * Sets the modification.
+	 *
+	 * @param value the new modification
+	 * @return Modification
 	 * TODO
 	 */
 	public void setModification(Modification value){
 		modification = value;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * Modification
+	 * Gets the modification.
+	 *
+	 * @return Modification
 	 * TODO
 	 */
 	public Modification getModification(){
 		return modification;
 	}
-	
+
 	/**
-	 * 
-	 * @param type
-	 * void
+	 * Sets the type.
+	 *
+	 * @param type void
 	 * TODO
 	 */
 	public void setType(String type){
 		this.type = type;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * String
+	 * Gets the type.
+	 *
+	 * @return String
 	 * TODO
 	 */
 	public String getType(){
 		return type;
 	}
-	
+
 	/**
-	 * 
-	 * @param index
-	 * void
+	 * Sets the target line index.
+	 *
+	 * @param index void
 	 * TODO
 	 */
 	public void setTargetLineIndex(String index){
@@ -133,31 +155,31 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 targetLineIndex.x = Double.valueOf(points[0]);
 		 targetLineIndex.y = Double.valueOf(points[1]);
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * Point2D.Double
+	 * Gets the target line index.
+	 *
+	 * @return Point2D.Double
 	 * TODO
 	 */
 	public Point2D.Double getTargetLineIndex(){
 		return targetLineIndex;
 	}
-	
+
 	/**
-	 * 
-	 * @param editPoints
-	 * void
+	 * Sets the edits the points.
+	 *
+	 * @param editPoints void
 	 * TODO
 	 */
 	public void setEditPoints(List<Point2D.Double> editPoints){
 		this.editPointList = editPoints;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * List<Point2D.Double>
+	 * Gets the edits the points.
+	 *
+	 * @return List<Point2D.Double>
 	 * TODO
 	 */
 	public List<Point2D.Double> getEditPoints(){

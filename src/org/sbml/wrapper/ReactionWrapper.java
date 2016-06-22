@@ -25,32 +25,74 @@ import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 import org.sbml.sbml.level2.version4.Reaction;
 import org.sbml.sbml.level2.version4.SpeciesReference;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class ReactionWrapper.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: May 24, 2016
  */
 
 public class ReactionWrapper extends Reaction{
-				
-		Reaction reaction;
-		ModelWrapper modelWrapper;
-		List<SpeciesReferenceWrapper> reactantWrapperList;
-		List<SpeciesReferenceWrapper> productWrapperList;
-		List<ModifierSpeciesReferenceWrapper> modifierWrapperList;
-		boolean isSetModifiers = true;
-		List<Point2D.Double> editPointList;
-		EditPoints editPoints;
-		List<Modification> modificationList;
-		String type;
-		List<BaseReactant> baseReactants;
-		List<BaseProduct> baseProducts;
-		List<ReactantLink> reactantLinks;
-		List<ProductLink> productLinks;
-		ConnectScheme connectScheme;
-		Offset offset;
-		int rectangleIndex;
-		
+
+  /** The reaction. */
+  private Reaction reaction;
+  
+  /** The model wrapper. */
+  private ModelWrapper modelWrapper;
+  
+  /** The reactant wrapper list. */
+  private List<SpeciesReferenceWrapper> reactantWrapperList;
+  
+  /** The product wrapper list. */
+  private List<SpeciesReferenceWrapper> productWrapperList;
+  
+  /** The modifier wrapper list. */
+  private List<ModifierSpeciesReferenceWrapper> modifierWrapperList;
+  
+  /** The is set modifiers. */
+  private boolean isSetModifiers = true;
+  
+  /** The edit point list. */
+  private List<Point2D.Double> editPointList;
+  
+  /** The edit points. */
+  private EditPoints editPoints;
+  
+  /** The modification list. */
+  private List<Modification> modificationList;
+  
+  /** The type. */
+  private String type;
+  
+  /** The base reactants. */
+  private List<BaseReactant> baseReactants;
+  
+  /** The base products. */
+  private List<BaseProduct> baseProducts;
+  
+  /** The reactant links. */
+  private List<ReactantLink> reactantLinks;
+  
+  /** The product links. */
+  private List<ProductLink> productLinks;
+  
+  /** The connect scheme. */
+  private ConnectScheme connectScheme;
+  
+  /** The offset. */
+  private Offset offset;
+  
+  /** The rectangle index. */
+  private int rectangleIndex;
+
+		/**
+		 * Instantiates a new reaction wrapper.
+		 *
+		 * @param reaction the reaction
+		 * @param modelWrapper the model wrapper
+		 */
 		public ReactionWrapper(Reaction reaction, ModelWrapper modelWrapper){
 			this.reaction = reaction;
 			this.modelWrapper = modelWrapper;
@@ -65,27 +107,27 @@ public class ReactionWrapper extends Reaction{
 			this.notes = reaction.getNotes();
 			this.reversible = reaction.isReversible();
 
-			
+
 			this.annotation = reaction.getAnnotation();
 			this.type  = annotation.getExtension().getReactionType();
-			
+
 			this.editPoints = annotation.getExtension().getEditPoints();
 			if(editPoints != null)
 				this.editPointList = LayoutUtil.createEditPointsAsList(editPoints.getValue());
 			else
 				this.editPointList = new ArrayList<Point2D.Double>();
-			
+
 			if(annotation.getExtension().getListOfModification() != null && annotation.getExtension().getListOfModification().getModification() != null)
 				this.modificationList = annotation.getExtension().getListOfModification().getModification();
-		
+
 			reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
 			productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
-			
+
 			if(listOfModifiers != null)
 				modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
-			else 
+			else
 				isSetModifiers = false;
-			
+
 			if(annotation.getExtension().getBaseReactants() != null) {
 				baseReactants = annotation.getExtension().getBaseReactants().getBaseReactant();
 				for (BaseReactant br : baseReactants) {
@@ -96,9 +138,9 @@ public class ReactionWrapper extends Reaction{
 					}
 				}
 			}
-			
-			if(annotation.getExtension().getBaseProducts() != null) {	
-				baseProducts = annotation.getExtension().getBaseProducts().getBaseProduct(); 
+
+			if(annotation.getExtension().getBaseProducts() != null) {
+				baseProducts = annotation.getExtension().getBaseProducts().getBaseProduct();
 				for(BaseProduct bp: baseProducts){
 					if(bp.getLinkAnchor() == null || bp.getLinkAnchor().getPosition() == null){
 						LinkAnchor anchor = new LinkAnchor();
@@ -107,44 +149,50 @@ public class ReactionWrapper extends Reaction{
 					}
 				}
 			}
-			
+
 			if(annotation.getExtension().getListOfReactantLinks() != null)
 				reactantLinks = annotation.getExtension().getListOfReactantLinks().getReactantLink();
-		
+
 			if(annotation.getExtension().getListOfProductLinks() != null)
 				productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
-			
+
 			connectScheme = annotation.getExtension().getConnectScheme();
 			offset = annotation.getExtension().getOffset();
-		
+
 			if(connectScheme != null && connectScheme.getRectangleIndex() != null)
 				rectangleIndex = Integer.valueOf(annotation.getExtension().getConnectScheme().getRectangleIndex());
 
 		}
-		
-	   public String getName() {
+
+	   /* (non-Javadoc)
+   	 * @see org.sbml.sbml.level2.version4.OriginalReaction#getName()
+   	 */
+   	public String getName() {
            return name;
        }
-	   
+
+       /* (non-Javadoc)
+        * @see org.sbml.sbml.level2.version4.OriginalReaction#setName(java.lang.String)
+        */
        public void setName(String name) {
            annotation.getExtension().setName(name);
            this.name = name;
        }
-       
+
        /**
-        * 
-        * @return
-        * String
+        * Gets the reaction type.
+        *
+        * @return String
         * TODO
         */
        public String getReactionType() {
            return type;
        }
-       
+
        /**
-        * 
-        * @param type
-        * void
+        * Sets the reaction type.
+        *
+        * @param type void
         * TODO
         */
        public void setReactionType(String type) {
@@ -153,19 +201,19 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @return
-        * BaseReactants
+        * Gets the base reactants.
+        *
+        * @return BaseReactants
         * TODO
         */
-       public List<BaseReactant> getBaseReactants() {	   
+       public List<BaseReactant> getBaseReactants() {
     	   return baseReactants;
        }
 
        /**
-        * 
-        * @param value
-        * void
+        * Sets the base reactants.
+        *
+        * @param value void
         * TODO
         */
        public void setBaseReactants(BaseReactants value) {
@@ -173,9 +221,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @return
-        * BaseProducts
+        * Gets the base products.
+        *
+        * @return BaseProducts
         * TODO
         */
        public List<BaseProduct> getBaseProducts() {
@@ -183,9 +231,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param value
-        * void
+        * Sets the base products.
+        *
+        * @param value void
         * TODO
         */
        public void setBaseProducts(BaseProducts value) {
@@ -193,9 +241,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @return
-        * ListOfReactantLinks
+        * Gets the list of reactant links.
+        *
+        * @return ListOfReactantLinks
         * TODO
         */
        public List<ReactantLink> getListOfReactantLinks() {
@@ -203,9 +251,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param value
-        * void
+        * Sets the list of reactant links.
+        *
+        * @param value void
         * TODO
         */
        public void setListOfReactantLinks(ListOfReactantLinks value) {
@@ -213,9 +261,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param link
-        * void
+        * Adds the reactant link.
+        *
+        * @param link void
         * TODO
         */
        public void addReactantLink(ReactantLink link){
@@ -223,19 +271,19 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param link
-        * void
+        * Removes the reactant link.
+        *
+        * @param link void
         * TODO
         */
        public void removeReactantLink(ReactantLink link){
     	  reactantLinks.remove(link);
        }
-       
+
        /**
-        * 
-        * @return
-        * ListOfProductLinks
+        * Gets the list of product links.
+        *
+        * @return ListOfProductLinks
         * TODO
         */
        public List<ProductLink> getListOfProductLinks() {
@@ -243,19 +291,19 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param value
-        * void
+        * Sets the list of product links.
+        *
+        * @param value void
         * TODO
         */
        public void setListOfProductLinks(ListOfProductLinks value) {
     	   annotation.getExtension().setListOfProductLinks(value);
        }
-       
+
        /**
-        * 
-        * @param link
-        * void
+        * Adds the product link.
+        *
+        * @param link void
         * TODO
         */
        public void addProductLink(ProductLink link){
@@ -263,9 +311,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param link
-        * void
+        * Removes the product link.
+        *
+        * @param link void
         * TODO
         */
        public void removeProductLink(ProductLink link){
@@ -273,9 +321,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @return
-        * ConnectScheme
+        * Gets the connect scheme.
+        *
+        * @return ConnectScheme
         * TODO
         */
        public ConnectScheme getConnectScheme() {
@@ -283,10 +331,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param value
-        * void
-        * TODO
+        * Sets the connect scheme.
+        *
+        * @param connectScheme the new connect scheme
         */
        public void setConnectScheme(ConnectScheme connectScheme) {
     	   annotation.getExtension().setConnectScheme(connectScheme);
@@ -294,9 +341,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @return
-        * Offset
+        * Gets the offset.
+        *
+        * @return Offset
         * TODO
         */
        public Offset getOffset() {
@@ -304,9 +351,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param offset
-        * void
+        * Sets the offset.
+        *
+        * @param offset void
         * TODO
         */
        public void setOffset(Offset offset) {
@@ -315,22 +362,22 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @return
-        * boolean
+        * Checks if is sets the edit points.
+        *
+        * @return boolean
         * TODO
         */
        public boolean isSetEditPoints(){
     	   if(editPoints == null)
     		   return false;
-    	   
+
     	   return true;
-       }  
-       
+       }
+
        /**
-        * 
-        * @return
-        * EditPoints
+        * Gets the edits the points.
+        *
+        * @return EditPoints
         * TODO
         */
        public EditPoints getEditPoints() {
@@ -338,9 +385,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param value
-        * void
+        * Sets the edits the points.
+        *
+        * @param value void
         * TODO
         */
        public void setEditPoints(EditPoints value) {
@@ -348,19 +395,19 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @return
-        * List<Point2D>
+        * Gets the edits the points as list.
+        *
+        * @return List<Point2D>
         * TODO
         */
        public List<Point2D.Double> getEditPointsAsList(){
     	   return editPointList;
        }
-       
+
        /**
-        * 
-        * @return
-        * Line
+        * Gets the line.
+        *
+        * @return Line
         * TODO
         */
        public Line getLine() {
@@ -368,9 +415,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param value
-        * void
+        * Sets the line.
+        *
+        * @param value void
         * TODO
         */
        public void setLine(Line value) {
@@ -378,9 +425,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @return
-        * ListOfModification
+        * Gets the list of modification.
+        *
+        * @return ListOfModification
         * TODO
         */
        public List<Modification> getListOfModification() {
@@ -388,9 +435,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param value
-        * void
+        * Sets the list of modification.
+        *
+        * @param value void
         * TODO
         */
        public void setListOfModification(ListOfModification value) {
@@ -398,9 +445,9 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param modification
-        * void
+        * Adds the modification.
+        *
+        * @param modification void
         * TODO
         */
        public void addModification(Modification modification){
@@ -408,20 +455,20 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * 
-        * @param modification
-        * void
+        * Removes the modification.
+        *
+        * @param modification void
         * TODO
         */
        public void removeModification(Modification modification){
     	   modificationList.remove(modification);
        }
-       
+
        /**
-        * 
-        * @param id
-        * @return
-        * Modification
+        * Gets the modification by modifier id.
+        *
+        * @param id the id
+        * @return Modification
         * TODO
         */
        public Modification getModificationByModifierId(String id){
@@ -429,138 +476,138 @@ public class ReactionWrapper extends Reaction{
     		   if(m.getModifiers().equals(id))
     			   return m;
     	   }
-    	   
+
     	   return null;
        }
-       
+
        /**
-        * 
-        * @param srList
-        * @return
-        * List<SpeciesReferenceWrapper>
+        * Creates the reactant wrapper list.
+        *
+        * @param srList the sr list
+        * @return List<SpeciesReferenceWrapper>
         * TODO
         */
        public List<SpeciesReferenceWrapper> createReactantWrapperList(List<SpeciesReference> srList){
     	   List<SpeciesReferenceWrapper> srwList = new ArrayList<SpeciesReferenceWrapper>(srList.size());
     	   for(SpeciesReference sr : srList)
     		   srwList.add(new SpeciesReferenceWrapper(sr, modelWrapper));
-    		   
+
     	   return srwList;
        }
 
        /**
-        * 
-        * @return
-        * List<SpeciesReferenceWrapper>
+        * Gets the list of reactant wrapper.
+        *
+        * @return List<SpeciesReferenceWrapper>
         * TODO
         */
        public List<SpeciesReferenceWrapper> getListOfReactantWrapper(){
     	   return reactantWrapperList;
        }
-       
+
        /**
-        * 
-        * @param srList
-        * @return
-        * List<SpeciesReferenceWrapper>
+        * Creates the product wrapper list.
+        *
+        * @param srList the sr list
+        * @return List<SpeciesReferenceWrapper>
         * TODO
         */
        public List<SpeciesReferenceWrapper> createProductWrapperList(List<SpeciesReference> srList){
     	   List<SpeciesReferenceWrapper> srwList = new ArrayList<SpeciesReferenceWrapper>(srList.size());
     	   for(SpeciesReference sr : srList)
     		   srwList.add(new SpeciesReferenceWrapper(sr, modelWrapper));
-    		   
+
     	   return srwList;
        }
-       
+
        /**
-        * 
-        * @return
-        * int
+        * Gets the rectangle index.
+        *
+        * @return int
         * TODO
         */
        public int getRectangleIndex(){
     	   return rectangleIndex;
        }
-       
+
        /**
-        * 
-        * @param index
-        * void
+        * Sets the rectangle index.
+        *
+        * @param index void
         * TODO
         */
        public void setRectangleIndex(int index){
     	   annotation.getExtension().getConnectScheme().setRectangleIndex(String.valueOf(index));
     	   this.rectangleIndex = index;
        }
-       
+
        /**
-        * 
-        * @return
-        * List<SpeciesReferenceWrapper>
+        * Gets the list of product wrapper.
+        *
+        * @return List<SpeciesReferenceWrapper>
         * TODO
         */
        public List<SpeciesReferenceWrapper> getListOfProductWrapper(){
     	   return productWrapperList;
        }
-       
+
        /**
-        * 
-        * @param msrList
-        * @return
-        * List<ModifierSpeciesReferenceWrapper>
+        * Creates the modifier wrapper list.
+        *
+        * @param msrList the msr list
+        * @return List<ModifierSpeciesReferenceWrapper>
         * TODO
         */
        public List<ModifierSpeciesReferenceWrapper> createModifierWrapperList(List<ModifierSpeciesReference> msrList){
     	   List<ModifierSpeciesReferenceWrapper> msrwList = new ArrayList<ModifierSpeciesReferenceWrapper>(msrList.size());
     	   for(ModifierSpeciesReference msr : msrList)
     		   msrwList.add(new ModifierSpeciesReferenceWrapper(msr, modelWrapper, this));
-    		   
+
     	   return msrwList;
        }
-       
+
        /**
-        * 
-        * @return
-        * List<SpeciesReferenceWrapper>
+        * Gets the list of modifier wrapper.
+        *
+        * @return List<SpeciesReferenceWrapper>
         * TODO
         */
        public List<ModifierSpeciesReferenceWrapper> getListOfModifierWrapper(){
     	   return modifierWrapperList;
        }
-       
+
        /**
-        * 
-        * @return
-        * boolean
+        * Checks if is sets the modifier.
+        *
+        * @return boolean
         * TODO
         */
        public boolean isSetModifier(){
     	   return isSetModifiers;
        }
-       
+
        /**
-        * 
-        * @param id
-        * @return
-        * String
+        * Gets the modifier type by modifier id.
+        *
+        * @param id the id
+        * @return String
         * TODO
         */
        public String getModifierTypeByModifierId(String id){
     	   List<Modification> mList = getListOfModification();
-    	   
+
     	   for(Modification m : mList)
     		   if(m.getModifiers().equals(id))
     			   return m.getType();
-    	   
+
     	   return "";
        }
-       
+
        /**
-        * 
-        * @param id
-        * @return
-        * LinkTarget
+        * Gets the link target by modifier.
+        *
+        * @param modification the modification
+        * @return LinkTarget
         * TODO
         */
        public LinkTarget getLinkTargetByModifier(Modification modification){
@@ -570,7 +617,7 @@ public class ReactionWrapper extends Reaction{
     		   if(lt.getSpecies().equals(id))
     			   return lt;
     	   }
-    	   
+
     	   // link target missing = positioned at inactive
     	   LinkTarget lt = new LinkTarget();
     	   lt.setSpecies(m.getModifiers());
@@ -578,7 +625,7 @@ public class ReactionWrapper extends Reaction{
     	   LinkAnchor la = new LinkAnchor();
     	   la.setPosition("INACTIVE");
     	   lt.setLinkAnchor(la);
-    	   
+
     	   return lt;
        }
 }

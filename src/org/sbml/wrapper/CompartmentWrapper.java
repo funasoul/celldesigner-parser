@@ -2,17 +2,29 @@ package org.sbml.wrapper;
 
 import org.sbml.sbml.level2.version4.Compartment;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class CompartmentWrapper.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: May 24, 2016
  */
 
 public class CompartmentWrapper extends Compartment {
 
-	ModelWrapper modelWrapper;
-	Compartment compartment;
-	
+	/** The model wrapper. */
+	private	ModelWrapper modelWrapper;
+  	
+	/** The compartment. */
+	private Compartment compartment;
+
+	/**
+	 * Instantiates a new compartment wrapper.
+	 *
+	 * @param compartment the compartment
+	 * @param modelWrapper the model wrapper
+	 */
 	public CompartmentWrapper(Compartment compartment, ModelWrapper modelWrapper){
 		this.compartment = compartment;
 		this.modelWrapper = modelWrapper;
@@ -28,40 +40,51 @@ public class CompartmentWrapper extends Compartment {
 
 		this.annotation = compartment.getAnnotation();
 	}
-	
+
+	/* (non-Javadoc)
+	 * @see org.sbml.sbml.level2.version4.OriginalCompartment#getName()
+	 */
 	public String getName(){
 		return name;
 	}
-	
-	
+
+
+	/* (non-Javadoc)
+	 * @see org.sbml.sbml.level2.version4.OriginalCompartment#setName(java.lang.String)
+	 */
 	public void setName(String value){
 		annotation.getExtension().setName(value);;
 	}
-	
+
+	/**
+	 * Checks if is sets the name.
+	 *
+	 * @return true, if is sets the name
+	 */
 	public boolean isSetName(){
 		if(annotation == null || annotation.getExtension().getName() == null)
 			return false;
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * boolean
+	 * Checks if is sets the outside.
+	 *
+	 * @return boolean
 	 * TODO
 	 */
 	public boolean isSetOutside(){
 		if(outside == null)
 			return false;
-		
+
 		return true;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * CompartmentWrapper
+	 * Gets the outside instance.
+	 *
+	 * @return CompartmentWrapper
 	 * TODO
 	 */
 	public CompartmentWrapper getOutsideInstance(){
@@ -69,8 +92,9 @@ public class CompartmentWrapper extends Compartment {
 	}
 
 	/**
-	 * @return
-	 * CompartmentAliasWrapper
+	 * Gets the alias wrapper.
+	 *
+	 * @return CompartmentAliasWrapper
 	 * TODO
 	 */
 	public CompartmentAliasWrapper getAliasWrapper() {

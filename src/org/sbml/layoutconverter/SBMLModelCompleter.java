@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package org.sbml.layoutconverter;
 
 import javax.swing.tree.TreeNode;
@@ -17,24 +20,34 @@ import org.sbml.jsbml.Unit;
 import org.sbml.jsbml.Unit.Kind;
 import org.sbml.jsbml.UnitDefinition;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class SBMLModelCompleter.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: Jun 9, 2016
  */
 
 public class SBMLModelCompleter {
 	
+	/** The document. */
 	static SBMLDocument document;
+	
+	/** The model. */
 	static Model model;
+	
+	/** The Constant level. */
 	static final int level = 3;
+	
+	/** The Constant version. */
 	static final int version = 1;
 	
 	/**
-	 * 
-	 * @param doc
-	 * @return
-	 * SBMLDocument
+	 * Auto complete required attributes.
+	 *
+	 * @param doc the doc
+	 * @return SBMLDocument
 	 * TODO
 	 */
 	public static SBMLDocument autoCompleteRequiredAttributes(SBMLDocument doc){
@@ -44,56 +57,55 @@ public class SBMLModelCompleter {
 		completeCompartments(model.getListOfCompartments());
 		completeReactions(model.getListOfReactions());
 		completeSpecies(model.getListOfSpecies());
+		completeParameter(model.getListOfParameters());
 		
 		return document;
 	}
 	
-	public static void autocomplete(TreeNode node){
-		System.out.println(node.getClass());
-		
-		for(int i = 0; i < node.getChildCount(); i++){
-			TreeNode n = node.getChildAt(i);
-			     
-			if(n instanceof Model){
-				Model model = (Model) n;
-				model.initDefaults(level, version);
-			} else if(n instanceof Compartment){
-				Compartment compartment = (Compartment) n;
-				compartment.initDefaults(level, version);
-			} else if(n instanceof Parameter){
-				Parameter parameter = (Parameter) n;
-				parameter.initDefaults(level, version);
-			} else if(n instanceof Species){
-				Species species = (Species) n;
-				species.initDefaults(level, version);
-			}  else if(n instanceof Unit){
-				Unit unit = (Unit) n;
-				unit.initDefaults(level, version);
-			} else if(n instanceof Reaction){
-				Reaction reaction = (Reaction) n;
-				reaction.initDefaults(level, version);
-			} else if(n instanceof Event){
-				Event event = (Event) n;
-				event.initDefaults(level, version);
-			} else if(n instanceof KineticLaw){
-				KineticLaw kineticLaw = (KineticLaw) n;
-				kineticLaw.initDefaults();
-			} 
-			
-			
-			
-			autocomplete(n);
-		}
-	}
+//	public static void autocomplete(TreeNode node){
+//		System.out.println(node.getClass());
+//		
+//		for(int i = 0; i < node.getChildCount(); i++){
+//			TreeNode n = node.getChildAt(i);
+//			     
+//			if(n instanceof Model){
+//				Model model = (Model) n;
+//				model.initDefaults(level, version);
+//			} else if(n instanceof Compartment){
+//				Compartment compartment = (Compartment) n;
+//				compartment.initDefaults(level, version);
+//			} else if(n instanceof Parameter){
+//				Parameter parameter = (Parameter) n;
+//				parameter.initDefaults(level, version);
+//			} else if(n instanceof Species){
+//				Species species = (Species) n;
+//				species.initDefaults(level, version);
+//			}  else if(n instanceof Unit){
+//				Unit unit = (Unit) n;
+//				unit.initDefaults(level, version);
+//			} else if(n instanceof Reaction){
+//				Reaction reaction = (Reaction) n;
+//				reaction.initDefaults(level, version);
+//			} else if(n instanceof Event){
+//				Event event = (Event) n;
+//				event.initDefaults(level, version);
+//			} else if(n instanceof KineticLaw){
+//				KineticLaw kineticLaw = (KineticLaw) n;
+//				kineticLaw.initDefaults();
+//			} 
+//	
+//			autocomplete(n);
+//		}
+//	}
 	
 	
 	/**
-	 * 
-	 * @param unitDefinitions
-	 * @return
-	 * ListOf<UnitDefinition>
-	 * TODO
-	 */
+ * Complete unit definitions.
+ *
+ * @param unitDefinitions the unit definitions
+ * @return ListOf<UnitDefinition>
+ * TODO
+ */
 	public static ListOf<UnitDefinition> completeUnitDefinitions(ListOf<UnitDefinition> unitDefinitions){
 		for(UnitDefinition ud : unitDefinitions){
 				ListOf<Unit> units = ud.getListOfUnits();
@@ -114,10 +126,10 @@ public class SBMLModelCompleter {
 	}
 	
 	/**
-	 * 
-	 * @param compartments
-	 * @return
-	 * ListOf<Compartment>
+	 * Complete compartments.
+	 *
+	 * @param compartments the compartments
+	 * @return ListOf<Compartment>
 	 * TODO
 	 */
 	public static ListOf<Compartment> completeCompartments(ListOf<Compartment> compartments){
@@ -133,10 +145,10 @@ public class SBMLModelCompleter {
 	}
 	
 	/**
-	 * 
-	 * @param species
-	 * @return
-	 * ListOf<Species>
+	 * Complete species.
+	 *
+	 * @param species the species
+	 * @return ListOf<Species>
 	 * TODO
 	 */
 	public static ListOf<Species> completeSpecies(ListOf<Species> species){
@@ -158,10 +170,29 @@ public class SBMLModelCompleter {
 	}
 	
 	/**
-	 * 
-	 * @param reactions
-	 * @return
-	 * ListOf<Reaction>
+	 * Complete parameter.
+	 *
+	 * @param parameters the parameters
+	 * @return ListOf<Parameter>
+	 * TODO
+	 */
+	public static ListOf<Parameter> completeParameter(ListOf<Parameter> parameters){
+		int i = 0;
+		for(Parameter p: parameters){
+			if(!p.isSetId())
+				p.setId(p.getClass().getSimpleName() + i++);
+			if(!p.isSetConstant())
+				p.setConstant(true);
+		}
+		
+		return parameters;
+	}
+	
+	/**
+	 * Complete reactions.
+	 *
+	 * @param reactions the reactions
+	 * @return ListOf<Reaction>
 	 * TODO
 	 */
 	public static ListOf<Reaction> completeReactions(ListOf<Reaction> reactions){
@@ -182,10 +213,10 @@ public class SBMLModelCompleter {
 	}
 	
 	/**
-	 * 
-	 * @param speciesReference
-	 * @return
-	 * ListOf<SpeciesReference>
+	 * Complete species reference.
+	 *
+	 * @param speciesReference the species reference
+	 * @return ListOf<SpeciesReference>
 	 * TODO
 	 */
 	public static ListOf<SpeciesReference> completeSpeciesReference(ListOf<SpeciesReference> speciesReference){
@@ -200,10 +231,10 @@ public class SBMLModelCompleter {
 	}
 	
 	/**
-	 * 
-	 * @param modifierSpeciesReference
-	 * @return
-	 * ListOf<ModifierSpeciesReference>
+	 * Complete modifier species reference.
+	 *
+	 * @param modifierSpeciesReference the modifier species reference
+	 * @return ListOf<ModifierSpeciesReference>
 	 * TODO
 	 */
 	public static ListOf<ModifierSpeciesReference> completeModifierSpeciesReference(ListOf<ModifierSpeciesReference> modifierSpeciesReference){

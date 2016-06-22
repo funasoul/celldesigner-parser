@@ -7,22 +7,44 @@ import org.sbml._2001.ns.celldesigner.ListOfCatalyzedReactions;
 import org.sbml._2001.ns.celldesigner.SpeciesIdentity;
 import org.sbml.sbml.level2.version4.Species;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class SpeciesWrapper.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: May 24, 2016
  */
 
 public class SpeciesWrapper extends Species{
-	
-	ModelWrapper modelWrapper;
-	Species species;
-	CompartmentWrapper compartmentWrapper;
-	String positionToCompartment;
-	String complexSpecies; // TODO
-	SpeciesIdentity speciesIdentity;
-	List<Catalyzed> catalyzedReactions;
-	
+
+  /** The model wrapper. */
+  private	ModelWrapper modelWrapper;
+  
+  /** The species. */
+  private	Species species;
+  
+  /** The compartment wrapper. */
+  private	CompartmentWrapper compartmentWrapper;
+  
+  /** The position to compartment. */
+  private	String positionToCompartment;
+  
+  /** The complex species. */
+  private	String complexSpecies; // TODO
+  
+  /** The species identity. */
+  private	SpeciesIdentity speciesIdentity;
+  
+  /** The catalyzed reactions. */
+  private	List<Catalyzed> catalyzedReactions;
+
+	/**
+	 * Instantiates a new species wrapper.
+	 *
+	 * @param species the species
+	 * @param modelWrapper the model wrapper
+	 */
 	public SpeciesWrapper(Species species, ModelWrapper modelWrapper){
 		this.modelWrapper = modelWrapper;
 		this.species = species;
@@ -38,7 +60,7 @@ public class SpeciesWrapper extends Species{
 		this.notes = species.getNotes();
 		this.spatialSizeUnits = species.getSpatialSizeUnits();
 		this.substanceUnits = species.getSubstanceUnits();
-		
+
 		this.compartmentWrapper = modelWrapper.getCompartmentWrapperById(species.getCompartment());
 		this.annotation = species.getAnnotation();
 		this.positionToCompartment = annotation.getExtension().getPositionToCompartment();
@@ -48,32 +70,32 @@ public class SpeciesWrapper extends Species{
 		if(annotation.getExtension().getListOfCatalyzedReactions() != null)
 			this.catalyzedReactions = annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
 	}
-	
+
 	/**
-	 * 	
-	 * @return
-	 * String
+	 * Gets the position to compartment.
+	 *
+	 * @return String
 	 * TODO
 	 */
-	public String getPositionToCompartment(){	
+	public String getPositionToCompartment(){
 		return positionToCompartment;
 	}
-	
+
 	/**
-	 * 
-	 * @param position
-	 * void
+	 * Sets the position to compartment.
+	 *
+	 * @param position void
 	 * TODO
 	 */
-	public void setPositionToCompartment(String position){	
+	public void setPositionToCompartment(String position){
 		annotation.getExtension().setPositionToCompartment(position);
 		positionToCompartment = position;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * boolean
+	 * Checks if is sets the position to compatment.
+	 *
+	 * @return boolean
 	 * TODO
 	 */
 	public boolean isSetPositionToCompatment(){
@@ -82,32 +104,32 @@ public class SpeciesWrapper extends Species{
 		else
 			return true;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * String
+	 * Gets the complex species.
+	 *
+	 * @return String
 	 * TODO
 	 */
 	public String getComplexSpecies(){
 		return complexSpecies;
 	}
-	
+
 	/**
-	 * 
-	 * @param complexSpecies
-	 * void
+	 * Sets the complex species.
+	 *
+	 * @param complexSpecies void
 	 * TODO
 	 */
 	public void setComplexSpecies(String complexSpecies){
 		annotation.getExtension().setComplexSpecies(complexSpecies);
 		this.complexSpecies = complexSpecies;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * boolean
+	 * Checks if is sets the complex species.
+	 *
+	 * @return boolean
 	 * TODO
 	 */
 	public boolean isSetComplexSpecies(){
@@ -116,32 +138,32 @@ public class SpeciesWrapper extends Species{
 		else
 			return true;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * SpeciesIdentity
+	 * Gets the species identity.
+	 *
+	 * @return SpeciesIdentity
 	 * TODO
 	 */
 	public SpeciesIdentity getSpeciesIdentity(){
 		return speciesIdentity;
 	}
-	
+
 	/**
-	 * 
-	 * @param speciesIdentity
-	 * void
+	 * Sets the species identity.
+	 *
+	 * @param speciesIdentity void
 	 * TODO
 	 */
 	public void setSpeciesIdentity(SpeciesIdentity speciesIdentity){
 		annotation.getExtension().setSpeciesIdentity(speciesIdentity);
 		this.speciesIdentity = speciesIdentity;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * boolean
+	 * Checks if is sets the species identity.
+	 *
+	 * @return boolean
 	 * TODO
 	 */
 	public boolean isSetSpeciesIdentity(){
@@ -150,11 +172,11 @@ public class SpeciesWrapper extends Species{
 		else
 			return true;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * ListOfCatalyzedReactions
+	 * Gets the list of catalyzed reactions.
+	 *
+	 * @return ListOfCatalyzedReactions
 	 * TODO
 	 */
 	public List<Catalyzed> getListOfCatalyzedReactions() {
@@ -162,20 +184,20 @@ public class SpeciesWrapper extends Species{
 	}
 
 	/**
-	 * 
-	 * @param value
-	 * void
+	 * Sets the list of catalyzed reactions.
+	 *
+	 * @param value void
 	 * TODO
 	 */
 	public void setListOfCatalyzedReactions(ListOfCatalyzedReactions value) {
 		annotation.getExtension().setListOfCatalyzedReactions(value);
 	}
-	
+
 	/**
-	 * 
-	 * 
 	 * void
-	 * TODO
+	 * TODO.
+	 *
+	 * @return true, if is sets the list of catalyzed reactions
 	 */
 	public boolean isSetListOfCatalyzedReactions(){
 		if(catalyzedReactions == null)
@@ -183,52 +205,53 @@ public class SpeciesWrapper extends Species{
 		else
 			return true;
 	}
-	
+
 	/**
-	 * 
-	 * @param catalyzed
-	 * void
+	 * Adds the catalyzed reaction.
+	 *
+	 * @param catalyzed void
 	 * TODO
 	 */
 	public void addCatalyzedReaction(Catalyzed catalyzed){
 		catalyzedReactions.add(catalyzed);
 	}
-	
+
 	/**
-	 * 
-	 * @param catalyzed
-	 * void
+	 * Removes the catalyzed reaction.
+	 *
+	 * @param catalyzed void
 	 * TODO
 	 */
 	public void removeCatalyzedReaction(Catalyzed catalyzed){
 		catalyzedReactions.remove(catalyzed);
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * Catalyzed
+	 * Creates the catalyzed reaction.
+	 *
+	 * @return Catalyzed
 	 * TODO
 	 */
 	public Catalyzed createCatalyzedReaction(){
 		Catalyzed catalyzed = new Catalyzed();
 		catalyzedReactions.add(catalyzed);
-		
+
 		return catalyzed;
 	}
-	
+
 	/**
-	 * 
-	 * @return
-	 * Catalyzed
+	 * Creates the catalyzed reaction.
+	 *
+	 * @param reaction the reaction
+	 * @return Catalyzed
 	 * TODO
 	 */
 	public Catalyzed createCatalyzedReaction(String reaction){
 		Catalyzed catalyzed = createCatalyzedReaction();
 		catalyzed.setReaction(reaction);
-		
+
 		return catalyzed;
 	}
-	
+
 	//TODO species identity handling
 }

@@ -5,6 +5,7 @@ package org.sbml.layoutconverter;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.sbml.jsbml.ext.layout.Dimensions;
@@ -147,6 +148,7 @@ public class LayoutUtil {
 		point.setLevel(DEFAULTSBMLLEVEL);
 		point.setVersion(DEFAULTSBMLVERSION);
 		point.setZ(0);
+		
 		if(direction.equals("NW")){
 			point.setX(x);
 			point.setY(y);
@@ -219,6 +221,21 @@ public class LayoutUtil {
 	}
 	
 	/**
+	 * Creates the adjusted point.
+	 *
+	 * @param sg the sg
+	 * @param direction the direction
+	 * @return Point
+	 * TODO
+	 */
+	public static Point createAdjustedPoint(SpeciesGlyph sg, String direction){
+		Point p = sg.getBoundingBox().getPosition();
+		Dimensions d = sg.getBoundingBox().getDimensions();
+		
+		return createAdjustedPoint(p.getX(), p.getY(), d.getWidth(), d.getHeight(), direction);
+	}
+	
+	/**
 	 * Adjust point.
 	 *
 	 * @param point the point
@@ -270,6 +287,7 @@ public class LayoutUtil {
 		
 		if(num0 > 0){
 			List<Point2D.Double> subList = editPointList.subList(0, num0);
+			Collections.reverse(subList);																			//since editpoint lists the cordinates starting from the editpoint
 			List<LineSegment> subLineList = createListOfLineSegment(startPoint, editPoint, editPoint, startPoint, subList);
 			lineList.addAll(lineList.size(), subLineList);
 		} else {
@@ -285,6 +303,7 @@ public class LayoutUtil {
 			if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
 				subLineList = createListOfLineSegment(editPoint, endPoint1, editPoint, endPoint1, subList);
 			} else {
+				Collections.reverse(subList);
 				subLineList = createListOfLineSegment(endPoint1, editPoint, editPoint, endPoint1, subList);
 			}
 			lineList.addAll(lineList.size(), subLineList);
@@ -311,23 +330,34 @@ public class LayoutUtil {
 			lineList.add(ls);
 		}
 		
-//		if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
-//			LineSegment l1 = lineList.get(num0 - tshapeIndex);
-//			LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
-//			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
-//			l2.setEnd(l1.getEnd().clone());
-//			l1.setEnd(p.clone());
-//			l2.setStart(p.clone());
-//			lineList.add(num0 + num1 + tshapeIndex + 1, l2);
-//		} else {
-//			LineSegment l1 = lineList.get(num0 + num1 + tshapeIndex);
-//			LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
-//			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
-//			l2.setEnd(l1.getEnd().clone());
-//			l1.setEnd(p.clone());
-//			l2.setStart(p.clone());
-//			lineList.add(num0 - tshapeIndex + 1, l2);
-//		}
+		for(LineSegment ls : lineList){
+			System.out.println(ls.toString());
+		}
+		
+		if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
+			LineSegment l1 = lineList.get(num0 - tshapeIndex);
+			LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
+			l2.setEnd(l1.getEnd().clone());
+			l1.setEnd(p.clone());
+			l2.setStart(p.clone());
+			System.out.println(l1.toString());
+			System.out.println(l2.toString());
+			lineList.add(num0 - tshapeIndex + 1, l2);
+		} else {
+			LineSegment l1 = lineList.get(num0 + 1 + num1 + 1 + tshapeIndex);
+			LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
+			l2.setEnd(l1.getEnd().clone());
+			l1.setEnd(p.clone());
+			l2.setStart(p.clone());
+			lineList.add(num0 + 1 + num1 + 1 + tshapeIndex + 1, l2);
+		}
+		
+		System.out.println();
+		for(LineSegment ls : lineList){
+			System.out.println(ls.toString());
+		}
 		
 		return lineList;
 	}
@@ -359,23 +389,35 @@ public class LayoutUtil {
 	}
 	
 	/**
+	 * Creates the list of line segment.
+	 * assumes vector1 is the start point and vector2 is the end point
+	 * @param vector1 the vector 1
+	 * @param vector2 the vector 2
+	 * @param editPointList the edit point list
+	 * @return the list
+	 */
+	public static List<LineSegment> createListOfLineSegment(Point vector1, Point vector2, List<Point2D.Double> editPointList){
+		return createListOfLineSegment(vector1, vector2, vector1, vector2, editPointList);
+	}
+	
+	/**
 	 * create line segments with 2 vectors .
 	 *
 	 * @param startPoint the start point
 	 * @param endPoint the end point
-	 * @param reactantPoint the reactant point
-	 * @param productPoint the product point
+	 * @param vector1 the vector 1
+	 * @param vector2 the vector 2
 	 * @param editPointList the edit point list
 	 * @return List<LineSegment>
 	 * TODO
 	 */
-	public static List<LineSegment> createListOfLineSegment(Point startPoint, Point endPoint, Point reactantPoint, Point productPoint, List<Point2D.Double> editPointList){
+	public static List<LineSegment> createListOfLineSegment(Point startPoint, Point endPoint, Point vector1, Point vector2, List<Point2D.Double> editPointList){
 		List<LineSegment> lineList = new ArrayList<LineSegment>();
-		Point perpPoint = createPerpendicularPoint(reactantPoint, productPoint);
+		Point perpPoint = createPerpendicularPoint(vector1, vector2);
 		LineSegment line = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
 		line.setStart(startPoint.clone());
 		for(int i = 0; i < editPointList.size(); i++){
-			Point point = getEditPointPosition(reactantPoint, productPoint, perpPoint, editPointList.get(i));
+			Point point = getEditPointPosition(vector1, vector2, perpPoint, editPointList.get(i));
 			line.setEnd(point.clone());
 			lineList.add(line);
 			line = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);

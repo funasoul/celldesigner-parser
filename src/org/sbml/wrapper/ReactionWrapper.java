@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package org.sbml.wrapper;
 
 import java.awt.geom.Point2D;

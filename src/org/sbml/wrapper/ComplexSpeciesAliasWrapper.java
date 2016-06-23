@@ -1,3 +1,6 @@
+/*
+ * 
+ */
 package org.sbml.wrapper;
 
 import java.math.BigDecimal;

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.sbml.jsbml.ext.layout.CubicBezier;
 import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.LineSegment;
 import org.sbml.jsbml.ext.layout.Point;
@@ -264,6 +265,27 @@ public class LayoutUtil {
 	}
 
 	/**
+	 * 
+	 * @param startPoint
+	 * @param endPoint
+	 * @param basePoint
+	 * @return
+	 * List<LineSegment>
+	 * TODO
+	 */
+	public static List<LineSegment> createListOfBezier(Point startPoint, Point endPoint, Point basePoint){
+		List<LineSegment> lsList = new ArrayList<LineSegment>();
+		CubicBezier bezier = new CubicBezier(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+		bezier.setStart(startPoint.clone());
+		bezier.setEnd(endPoint.clone());
+		bezier.setBasePoint1(basePoint.clone());
+		bezier.setBasePoint2(basePoint.clone());
+		lsList.add(bezier);
+		
+		return lsList;
+	}
+	
+	/**
 	 * Creates the list of line segment.
 	 *
 	 * @param startPoint the start point
@@ -330,10 +352,6 @@ public class LayoutUtil {
 			lineList.add(ls);
 		}
 		
-		for(LineSegment ls : lineList){
-			System.out.println(ls.toString());
-		}
-		
 		if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
 			LineSegment l1 = lineList.get(num0 - tshapeIndex);
 			LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
@@ -341,8 +359,6 @@ public class LayoutUtil {
 			l2.setEnd(l1.getEnd().clone());
 			l1.setEnd(p.clone());
 			l2.setStart(p.clone());
-			System.out.println(l1.toString());
-			System.out.println(l2.toString());
 			lineList.add(num0 - tshapeIndex + 1, l2);
 		} else {
 			LineSegment l1 = lineList.get(num0 + 1 + num1 + 1 + tshapeIndex);
@@ -352,11 +368,6 @@ public class LayoutUtil {
 			l1.setEnd(p.clone());
 			l2.setStart(p.clone());
 			lineList.add(num0 + 1 + num1 + 1 + tshapeIndex + 1, l2);
-		}
-		
-		System.out.println();
-		for(LineSegment ls : lineList){
-			System.out.println(ls.toString());
 		}
 		
 		return lineList;

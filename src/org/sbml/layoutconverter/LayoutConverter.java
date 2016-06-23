@@ -336,7 +336,7 @@ public class LayoutConverter {
 				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint1, endPoint2, reactantPoint, productPoint1, productPoint2, editPointList, num0, num1, num2, rw.getReactionType(), rw.getEditPoints().getTShapeIndex());
 				int reactant1 = num0 + 1;
 				int reactant2 = num0 + num1 + 1;
-				System.out.println(reactant1);
+
 				Curve curve = srg1.createCurve();
 				for(int i = 0; i <= reactant1; i++){
 					curve.addCurveSegment(lsList.get(i));
@@ -370,9 +370,9 @@ public class LayoutConverter {
 					LinkTarget lt = rw.getLinkTargetByModifier(m);					
 					Point startPoint = LayoutUtil.createAdjustedPoint(sg, lt.getLinkAnchor().getPosition());
 					Point reactionPoint = rg.getBoundingBox().getPosition();
-					lsList = LayoutUtil.createListOfLineSegment(startPoint, reactionPoint, modifierPoint, reactionPoint, editPointList, rectangleIndex);
+					List<LineSegment> lsList2 = LayoutUtil.createListOfLineSegment(startPoint, reactionPoint, modifierPoint, reactionPoint, editPointList, rectangleIndex);
 					Curve curve = srg.createCurve();
-					for(LineSegment ls : lsList){
+					for(LineSegment ls : lsList2){
 						curve.addCurveSegment(ls);
 					}
 				}
@@ -382,30 +382,42 @@ public class LayoutConverter {
 			List<ProductLink> plList = rw.getListOfProductLinks();
 
 			for(ReactantLink link : rlList){
+				String lineType = link.getLine().getType();
 				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + link.getAlias());
 				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 				Point startPoint  = LayoutUtil.createAdjustedPoint(sg, link.getLinkAnchor().getPosition());
 				Point endPoint = reactionBB.getPosition();
 				editPointList= new ArrayList<Point2D.Double>();
-				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint, editPointList);
-
+				List<LineSegment> lsList2;
+				if(lineType.equals("straight"))
+					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, endPoint, editPointList);
+				else
+					lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex).getStart());
+				
 				Curve curve = srg.createCurve();
-				for(LineSegment ls : lsList){
+				for(LineSegment ls : lsList2){
 					curve.addCurveSegment(ls);
 				}
 			}
 
 			for(ProductLink link : plList){
+				String lineType = link.getLine().getType();
 				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + link.getAlias());
 				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 				Point endPoint = LayoutUtil.createAdjustedPoint(sg, link.getLinkAnchor().getPosition());
 				
 				Point startPoint = reactionBB.getPosition();
 				editPointList= new ArrayList<Point2D.Double>();
-				lsList = LayoutUtil.createListOfLineSegment(startPoint, endPoint, editPointList);
+				List<LineSegment> lsList2;
+				
+				if(lineType.equals("straight"))
+					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, endPoint, editPointList);
+				else
+					lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex + 1).getEnd());
+				
 
 				Curve curve = srg.createCurve();
-				for(LineSegment ls : lsList){
+				for(LineSegment ls : lsList2){
 					curve.addCurveSegment(ls);
 				}
 			}
@@ -583,7 +595,7 @@ public class LayoutConverter {
 		LayoutConverter converter;
 		try {
 			//converter = new LayoutConverter(new File("sample/sample.xml"));
-			converter = new LayoutConverter(new File("sample/dissociation.xml"));
+			converter = new LayoutConverter(new File("sample/bezier.xml"));
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

@@ -81,6 +81,9 @@ public class LayoutConverter {
 	/** The Constant DEFAULT_SPECIES_DEPTH. */
 	static final double DEFAULT_SPECIES_DEPTH = 1.0;
 
+	/** The conver default compartment. */
+	private boolean converDefaultCompartment = true;
+	
 	/**
 	 * Instantiates a new layout converter.
 	 *
@@ -93,39 +96,6 @@ public class LayoutConverter {
 		mWrapper = ObjectFactory.unmarshalSBML(file);
 		document = ConverterSBMLReader.read(file);
 		model = document.getModel();
-		LayoutModelPlugin mplugin = (LayoutModelPlugin)(model.getPlugin("layout"));
-		layout = mplugin.createLayout();
-	}
-
-	/**
-	 * void
-	 * TODO.
-	 */
-	public void print(){
-		try {
-	    	String docStr = new TidySBMLWriter().writeSBMLToString(document);
-	    	System.out.println(docStr);
-		} catch (SBMLException e) {
-			e.printStackTrace();
-		} catch (XMLStreamException e) {
-			e.printStackTrace();
-		} 
-	}
-
-	/**
-	 * 
-	 * 
-	 * void
-	 * TODO
-	 */
-	public void save(){
-    	try {
-			SBMLWriter.write(document, new File("CD_" + model.getId() + ".xml"), ' ', (short) 2);
-		} catch (SBMLException | XMLStreamException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 	}
 	
 	/**
@@ -135,6 +105,9 @@ public class LayoutConverter {
 	 * @return the SBML document
 	 */
 	public SBMLDocument convertToLayout(){
+		LayoutModelPlugin mplugin = (LayoutModelPlugin)(model.getPlugin("layout"));
+		layout = mplugin.createLayout();
+		
 		convertModelToLayout(mWrapper);
 		convertCompartmentsToLayout(mWrapper.getListOfCompartmentAliasWrapper());
 		convertComplexAliasToLayout(mWrapper.getListOfComplexSpeciesAliasWrapper());
@@ -145,36 +118,25 @@ public class LayoutConverter {
 	}
 
 	/**
+	 * Convert model to layout.
+	 *
+	 * @param mWrapper void
+	 * TODO
+	 */
+	public void convertModelToLayout(ModelWrapper mWrapper){
+		layout.setId("Layout_" + model.getId());
+		layout.createDimensions(mWrapper.getW(), mWrapper.getH(), 1d);
+
+	}
+	
+	/**
 	 * Convert compartments to layout.
 	 *
 	 * @param cawList the caw list
 	 */
 	public void convertCompartmentsToLayout(List<CompartmentAliasWrapper> cawList){
-		CompartmentWrapper cw = mWrapper.getCompartmentWrapperById("default");
-		if(cw != null){
-			CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + cw.getId());
-			cg.setCompartment(cw.getId());
-			BoundingBox bb = cg.createBoundingBox();
-			Dimensions dimension = bb.createDimensions();
-			dimension.setWidth(mWrapper.getW());
-			dimension.setHeight(mWrapper.getH());
-			dimension.setDepth(1d);
-			bb.createPosition(0, 0, 0);
-
-			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + cw.getId());
-			tg.setOriginOfText(cw.getId());
-			tg.setGraphicalObject(cg);
-			BoundingBox bb2 = tg.createBoundingBox();;
-			Dimensions dimension2 = bb2.createDimensions();
-			dimension2.setWidth(cw.getId().length() * 3);
-			dimension2.setHeight(10);
-			dimension.setDepth(1d);
-			Point point2 = bb2.createPosition();
-			point2.setX(mWrapper.getW() / 2 - cw.getId().length() * 3 / 2);
-			point2.setY(mWrapper.getH() - 10);
-			point2.setZ(0d);
-
-		}
+		if(converDefaultCompartment)
+			convertDefaultCompartment();
 
 		cawList = ModelWrapper.reorderCompartmentAccordingToPosition(cawList);
 
@@ -207,17 +169,35 @@ public class LayoutConverter {
 	}
 
 	/**
-	 * Convert model to layout.
-	 *
-	 * @param mWrapper void
-	 * TODO
+	 * Convert default compartment.
 	 */
-	public void convertModelToLayout(ModelWrapper mWrapper){
-		layout.setId("Layout_" + model.getId());
-		layout.createDimensions(mWrapper.getW(), mWrapper.getH(), 1d);
+	public void convertDefaultCompartment(){
+		CompartmentWrapper cw = mWrapper.getCompartmentWrapperById("default");
+		if(cw != null){
+			CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + cw.getId());
+			cg.setCompartment(cw.getId());
+			BoundingBox bb = cg.createBoundingBox();
+			Dimensions dimension = bb.createDimensions();
+			dimension.setWidth(mWrapper.getW());
+			dimension.setHeight(mWrapper.getH());
+			dimension.setDepth(1d);
+			bb.createPosition(0, 0, 0);
 
+			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + cw.getId());
+			tg.setOriginOfText(cw.getId());
+			tg.setGraphicalObject(cg);
+			BoundingBox bb2 = tg.createBoundingBox();;
+			Dimensions dimension2 = bb2.createDimensions();
+			dimension2.setWidth(cw.getId().length() * 3);
+			dimension2.setHeight(10);
+			dimension.setDepth(1d);
+			Point point2 = bb2.createPosition();
+			point2.setX(mWrapper.getW() / 2 - cw.getId().length() * 3 / 2);
+			point2.setY(mWrapper.getH() - 10);
+			point2.setZ(0d);
+		}
 	}
-
+	
 	/**
 	 * Convert reactions to layout.
 	 *
@@ -389,7 +369,7 @@ public class LayoutConverter {
 				Point endPoint = reactionBB.getPosition();
 				editPointList= new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
-				if(lineType.equals("straight"))
+				if(lineType.equals("Straight"))
 					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, endPoint, editPointList);
 				else
 					lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex).getStart());
@@ -405,12 +385,11 @@ public class LayoutConverter {
 				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + link.getAlias());
 				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 				Point endPoint = LayoutUtil.createAdjustedPoint(sg, link.getLinkAnchor().getPosition());
-				
 				Point startPoint = reactionBB.getPosition();
 				editPointList= new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
 				
-				if(lineType.equals("straight"))
+				if(lineType.equals("Straight"))
 					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, endPoint, editPointList);
 				else
 					lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex + 1).getEnd());
@@ -574,6 +553,15 @@ public class LayoutConverter {
 	}
 
 	/**
+	 * Convert to CD annotation.
+	 */
+	public void convertToCDAnnotation(){
+		LayoutModelPlugin mplugin = (LayoutModelPlugin)(model.getPlugin("layout"));
+		layout = mplugin.getLayout(0);
+		
+	}
+	
+	/**
 	 * void
 	 * TODO.
 	 */
@@ -587,6 +575,34 @@ public class LayoutConverter {
 	}
 
 	/**
+	 * void
+	 * TODO.
+	 */
+	public void print(){
+		try {
+	    	String docStr = new TidySBMLWriter().writeSBMLToString(document);
+	    	System.out.println(docStr);
+		} catch (SBMLException e) {
+			e.printStackTrace();
+		} catch (XMLStreamException e) {
+			e.printStackTrace();
+		} 
+	}
+
+	/**
+	 * void
+	 * TODO.
+	 */
+	public void save(){
+    	try {
+			SBMLWriter.write(document, new File("CD_" + model.getId() + ".xml"), ' ', (short) 2);
+		} catch (SBMLException | XMLStreamException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	/**
 	 * The main method.
 	 *
 	 * @param args the arguments
@@ -594,8 +610,8 @@ public class LayoutConverter {
 	public static void main(String[] args){
 		LayoutConverter converter;
 		try {
-			//converter = new LayoutConverter(new File("sample/sample.xml"));
-			converter = new LayoutConverter(new File("sample/bezier.xml"));
+			converter = new LayoutConverter(new File("sample/sample.xml"));
+			//converter = new LayoutConverter(new File("sample/layout_example.xml"));
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();
@@ -607,7 +623,8 @@ public class LayoutConverter {
 		}
 
 		converter.convertToLayout();
-		//converter.print();
+		//converter.convertToCDAnnotation();
+		converter.print();
 		converter.validate();
 		converter.save();
 	}

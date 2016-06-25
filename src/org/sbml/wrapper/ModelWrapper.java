@@ -118,11 +118,22 @@ public class ModelWrapper extends Model {
 	 */
 	public ModelWrapper(Model model){
 		this.model = model;
-		this.annotation = model.getAnnotation();
 		this.id = model.getId();
 		this.name = model.getName();
 		this.notes = model.getNotes();
+		this.annotation = model.getAnnotation();
 
+		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
+		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
+		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
+		if(annotation != null)
+			initAnnotations();
+	}
+
+	/**
+	 * Inits the annotations.
+	 */
+	void initAnnotations(){
 		if(annotation.getExtension().getListOfAntisenseRNAs() != null)
 			this.antiSenseRNAList = annotation.getExtension().getListOfAntisenseRNAs().getAntisenseRNA();
 
@@ -153,27 +164,23 @@ public class ModelWrapper extends Model {
 		if(annotation.getExtension().getListOfSpeciesAliases() != null)
 			this.sAliasList = annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias();
 
-		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
 		this.cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias());
-		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
-		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
+
 		if(annotation.getExtension().getListOfComplexSpeciesAliases() != null) {
 			this.complexSpeciesAliasList = annotation.getExtension().getListOfComplexSpeciesAliases().getComplexSpeciesAlias();
 			this.complexWrapperList = createComplexWrapperList(complexSpeciesAliasList);
 		}
 
 		this.sAliasWrapperList = createSpeciesAliasWrapperList(sAliasList);
-
-
+		
 		modelDisplay = annotation.getExtension().getModelDisplay();
 		version = annotation.getExtension().getModelVersion().intValue();
 
 		this.width = modelDisplay.getSizeX();
 		this.height = modelDisplay.getSizeY();
 
-
 	}
-
+	
 //
 //	/**
 //	 * @param species
@@ -232,7 +239,6 @@ public class ModelWrapper extends Model {
 		this.height = h;
 		annotation.getExtension().getModelDisplay().setSizeY((short) h);
 	}
-
 
 	/**
 	 * Creates the compartment alias wrapper list.

@@ -111,6 +111,14 @@ public class ReactionWrapper extends Reaction{
 		this.reversible = reaction.isReversible();
 
 		this.annotation = reaction.getAnnotation();
+		if(annotation != null)
+			initAnnotations();
+	}
+
+	/**
+	 * Inits the annotations.
+	 */
+	void initAnnotations(){
 		this.type = annotation.getExtension().getReactionType();
 
 		this.editPoints = annotation.getExtension().getEditPoints();
@@ -168,8 +176,8 @@ public class ReactionWrapper extends Reaction{
 		if (connectScheme != null && connectScheme.getRectangleIndex() != null)
 			rectangleIndex = Integer.valueOf(annotation.getExtension().getConnectScheme().getRectangleIndex());
 
+		
 	}
-
 	   /* (non-Javadoc)
    	 * @see org.sbml.sbml.level2.version4.OriginalReaction#getName()
    	 */

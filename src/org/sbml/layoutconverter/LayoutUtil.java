@@ -25,12 +25,6 @@ import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 public class LayoutUtil {
 
-	/** The defaultsbmllevel. */
-	public static int DEFAULTSBMLLEVEL = 3;
-	
-	/** The defaultsbmlversion. */
-	public static int DEFAULTSBMLVERSION = 1;
-	
 	/**
 	 * Gets the center of glyph.
 	 *
@@ -100,7 +94,7 @@ public class LayoutUtil {
 	 * TODO
 	 */
 	public static Point getDistanceFromEditPoint(Point p1, Point p2, double percentage){
-		Point point = new Point(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+		Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		point.setX(getLength(p1, p2, percentage));
 		point.setY(getLength(p1, p2, percentage));
 		point.setZ(0);
@@ -146,8 +140,8 @@ public class LayoutUtil {
 	 */
 	public static Point createAdjustedPoint(double x, double y, double width, double height, String direction){
 		Point point = new Point();
-		point.setLevel(DEFAULTSBMLLEVEL);
-		point.setVersion(DEFAULTSBMLVERSION);
+		point.setLevel(SBMLUtil.DEFAULT_SBML_LEVEL);
+		point.setVersion(SBMLUtil.DEFAULT_SBML_VERSION);
 		point.setZ(0);
 		
 		if(direction.equals("NW")){
@@ -265,17 +259,17 @@ public class LayoutUtil {
 	}
 
 	/**
-	 * 
-	 * @param startPoint
-	 * @param endPoint
-	 * @param basePoint
-	 * @return
-	 * List<LineSegment>
+	 * Creates the list of bezier.
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint the end point
+	 * @param basePoint the base point
+	 * @return List<LineSegment>
 	 * TODO
 	 */
 	public static List<LineSegment> createListOfBezier(Point startPoint, Point endPoint, Point basePoint){
 		List<LineSegment> lsList = new ArrayList<LineSegment>();
-		CubicBezier bezier = new CubicBezier(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+		CubicBezier bezier = new CubicBezier(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		bezier.setStart(startPoint.clone());
 		bezier.setEnd(endPoint.clone());
 		bezier.setBasePoint1(basePoint.clone());
@@ -313,7 +307,7 @@ public class LayoutUtil {
 			List<LineSegment> subLineList = createListOfLineSegment(startPoint, editPoint, editPoint, startPoint, subList);
 			lineList.addAll(lineList.size(), subLineList);
 		} else {
-			LineSegment ls = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+			LineSegment ls = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			ls.setStart(startPoint);
 			ls.setEnd(editPoint);
 			lineList.add(ls);
@@ -330,7 +324,7 @@ public class LayoutUtil {
 			}
 			lineList.addAll(lineList.size(), subLineList);
 		} else {
-			LineSegment ls = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+			LineSegment ls = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
 				ls.setStart(editPoint.clone());
 				ls.setEnd(endPoint1);
@@ -346,7 +340,7 @@ public class LayoutUtil {
 			List<LineSegment> subLineList = createListOfLineSegment(editPoint, endPoint2, editPoint, endPoint2, subList);
 			lineList.addAll(lineList.size(), subLineList);
 		} else {
-			LineSegment ls = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+			LineSegment ls = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			ls.setStart(editPoint.clone());
 			ls.setEnd(endPoint2);
 			lineList.add(ls);
@@ -354,7 +348,7 @@ public class LayoutUtil {
 		
 		if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
 			LineSegment l1 = lineList.get(num0 - tshapeIndex);
-			LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+			LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
 			l2.setEnd(l1.getEnd().clone());
 			l1.setEnd(p.clone());
@@ -362,7 +356,7 @@ public class LayoutUtil {
 			lineList.add(num0 - tshapeIndex + 1, l2);
 		} else {
 			LineSegment l1 = lineList.get(num0 + 1 + num1 + 1 + tshapeIndex);
-			LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+			LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
 			l2.setEnd(l1.getEnd().clone());
 			l1.setEnd(p.clone());
@@ -389,7 +383,7 @@ public class LayoutUtil {
 		List<LineSegment> lineList = createListOfLineSegment(startPoint, endPoint, reactantPoint, productPoint, editPointList);
 		
 		LineSegment l1 = lineList.get(rectangleIndex);
-		LineSegment l2 = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+		LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
 		l2.setEnd(l1.getEnd().clone());
 		l1.setEnd(p.clone());
@@ -425,13 +419,13 @@ public class LayoutUtil {
 	public static List<LineSegment> createListOfLineSegment(Point startPoint, Point endPoint, Point vector1, Point vector2, List<Point2D.Double> editPointList){
 		List<LineSegment> lineList = new ArrayList<LineSegment>();
 		Point perpPoint = createPerpendicularPoint(vector1, vector2);
-		LineSegment line = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+		LineSegment line = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		line.setStart(startPoint.clone());
 		for(int i = 0; i < editPointList.size(); i++){
 			Point point = getEditPointPosition(vector1, vector2, perpPoint, editPointList.get(i));
 			line.setEnd(point.clone());
 			lineList.add(line);
-			line = new LineSegment(DEFAULTSBMLLEVEL, DEFAULTSBMLVERSION);
+			line = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			line.setStart(point.clone());
 		}
 			

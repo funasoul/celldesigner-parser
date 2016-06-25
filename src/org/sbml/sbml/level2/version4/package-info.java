@@ -5,5 +5,7 @@
 // Generated on: 2016.05.30 at 07:47:34 PM JST 
 //
 
-@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.sbml.org/sbml/level2/version4", elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
+@javax.xml.bind.annotation.XmlSchema(namespace = "http://www.sbml.org/sbml/level2/version4", xmlns = { @XmlNs(namespaceURI = "http://www.sbml.org/2001/ns/celldesigner", prefix="celldesigner"), @XmlNs(namespaceURI = "http://www.w3.org/1998/Math/MathML", prefix="mathml"), @XmlNs(namespaceURI = "http://www.sbml.org/sbml/level2/version4", prefix="")},elementFormDefault = javax.xml.bind.annotation.XmlNsForm.QUALIFIED)
 package org.sbml.sbml.level2.version4;
+import javax.xml.bind.annotation.XmlNs;
+

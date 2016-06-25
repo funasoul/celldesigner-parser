@@ -51,7 +51,6 @@ public class CompartmentWrapper extends Compartment {
 		return name;
 	}
 
-
 	/* (non-Javadoc)
 	 * @see org.sbml.sbml.level2.version4.OriginalCompartment#setName(java.lang.String)
 	 */

@@ -4,9 +4,11 @@
 package org.sbml.wrapper;
 
 import java.io.File;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.JAXBIntrospector;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.sbml.sbml.level2.version4.Model;
@@ -29,6 +31,10 @@ public class ObjectFactory {
 	/** The model wrapper. */
 	static ModelWrapper modelWrapper;
 	
+	static JAXBContext context;
+	
+	static Sbml sbml;
+	
 	/**
 	 * Unmarshal SBML.
 	 *
@@ -48,10 +54,11 @@ public class ObjectFactory {
 	 * @throws JAXBException the JAXB exception
 	 */
 	public static ModelWrapper unmarshalSBML(File file) throws JAXBException{
-		Sbml sbml = getSbml(file);
+		sbml = getSbml(file);
 		
 		model = sbml.getModel();
 		modelWrapper = createModelWrapper(model);
+		
 		return modelWrapper;
 	}
 	
@@ -63,14 +70,12 @@ public class ObjectFactory {
 	 * @throws JAXBException the JAXB exception
 	 */
 	public static Sbml getSbml(File file) throws JAXBException{
-		JAXBContext context;
-		Sbml sbml = null;
 		context = JAXBContext.newInstance(Sbml.class);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		Object schemaObject = JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
 		sbml = (Sbml) schemaObject;
-
-	   return sbml;
+	
+		return sbml;
 	}
 	
 	/**
@@ -81,5 +86,15 @@ public class ObjectFactory {
 	 */
 	public static ModelWrapper createModelWrapper(Model model){
 		return new ModelWrapper(model);	
+	}
+	
+	public static File saveModel(ModelWrapper modelWrapper) throws JAXBException{
+		File file = new File(modelWrapper.getId() + ".xml");
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.marshal(sbml, file);
+
+		return file;
 	}
 }

@@ -66,14 +66,23 @@ public class SpeciesWrapper extends Species{
 
 		this.compartmentWrapper = modelWrapper.getCompartmentWrapperById(species.getCompartment());
 		this.annotation = species.getAnnotation();
+		if(annotation != null)
+			initAnnotations();
+	}
+
+	/**
+	 * Inits the annotations.
+	 */
+	void initAnnotations(){
 		this.positionToCompartment = annotation.getExtension().getPositionToCompartment();
 		this.complexSpecies = annotation.getExtension().getComplexSpecies();
 		this.speciesIdentity = annotation.getExtension().getSpeciesIdentity();
 
 		if(annotation.getExtension().getListOfCatalyzedReactions() != null)
 			this.catalyzedReactions = annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
-	}
 
+	}
+	
 	/**
 	 * Gets the position to compartment.
 	 *

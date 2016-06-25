@@ -25,6 +25,8 @@ import org.sbml._2001.ns.celldesigner.ListOfLayers;
 import org.sbml._2001.ns.celldesigner.ListOfProteins;
 import org.sbml._2001.ns.celldesigner.ListOfRNAs;
 import org.sbml._2001.ns.celldesigner.ListOfSpeciesAliases;
+import org.sbml._2001.ns.celldesigner.ModelAnnotationType;
+import org.sbml._2001.ns.celldesigner.ModelAnnotationType.Extension;
 import org.sbml._2001.ns.celldesigner.ModelDisplay;
 import org.sbml._2001.ns.celldesigner.Protein;
 import org.sbml._2001.ns.celldesigner.RNA;
@@ -88,7 +90,7 @@ public class ModelWrapper extends Model {
   private	List<Group> groupList;
   
   /** The included species list. */
-  private	List<Species> includedSpeciesList;
+  private	List<org.sbml._2001.ns.celldesigner.Species> includedSpeciesList;
   
   /** The layer list. */
   private	List<Layer> layerList;
@@ -126,14 +128,17 @@ public class ModelWrapper extends Model {
 		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
 		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
 		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
+		
 		if(annotation != null)
+			setAnnotations();
+		else
 			initAnnotations();
 	}
 
 	/**
-	 * Inits the annotations.
+	 * Sets the annotations.
 	 */
-	void initAnnotations(){
+	void setAnnotations(){
 		if(annotation.getExtension().getListOfAntisenseRNAs() != null)
 			this.antiSenseRNAList = annotation.getExtension().getListOfAntisenseRNAs().getAntisenseRNA();
 
@@ -181,6 +186,55 @@ public class ModelWrapper extends Model {
 
 	}
 	
+	void initAnnotations(){
+		
+		this.setAnnotation(new ModelAnnotationType());
+		model.setAnnotation(annotation);
+		annotation.setExtension(new Extension());
+		
+		annotation.getExtension().setListOfAntisenseRNAs(new ListOfAntisenseRNAs());
+		this.antiSenseRNAList = annotation.getExtension().getListOfAntisenseRNAs().getAntisenseRNA();
+
+		annotation.getExtension().setListOfBlockDiagrams(new ListOfBlockDiagrams());
+		this.blockDiagramList = annotation.getExtension().getListOfBlockDiagrams().getBlockDiagram();
+
+		annotation.getExtension().setListOfCompartmentAliases(new ListOfCompartmentAliases());
+		this.cAliasList = annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias();
+
+		annotation.getExtension().setListOfGenes(new ListOfGenes());
+		this.geneList = annotation.getExtension().getListOfGenes().getGene();
+
+		annotation.getExtension().setListOfGroups(new ListOfGroups());
+		this.groupList = annotation.getExtension().getListOfGroups().getGroup();
+
+		annotation.getExtension().setListOfLayers(new ListOfLayers());
+		this.layerList = annotation.getExtension().getListOfLayers().getLayer();
+
+		annotation.getExtension().setListOfIncludedSpecies(new ListOfIncludedSpecies());
+		this.includedSpeciesList = annotation.getExtension().getListOfIncludedSpecies().getSpecies();
+
+		annotation.getExtension().setListOfProteins(new ListOfProteins());
+		this.proteinList = annotation.getExtension().getListOfProteins().getProtein();
+
+		annotation.getExtension().setListOfRNAs(new ListOfRNAs());
+		this.rnaList = annotation.getExtension().getListOfRNAs().getRNA();
+
+		annotation.getExtension().setListOfSpeciesAliases(new ListOfSpeciesAliases());
+		this.sAliasList = annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias();
+		this.sAliasWrapperList = createSpeciesAliasWrapperList(sAliasList);
+		
+		annotation.getExtension().setListOfCompartmentAliases(new ListOfCompartmentAliases());
+		this.cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias());
+
+		annotation.getExtension().setListOfComplexSpeciesAliases(new ListOfComplexSpeciesAliases());
+		this.complexSpeciesAliasList = annotation.getExtension().getListOfComplexSpeciesAliases().getComplexSpeciesAlias();
+		this.complexWrapperList = createComplexWrapperList(complexSpeciesAliasList);
+		
+		modelDisplay = new ModelDisplay();
+		annotation.getExtension().setModelDisplay(modelDisplay);
+		
+	}
+	
 //
 //	/**
 //	 * @param species
@@ -201,11 +255,11 @@ public class ModelWrapper extends Model {
 //	}
 
 	/**
- * Gets the w.
- *
- * @return double
- * TODO
- */
+	 * Gets the w.
+	 *
+	 * @return double
+	 * TODO
+	 */
 	public double getW(){
 		return width;
 	}
@@ -231,15 +285,26 @@ public class ModelWrapper extends Model {
 	}
 
 	/**
-	 * Sets the size Y.
+	 * Sets the h.
 	 *
-	 * @param h the new size Y
+	 * @param h the new h
 	 */
-	public void setSizeY(double h){
+	public void setH(double h){
 		this.height = h;
-		annotation.getExtension().getModelDisplay().setSizeY((short) h);
+		annotation.getExtension().getModelDisplay().setSizeY((short) height);
 	}
 
+	/**
+	 * @param width2
+	 * @param height2
+	 * void
+	 * TODO
+	 */
+	public void setDimension(double width, double height) {
+		setH(height);
+		setW(width);
+	}
+	
 	/**
 	 * Creates the compartment alias wrapper list.
 	 *
@@ -545,7 +610,7 @@ public class ModelWrapper extends Model {
      * @return ListOfIncludedSpecies
      * TODO
      */
-    public  List<Species> getListOfIncludedSpecies() {
+    public  List<org.sbml._2001.ns.celldesigner.Species> getListOfIncludedSpecies() {
         return includedSpeciesList;
     }
 
@@ -566,7 +631,7 @@ public class ModelWrapper extends Model {
      * @param species void
      * TODO
      */
-    public void addIncludedSpecies(Species species){
+    public void addIncludedSpecies(org.sbml._2001.ns.celldesigner.Species species){
     	includedSpeciesList.add(species);
     }
 
@@ -1028,4 +1093,5 @@ public class ModelWrapper extends Model {
 
 		return cawList;
 	}
+
 }

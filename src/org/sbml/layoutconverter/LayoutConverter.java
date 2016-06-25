@@ -143,26 +143,6 @@ public class LayoutConverter {
 	}
 
 	/**
-	 * void TODO.
-	 *
-	 * @return the SBML document
-	 */
-	public SBMLDocument convertToLayout() {
-		LayoutModelPlugin mplugin = (LayoutModelPlugin) (model
-				.getPlugin("layout"));
-		layout = mplugin.createLayout();
-
-		convertModelToLayout(mWrapper);
-		convertCompartmentsToLayout(mWrapper.getListOfCompartmentAliasWrapper());
-		convertComplexAliasToLayout(mWrapper
-				.getListOfComplexSpeciesAliasWrapper());
-		convertSpeciesAliasToLayout(mWrapper.getListOfSpeciesAliasWrapper());
-		convertReactionsToLayout(mWrapper.getListOfReactionWrapper());
-
-		return document;
-	}
-
-	/**
 	 * Convert.
 	 */
 	public void convert() {
@@ -170,6 +150,24 @@ public class LayoutConverter {
 			this.convertToLayout();
 		else
 			this.convertToCDAnnotation();
+	}
+	
+	/**
+	 * void TODO.
+	 *
+	 * @return the SBML document
+	 */
+	public SBMLDocument convertToLayout() {
+		LayoutModelPlugin mplugin = (LayoutModelPlugin) (model.getPlugin("layout"));
+		layout = mplugin.createLayout();
+
+		convertModelToLayout(mWrapper);
+		convertCompartmentsToLayout(mWrapper.getListOfCompartmentAliasWrapper());
+		convertComplexAliasToLayout(mWrapper.getListOfComplexSpeciesAliasWrapper());
+		convertSpeciesAliasToLayout(mWrapper.getListOfSpeciesAliasWrapper());
+		convertReactionsToLayout(mWrapper.getListOfReactionWrapper());
+
+		return document;
 	}
 
 	/**
@@ -382,29 +380,24 @@ public class LayoutConverter {
 					|| rw.getReactionType().equals("TRUNCATION")) { // one to
 																	// two
 				BaseReactant br1 = brsList.get(0);
-				SpeciesReferenceGlyph srg1 = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
+				SpeciesReferenceGlyph srg1 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
 								+ br1.getAlias());
 				SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
-				Point startPoint = LayoutUtil.createAdjustedPoint(sg1, br1
-						.getLinkAnchor().getPosition());
+				Point startPoint = LayoutUtil.createAdjustedPoint(sg1, br1.getLinkAnchor().getPosition());
 
 				BaseProduct bp1 = prsList.get(0);
-				SpeciesReferenceGlyph srg2 = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
+				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
 								+ bp1.getAlias());
 				SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
 				Point endPoint1 = LayoutUtil.createAdjustedPoint(sg2, bp1
 						.getLinkAnchor().getPosition());
 
 				BaseProduct bp2 = prsList.get(1);
-				SpeciesReferenceGlyph srg3 = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
+				SpeciesReferenceGlyph srg3 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
 								+ bp2.getAlias());
 				SpeciesGlyph sg3 = layout.getSpeciesGlyph("SpeciesGlyph_"
 						+ bp2.getAlias());
-				Point endPoint2 = LayoutUtil.createAdjustedPoint(sg3, bp2
-						.getLinkAnchor().getPosition());
+				Point endPoint2 = LayoutUtil.createAdjustedPoint(sg3, bp2.getLinkAnchor().getPosition());
 
 				Point reactantPoint = LayoutUtil.createCenterPoint(sg1);
 				Point productPoint1 = LayoutUtil.createCenterPoint(sg2);
@@ -416,9 +409,7 @@ public class LayoutConverter {
 
 				lsList = LayoutUtil.createListOfLineSegment(startPoint,
 						endPoint1, endPoint2, reactantPoint, productPoint1,
-						productPoint2, editPointList, num0, num1, num2, rw
-								.getReactionType(), rw.getEditPoints()
-								.getTShapeIndex());
+						productPoint2, editPointList, num0, num1, num2, rw.getReactionType(), rw.getEditPoints().getTShapeIndex());
 				int reactant1 = num0 + 1;
 				int reactant2 = num0 + num1 + 1;
 
@@ -445,26 +436,20 @@ public class LayoutConverter {
 			}
 
 			if (rw.isSetModifier()) {
-				List<ModifierSpeciesReferenceWrapper> msrwList = rw
-						.getListOfModifierWrapper();
+				List<ModifierSpeciesReferenceWrapper> msrwList = rw.getListOfModifierWrapper();
 				for (ModifierSpeciesReferenceWrapper msrw : msrwList) {
-					Modification m = rw.getModificationByModifierId(msrw
-							.getSpecies());
+					Modification m = rw.getModificationByModifierId(msrw.getSpecies());
 					editPointList = msrw.getEditPoints();
-					SpeciesReferenceGlyph srg = rg
-							.getSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_"
+					SpeciesReferenceGlyph srg = rg.getSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_"
 									+ rg.getReaction() + "_" + msrw.getAlias());
 					SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 					Point modifierPoint = LayoutUtil.createCenterPoint(sg);
 
 					LinkTarget lt = rw.getLinkTargetByModifier(m);
-					Point startPoint = LayoutUtil.createAdjustedPoint(sg, lt
-							.getLinkAnchor().getPosition());
+					Point startPoint = LayoutUtil.createAdjustedPoint(sg, lt.getLinkAnchor().getPosition());
 					Point reactionPoint = rg.getBoundingBox().getPosition();
-					List<LineSegment> lsList2 = LayoutUtil
-							.createListOfLineSegment(startPoint, reactionPoint,
-									modifierPoint, reactionPoint,
-									editPointList, rectangleIndex);
+					List<LineSegment> lsList2 = LayoutUtil.createListOfLineSegment(startPoint, reactionPoint,
+									modifierPoint, reactionPoint, editPointList, rectangleIndex);
 					Curve curve = srg.createCurve();
 					for (LineSegment ls : lsList2) {
 						curve.addCurveSegment(ls);
@@ -528,10 +513,8 @@ public class LayoutConverter {
 			BaseReactant br = brsList.get(0);
 			SpeciesGlyph sg = layout.getSpeciesGlyph("SpeciesGlyph_"
 					+ br.getAlias());
-			Point point = LayoutUtil.createAdjustedPoint(sg, br.getLinkAnchor()
-					.getPosition());
-			point = LayoutUtil.adjustPoint(point, br.getLinkAnchor()
-					.getPosition());
+			Point point = LayoutUtil.createAdjustedPoint(sg, br.getLinkAnchor().getPosition());
+			point = LayoutUtil.adjustPoint(point, br.getLinkAnchor().getPosition());
 
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + rw.getId());
 			tg.setOriginOfText(rw.getId());
@@ -550,36 +533,29 @@ public class LayoutConverter {
 	 *            the rw
 	 * @return ListOf<SpeciesReferenceGlyph> TODO
 	 */
-	public ListOf<SpeciesReferenceGlyph> createSpeciesReferenceGlyph(
-			ReactionGlyph rg, ReactionWrapper rw) {
-		ListOf<SpeciesReferenceGlyph> srgList = rg
-				.getListOfSpeciesReferenceGlyphs();
+	public ListOf<SpeciesReferenceGlyph> createSpeciesReferenceGlyph(ReactionGlyph rg, ReactionWrapper rw) {
+		ListOf<SpeciesReferenceGlyph> srgList = rg.getListOfSpeciesReferenceGlyphs();
 
-		List<SpeciesReferenceWrapper> reactantList = rw
-				.getListOfReactantWrapper();
+		List<SpeciesReferenceWrapper> reactantList = rw.getListOfReactantWrapper();
 		for (SpeciesReferenceWrapper srw : reactantList) {
-			SpeciesReferenceGlyph srg = rg
-					.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_"
+			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_"
 							+ rg.getReaction() + "_" + srw.getAlias());
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
-			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH,
-					DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
+			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH, DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
 			bb.createPosition(0, 0, 0);
 		}
 
 		List<SpeciesReferenceWrapper> productList = rw
 				.getListOfProductWrapper();
 		for (SpeciesReferenceWrapper srw : productList) {
-			SpeciesReferenceGlyph srg = rg
-					.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_"
+			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_"
 							+ rg.getReaction() + "_" + srw.getAlias());
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.PRODUCT);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
-			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH,
-					DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
+			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH, DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
 			bb.createPosition(0, 0, 0);
 		}
 
@@ -650,8 +626,7 @@ public class LayoutConverter {
 			dimension.setDepth(1d);
 			Point point2 = bb2.createPosition();
 			point2.setX(saw.getX() + saw.getW() / 2 - dimension2.getWidth() / 2);
-			point2.setY(saw.getY() + saw.getH() / 2 - dimension2.getHeight()
-					/ 2);
+			point2.setY(saw.getY() + saw.getH() / 2 - dimension2.getHeight() / 2);
 			point2.setZ(0d);
 
 		}
@@ -666,8 +641,7 @@ public class LayoutConverter {
 	public void convertComplexAliasToLayout(
 			List<ComplexSpeciesAliasWrapper> csaList) {
 		for (ComplexSpeciesAliasWrapper csaw : csaList) {
-			SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_"
-					+ csaw.getId());
+			SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + csaw.getId());
 			sg.setReference(csaw.getSpecies());
 
 			BoundingBox bb = sg.createBoundingBox();
@@ -691,8 +665,7 @@ public class LayoutConverter {
 			dimension2.setHeight(10);
 			dimension.setDepth(1d);
 			Point point2 = bb2.createPosition();
-			point2.setX(csaw.getX() + csaw.getW() / 2 - dimension2.getWidth()
-					/ 2);
+			point2.setX(csaw.getX() + csaw.getW() / 2 - dimension2.getWidth() / 2);
 			point2.setY(csaw.getY() + csaw.getH());
 			point2.setZ(0d);
 
@@ -703,8 +676,7 @@ public class LayoutConverter {
 	 * Convert to CD annotation.
 	 */
 	public void convertToCDAnnotation() {
-		LayoutModelPlugin mplugin = (LayoutModelPlugin) (model
-				.getPlugin("layout"));
+		LayoutModelPlugin mplugin = (LayoutModelPlugin) (model.getPlugin("layout"));
 		layout = mplugin.getLayout(0);
 
 		convertModelToCD(layout);
@@ -721,7 +693,8 @@ public class LayoutConverter {
 	 *            the layout
 	 */
 	public void convertModelToCD(Layout layout) {
-
+		mWrapper.setDimension(layout.getDimensions().getWidth(),layout.getDimensions().getHeight());
+		mWrapper.setModelVersion(4);
 	}
 
 	/**
@@ -731,7 +704,9 @@ public class LayoutConverter {
 	 *            the cg list
 	 */
 	public void convertCompartmentsToCD(List<CompartmentGlyph> cgList) {
-
+		for(CompartmentGlyph cg: cgList){
+			
+		}
 	}
 
 	/**
@@ -829,8 +804,8 @@ public class LayoutConverter {
 		}
 
 		converter.convert();
-		converter.validate();
 		converter.save();
-		//converter.print();
+		converter.print();
+		converter.validate();
 	}
 }

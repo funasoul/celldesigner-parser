@@ -186,52 +186,55 @@ public class ModelWrapper extends Model {
 
 	}
 	
+	/**
+	 * Inits the annotations.
+	 */
 	void initAnnotations(){
 		
-		this.setAnnotation(new ModelAnnotationType());
+		setAnnotation(new ModelAnnotationType());
 		model.setAnnotation(annotation);
 		annotation.setExtension(new Extension());
 		
-		annotation.getExtension().setListOfAntisenseRNAs(new ListOfAntisenseRNAs());
+		setListOfAntisenseRNAs(new ListOfAntisenseRNAs());
 		this.antiSenseRNAList = annotation.getExtension().getListOfAntisenseRNAs().getAntisenseRNA();
 
-		annotation.getExtension().setListOfBlockDiagrams(new ListOfBlockDiagrams());
+		setListOfBlockDiagrams(new ListOfBlockDiagrams());
 		this.blockDiagramList = annotation.getExtension().getListOfBlockDiagrams().getBlockDiagram();
 
-		annotation.getExtension().setListOfCompartmentAliases(new ListOfCompartmentAliases());
+		setListOfCompartmentAliases(new ListOfCompartmentAliases());
 		this.cAliasList = annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias();
 
-		annotation.getExtension().setListOfGenes(new ListOfGenes());
+		setListOfGenes(new ListOfGenes());
 		this.geneList = annotation.getExtension().getListOfGenes().getGene();
 
-		annotation.getExtension().setListOfGroups(new ListOfGroups());
+		setListOfGroups(new ListOfGroups());
 		this.groupList = annotation.getExtension().getListOfGroups().getGroup();
 
-		annotation.getExtension().setListOfLayers(new ListOfLayers());
+		setListOfLayers(new ListOfLayers());
 		this.layerList = annotation.getExtension().getListOfLayers().getLayer();
 
-		annotation.getExtension().setListOfIncludedSpecies(new ListOfIncludedSpecies());
+		setListOfIncludedSpecies(new ListOfIncludedSpecies());
 		this.includedSpeciesList = annotation.getExtension().getListOfIncludedSpecies().getSpecies();
 
-		annotation.getExtension().setListOfProteins(new ListOfProteins());
+		setListOfProteins(new ListOfProteins());
 		this.proteinList = annotation.getExtension().getListOfProteins().getProtein();
 
-		annotation.getExtension().setListOfRNAs(new ListOfRNAs());
+		setListOfRNAs(new ListOfRNAs());
 		this.rnaList = annotation.getExtension().getListOfRNAs().getRNA();
 
-		annotation.getExtension().setListOfSpeciesAliases(new ListOfSpeciesAliases());
+		setListOfSpeciesAliases(new ListOfSpeciesAliases());
 		this.sAliasList = annotation.getExtension().getListOfSpeciesAliases().getSpeciesAlias();
 		this.sAliasWrapperList = createSpeciesAliasWrapperList(sAliasList);
 		
-		annotation.getExtension().setListOfCompartmentAliases(new ListOfCompartmentAliases());
+		setListOfCompartmentAliases(new ListOfCompartmentAliases());
 		this.cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension().getListOfCompartmentAliases().getCompartmentAlias());
 
-		annotation.getExtension().setListOfComplexSpeciesAliases(new ListOfComplexSpeciesAliases());
+		setListOfComplexSpeciesAliases(new ListOfComplexSpeciesAliases());
 		this.complexSpeciesAliasList = annotation.getExtension().getListOfComplexSpeciesAliases().getComplexSpeciesAlias();
 		this.complexWrapperList = createComplexWrapperList(complexSpeciesAliasList);
 		
 		modelDisplay = new ModelDisplay();
-		annotation.getExtension().setModelDisplay(modelDisplay);
+		setModelDisplay(modelDisplay);
 		
 	}
 	
@@ -295,10 +298,10 @@ public class ModelWrapper extends Model {
 	}
 
 	/**
-	 * @param width2
-	 * @param height2
-	 * void
-	 * TODO
+	 * Sets the dimension.
+	 *
+	 * @param width the width
+	 * @param height the height
 	 */
 	public void setDimension(double width, double height) {
 		setH(height);

@@ -6,10 +6,8 @@ package org.sbml.wrapper;
 import java.math.BigDecimal;
 import java.util.List;
 
-import org.sbml._2001.ns.celldesigner.CompartmentAlias;
 import org.sbml._2001.ns.celldesigner.ComplexSpeciesAlias;
 import org.sbml._2001.ns.celldesigner.ListOfSpeciesTag;
-import org.sbml._2001.ns.celldesigner.SpeciesAlias;
 import org.sbml._2001.ns.celldesigner.SpeciesTag;
 
 // TODO: Auto-generated Javadoc

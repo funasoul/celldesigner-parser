@@ -23,6 +23,8 @@ import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml._2001.ns.celldesigner.Offset;
 import org.sbml._2001.ns.celldesigner.ProductLink;
 import org.sbml._2001.ns.celldesigner.ReactantLink;
+import org.sbml._2001.ns.celldesigner.ReactionAnnotationType;
+import org.sbml._2001.ns.celldesigner.ReactionAnnotationType.Extension;
 import org.sbml.layoutconverter.LayoutUtil;
 import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 import org.sbml.sbml.level2.version4.Reaction;
@@ -110,15 +112,26 @@ public class ReactionWrapper extends Reaction{
 		this.notes = reaction.getNotes();
 		this.reversible = reaction.isReversible();
 
+		reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
+		productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
+
+		if (listOfModifiers != null)
+			modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
+		else
+			isSetModifiers = false;
+
+		
 		this.annotation = reaction.getAnnotation();
 		if(annotation != null)
+			setAnnotations();
+		else
 			initAnnotations();
 	}
 
 	/**
-	 * Inits the annotations.
+	 * Sets the annotations.
 	 */
-	void initAnnotations(){
+	void setAnnotations(){
 		this.type = annotation.getExtension().getReactionType();
 
 		this.editPoints = annotation.getExtension().getEditPoints();
@@ -127,16 +140,8 @@ public class ReactionWrapper extends Reaction{
 		else
 			this.editPointList = new ArrayList<Point2D.Double>();
 
-		if (annotation.getExtension().getListOfModification() != null && annotation.getExtension().getListOfModification().getModification() != null)
+		if (annotation.getExtension().getListOfModification() != null)
 			this.modificationList = annotation.getExtension().getListOfModification().getModification();
-
-		reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
-		productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
-
-		if (listOfModifiers != null)
-			modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
-		else
-			isSetModifiers = false;
 
 		if (annotation.getExtension().getBaseReactants() != null) {
 			baseReactants = annotation.getExtension().getBaseReactants().getBaseReactant();
@@ -175,12 +180,49 @@ public class ReactionWrapper extends Reaction{
 
 		if (connectScheme != null && connectScheme.getRectangleIndex() != null)
 			rectangleIndex = Integer.valueOf(annotation.getExtension().getConnectScheme().getRectangleIndex());
-
 		
 	}
+	
+	/**
+	 * Inits the annotations.
+	 */
+	void initAnnotations(){
+		annotation = new ReactionAnnotationType();
+		reaction.setAnnotation(annotation);
+		annotation.setExtension(new Extension());
+
+		setReactionType(new String());
+		
+		setEditPoints(new EditPoints());
+		this.editPointList = new ArrayList<Point2D.Double>();
+
+		setListOfModification(new ListOfModification());
+		this.modificationList = annotation.getExtension().getListOfModification().getModification();
+
+		setBaseReactants(new BaseReactants());
+		baseReactants = annotation.getExtension().getBaseReactants().getBaseReactant();
+		
+		setBaseProducts(new BaseProducts());
+		baseProducts = annotation.getExtension().getBaseProducts().getBaseProduct();
+		
+		setListOfReactantLinks(new ListOfReactantLinks());
+		reactantLinks = annotation.getExtension().getListOfReactantLinks().getReactantLink();
+		
+		setListOfProductLinks(new ListOfProductLinks());
+		productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
+
+		setConnectScheme(new ConnectScheme());
+		connectScheme = annotation.getExtension().getConnectScheme();
+
+		setOffset(new Offset());
+		offset = annotation.getExtension().getOffset();
+
+	}
+
+	
 	   /* (non-Javadoc)
-   	 * @see org.sbml.sbml.level2.version4.OriginalReaction#getName()
-   	 */
+	    * @see org.sbml.sbml.level2.version4.OriginalReaction#getName()
+   	 	*/
    	public String getName() {
            return name;
        }

@@ -59,15 +59,16 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 this.sRef =  sRef;
 		 this.modelWrapper = modelWrapper;
 		 this.reactionWrapper = reactionWrapper;
-		 this.annotation = sRef.getAnnotation();
-		 this.alias = annotation.getExtension().getAlias();
 		 this.metaid = sRef.getMetaid();
 		 this.notes = sRef.getNotes();
 		 this.species = sRef.getSpecies();
 		 this.speciesWrapper = modelWrapper.getSpeciesWrapperById(sRef.getSpecies());
 		 this.modification = reactionWrapper.getModificationByModifierId(species);
-
 		 this.type = modification.getType();
+			
+		 this.annotation = sRef.getAnnotation();
+		 this.alias = annotation.getExtension().getAlias();
+		 
 		 if(modification.getEditPoints() != null)
 			 this.editPointList = LayoutUtil.createEditPointsAsList(modification.getEditPoints());
 		 if(modification.getTargetLineIndex() != null)

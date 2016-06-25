@@ -31,8 +31,10 @@ public class ObjectFactory {
 	/** The model wrapper. */
 	static ModelWrapper modelWrapper;
 	
+	/** The context. */
 	static JAXBContext context;
 	
+	/** The sbml. */
 	static Sbml sbml;
 	
 	/**
@@ -88,6 +90,13 @@ public class ObjectFactory {
 		return new ModelWrapper(model);	
 	}
 	
+	/**
+	 * Save model.
+	 *
+	 * @param modelWrapper the model wrapper
+	 * @return the file
+	 * @throws JAXBException the JAXB exception
+	 */
 	public static File saveModel(ModelWrapper modelWrapper) throws JAXBException{
 		File file = new File(modelWrapper.getId() + ".xml");
 		Marshaller marshaller = context.createMarshaller();

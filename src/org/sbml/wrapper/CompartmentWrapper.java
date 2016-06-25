@@ -3,6 +3,8 @@
  */
 package org.sbml.wrapper;
 
+import org.sbml._2001.ns.celldesigner.CompartmentAnnotationType;
+import org.sbml._2001.ns.celldesigner.CompartmentAnnotationType.Extension;
 import org.sbml.sbml.level2.version4.Compartment;
 
 // TODO: Auto-generated Javadoc
@@ -42,8 +44,20 @@ public class CompartmentWrapper extends Compartment {
 		this.units = compartment.getUnits();
 
 		this.annotation = compartment.getAnnotation();
+		
+		if(annotation == null)
+			initAnnotations();
 	}
 
+	/**
+	 * Inits the annotations.
+	 */
+	public void initAnnotations(){
+		this.annotation = new CompartmentAnnotationType();
+		compartment.setAnnotation(annotation);
+		annotation.setExtension(new Extension());
+	}
+	
 	/* (non-Javadoc)
 	 * @see org.sbml.sbml.level2.version4.OriginalCompartment#getName()
 	 */

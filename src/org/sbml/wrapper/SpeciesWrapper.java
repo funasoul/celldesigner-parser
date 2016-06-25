@@ -7,6 +7,8 @@ import java.util.List;
 
 import org.sbml._2001.ns.celldesigner.Catalyzed;
 import org.sbml._2001.ns.celldesigner.ListOfCatalyzedReactions;
+import org.sbml._2001.ns.celldesigner.SpeciesAnnotationType;
+import org.sbml._2001.ns.celldesigner.SpeciesAnnotationType.Extension;
 import org.sbml._2001.ns.celldesigner.SpeciesIdentity;
 import org.sbml.sbml.level2.version4.Species;
 
@@ -67,13 +69,16 @@ public class SpeciesWrapper extends Species{
 		this.compartmentWrapper = modelWrapper.getCompartmentWrapperById(species.getCompartment());
 		this.annotation = species.getAnnotation();
 		if(annotation != null)
+			setAnnotations();
+		else
 			initAnnotations();
+		
 	}
 
 	/**
-	 * Inits the annotations.
+	 * Sets the annotations.
 	 */
-	void initAnnotations(){
+	void setAnnotations(){
 		this.positionToCompartment = annotation.getExtension().getPositionToCompartment();
 		this.complexSpecies = annotation.getExtension().getComplexSpecies();
 		this.speciesIdentity = annotation.getExtension().getSpeciesIdentity();
@@ -81,6 +86,26 @@ public class SpeciesWrapper extends Species{
 		if(annotation.getExtension().getListOfCatalyzedReactions() != null)
 			this.catalyzedReactions = annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
 
+	}
+	
+	/**
+	 * Inits the annotations.
+	 */
+	void initAnnotations(){
+		this.annotation = new SpeciesAnnotationType();
+		species.setAnnotation(annotation);
+		annotation.setExtension(new Extension());
+		
+		setPositionToCompartment(new String());
+		
+		setComplexSpecies(new String());
+		
+		setSpeciesIdentity(new SpeciesIdentity());
+		
+		setListOfCatalyzedReactions(new ListOfCatalyzedReactions());
+		this.catalyzedReactions = annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
+	
+	
 	}
 	
 	/**

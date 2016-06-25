@@ -3,6 +3,8 @@
  */
 package org.sbml.wrapper;
 
+import org.sbml._2001.ns.celldesigner.SpeciesReferenceAnnotationType;
+import org.sbml._2001.ns.celldesigner.SpeciesReferenceAnnotationType.Extension;
 import org.sbml.sbml.level2.version4.SpeciesReference;
 
 // TODO: Auto-generated Javadoc
@@ -34,14 +36,37 @@ public class SpeciesReferenceWrapper extends SpeciesReference{
 	public SpeciesReferenceWrapper(SpeciesReference sRef, ModelWrapper modelWrapper){
 		this.sRef = sRef;
 		this.modelWrapper = modelWrapper;
-		this.annotation = sRef.getAnnotation();
 		this.metaid = sRef.getMetaid();
 		this.notes = sRef.getNotes();
 		this.species = sRef.getSpecies();
 		this.stoichiometry = sRef.getStoichiometry();
 		this.stoichiometryMath = sRef.getStoichiometryMath();
+		this.annotation = sRef.getAnnotation();
 
+		
+		if(annotation != null)
+			setAnnotations();
+		else
+			initAnnotations();
+	}
+	
+	/**
+	 * Sets the annotations.
+	 */
+	void setAnnotations(){
 		this.alias = annotation.getExtension().getAlias();
+	}
+	
+	/**
+	 * Inits the annotations.
+	 */
+	void initAnnotations(){	
+		annotation = new SpeciesReferenceAnnotationType();
+		sRef.setAnnotation(annotation);
+		annotation.setExtension(new Extension());
+		
+		this.alias = new String();
+		annotation.getExtension().setAlias(alias);
 	}
 
 	/**

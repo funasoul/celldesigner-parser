@@ -60,8 +60,8 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
   /** The y. */
   private	double Y;
 	
-	/** The compartment alias wrapper. */
-	private CompartmentAliasWrapper compartmentAliasWrapper;
+  /** The compartment alias wrapper. */
+  private CompartmentAliasWrapper compartmentAliasWrapper;
 
 	/**
 	 * Instantiates a new species alias wrapper.

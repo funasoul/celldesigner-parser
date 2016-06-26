@@ -52,6 +52,20 @@ public class SBMLUtil {
 		Map<String, String> nsMap = document.getDeclaredNamespaces();
 		return nsMap.containsValue(cellDesignerNS);
 	}
+	
+	/**
+	 * Checks if is sets the cell designer name space.
+	 *
+	 * @param file the file
+	 * @return true, if is sets the cell designer name space
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static boolean isSetCellDesignerNameSpace(File file) throws XMLStreamException, IOException{
+		return isSetCellDesignerNameSpace(SBMLReader.read(file));
+	}
+	
+	
 	/**
 	 * Checks if is sets the cell designer name space.
 	 *

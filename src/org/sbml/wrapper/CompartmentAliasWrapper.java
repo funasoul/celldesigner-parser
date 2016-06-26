@@ -32,22 +32,22 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 	private	CompartmentAlias compartmentAlias;
   	
 	  /** The h. */
-	  private	double H;
+	private	double H;
   	
 	  /** The w. */
-	  private	double W;
+	private	double W;
   	
 	  /** The x. */
-	  private	double X;
+	private	double X;
   	
 	  /** The y. */
-	  private	double Y;
+	private	double Y;
   	
 	  /** The name X. */
-	  private	double nameX;
+	private	double nameX;
   	
 	  /** The name Y. */
-	  private	double nameY;
+	private	double nameY;
 
 	/**
 	 * Instantiates a new compartment alias wrapper.

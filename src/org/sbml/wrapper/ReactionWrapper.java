@@ -114,18 +114,18 @@ public class ReactionWrapper extends Reaction{
 
 		reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
 		productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
-
-		if (listOfModifiers != null)
-			modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
-		else
-			isSetModifiers = false;
-
 		
 		this.annotation = reaction.getAnnotation();
 		if(annotation != null)
 			setAnnotations();
 		else
 			initAnnotations();
+
+		if (listOfModifiers != null)
+			modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
+		else
+			isSetModifiers = false;
+
 	}
 
 	/**

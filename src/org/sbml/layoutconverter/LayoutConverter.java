@@ -98,8 +98,8 @@ public class LayoutConverter {
 	public static void main(String[] args) {
 		LayoutConverter converter;
 		try {
-			converter = new LayoutConverter(new File("sample/sample.xml"), true);
-			//converter = new LayoutConverter(new  File("sample/layout_example1_L3.xml"), false);
+			//converter = new LayoutConverter(new File("sample/link2.xml"));
+			converter = new LayoutConverter(new  File("sample/layout_example1_L3.xml"));
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

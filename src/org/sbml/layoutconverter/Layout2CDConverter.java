@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
@@ -42,10 +43,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			throw new IOException("Missing Layout Namespace");
 		
 		SBMLDocument document2 = SBMLLevelandVersionHandler.downgrade(document.clone());
-		file = new File("tmp.xml");
-		SBMLWriter.write(document2, file, ' ', (short) 2);
-		
-		mWrapper = ObjectFactory.unmarshalSBML(file);
+		mWrapper = ObjectFactory.unmarshalSBMLFromString(JSBML.writeSBMLToString(document2));
 		model = document.getModel();
 	
 	}

@@ -40,23 +40,28 @@ import org.sbml.wrapper.ReactionWrapper;
 import org.sbml.wrapper.SpeciesAliasWrapper;
 import org.sbml.wrapper.SpeciesReferenceWrapper;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class CD2LayoutConverter.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: Jun 26, 2016
  */
 
-public class CD2LayoutConverter extends abstractLayoutConverter {
+public class CD2LayoutConverter extends BaseLayoutConverter {
 
 	/** The convert default compartment. */
 	private boolean isConvertDefaultCompartment = true;
 
 	
 	/**
-	 * @param file
-	 * @throws XMLStreamException
-	 * @throws IOException
-	 * @throws JAXBException 
+	 * Instantiates a new CD 2 layout converter.
+	 *
+	 * @param file the file
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws JAXBException the JAXB exception
 	 */
 	public CD2LayoutConverter(File file) throws XMLStreamException, IOException, JAXBException {
 		super(file);

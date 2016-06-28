@@ -4,6 +4,7 @@
 package org.sbml.wrapper;
 
 import java.io.File;
+import java.io.StringReader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -65,6 +66,22 @@ public class ObjectFactory {
 	}
 	
 	/**
+	 * Unmarshal SBML from string.
+	 *
+	 * @param xml the xml
+	 * @return the model wrapper
+	 * @throws JAXBException the JAXB exception
+	 */
+	public static ModelWrapper unmarshalSBMLFromString(String xml) throws JAXBException{
+		sbml = getSbml(xml);
+		
+		model = sbml.getModel();
+		modelWrapper = createModelWrapper(model);
+		
+		return modelWrapper;
+	}
+	
+	/**
 	 * Gets the sbml.
 	 *
 	 * @param file the file
@@ -75,6 +92,23 @@ public class ObjectFactory {
 		context = JAXBContext.newInstance(Sbml.class);
 		Unmarshaller unmarshaller = context.createUnmarshaller();
 		Object schemaObject = JAXBIntrospector.getValue(unmarshaller.unmarshal(file));
+		sbml = (Sbml) schemaObject;
+	
+		return sbml;
+	}
+
+	/**
+	 * Gets the sbml.
+	 *
+	 * @param xml the xml
+	 * @return the sbml
+	 * @throws JAXBException the JAXB exception
+	 */
+	public static Sbml getSbml(String xml) throws JAXBException{
+		StringReader reader = new StringReader(xml);
+		context = JAXBContext.newInstance(Sbml.class);
+		Unmarshaller unmarshaller = context.createUnmarshaller();
+		Object schemaObject = JAXBIntrospector.getValue(unmarshaller.unmarshal(reader));
 		sbml = (Sbml) schemaObject;
 	
 		return sbml;

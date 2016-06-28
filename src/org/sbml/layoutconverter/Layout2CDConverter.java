@@ -7,15 +7,18 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.JSBML;
+import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
-import org.sbml.jsbml.SBMLWriter;
+import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.wrapper.ObjectFactory;
 
 // TODO: Auto-generated Javadoc
@@ -60,7 +63,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		convertCompartmentsToCD(layout.getListOfCompartmentGlyphs());
 		convertSpeciesToCD(layout.getListOfSpeciesGlyphs());
 		convertReactionsToCD(layout.getListOfReactionGlyphs());
-
+		convertTextToCD(layout.getListOfTextGlyphs());
 	}
 
 	/**
@@ -82,7 +85,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 */
 	public void convertCompartmentsToCD(List<CompartmentGlyph> cgList) {
 		for(CompartmentGlyph cg: cgList){
-			
+			Compartment c = (Compartment) cg.getCompartmentInstance();
+			mWrapper.createCompartmentAliasWrapper(cg);
+		
 		}
 	}
 
@@ -93,7 +98,10 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 *            the sg list
 	 */
 	public void convertSpeciesToCD(List<SpeciesGlyph> sgList) {
-
+		for(SpeciesGlyph sg: sgList){
+			Species s = (Species) sg.getSpeciesInstance();
+			mWrapper.createSpeciesAliasWrapper(sg);
+		}
 	}
 
 	/**
@@ -103,7 +111,15 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 *            the rg list
 	 */
 	public void convertReactionsToCD(List<ReactionGlyph> rgList) {
-
+		for(ReactionGlyph rg : rgList){
+			Reaction r = (Reaction) rg.getReactionInstance();
+		}
+	}
+	
+	public void convertTextToCD(List<TextGlyph> tgList){
+		for(TextGlyph tg : tgList){
+			
+		}
 	}
 	
 	/* (non-Javadoc)

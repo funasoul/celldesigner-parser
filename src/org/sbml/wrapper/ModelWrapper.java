@@ -31,6 +31,8 @@ import org.sbml._2001.ns.celldesigner.ModelDisplay;
 import org.sbml._2001.ns.celldesigner.Protein;
 import org.sbml._2001.ns.celldesigner.RNA;
 import org.sbml._2001.ns.celldesigner.SpeciesAlias;
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.sbml.level2.version4.Compartment;
 import org.sbml.sbml.level2.version4.Model;
 import org.sbml.sbml.level2.version4.Reaction;
@@ -372,7 +374,7 @@ public class ModelWrapper extends Model {
 
 		return null;
 	}
-
+	
 	/**
 	 * Creates the reaction wrapper list.
 	 *
@@ -493,7 +495,14 @@ public class ModelWrapper extends Model {
 
 		return null;
 	}
-
+	
+	public SpeciesAliasWrapper createSpeciesAliasWrapper(SpeciesGlyph sg){
+		SpeciesAliasWrapper saw =  new SpeciesAliasWrapper(sg, this);
+		sAliasList.add(saw);
+		
+		return saw;
+	}
+		
 	/**
 	 * Creates the complex wrapper list.
 	 *
@@ -550,6 +559,12 @@ public class ModelWrapper extends Model {
 		return null;
 	}
 
+	public CompartmentAliasWrapper createCompartmentAliasWrapper(CompartmentGlyph cg){
+		CompartmentAliasWrapper caw = new CompartmentAliasWrapper(cg, this);
+		cAliasWrapperList.add(caw);
+		return caw;
+	}
+	
 	/**
 	 * Gets the complex species alias by id.
 	 *
@@ -677,6 +692,7 @@ public class ModelWrapper extends Model {
      */
     public void addCompartmentAlias(CompartmentAlias compartmentAlias){
     	cAliasList.add(compartmentAlias);
+    	//cAliasWrapperList.add(new CompartmentAliasWrapper(compartmentAlias, this));
     }
 
     /**
@@ -687,6 +703,9 @@ public class ModelWrapper extends Model {
      */
     public void removeCompartmentAlias(CompartmentAlias compartmentAlias){
     	cAliasList.remove(compartmentAlias);
+    	for(CompartmentAliasWrapper caw : cAliasWrapperList)
+    		if(caw.getCompartment().equals(compartmentAlias.getCompartment()))
+    			cAliasWrapperList.remove(caw);
     }
 
 	/**
@@ -1095,6 +1114,17 @@ public class ModelWrapper extends Model {
 		}
 
 		return cawList;
+	}
+
+	/**
+	 * @param reference
+	 * @return
+	 * org.sbml._2001.ns.celldesigner.Species
+	 * TODO
+	 */
+	public org.sbml._2001.ns.celldesigner.Species getSpeciesById(String reference) {
+		List<Species> list = model.getListOfSpecies().getSpecies();
+		return null;
 	}
 
 }

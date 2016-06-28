@@ -5,8 +5,14 @@ package org.sbml.wrapper;
 
 import java.math.BigDecimal;
 
+import org.sbml._2001.ns.celldesigner.Bounds;
 import org.sbml._2001.ns.celldesigner.CompartmentAlias;
+import org.sbml._2001.ns.celldesigner.DoubleLine;
+import org.sbml._2001.ns.celldesigner.Info;
+import org.sbml._2001.ns.celldesigner.Paint;
+import org.sbml._2001.ns.celldesigner.Point;
 import org.sbml.jsbml.Compartment;
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -77,6 +83,46 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 
 	}
 
+	/**
+	 * Instantiates a new compartment alias wrapper.
+	 *
+	 * @param cg the cg
+	 * @param modelWrapper the model wrapper
+	 */
+	public CompartmentAliasWrapper(CompartmentGlyph cg, ModelWrapper modelWrapper){
+		this.compartmentAlias = new CompartmentAlias();
+		modelWrapper.addCompartmentAlias(compartmentAlias);
+		compartmentAliased = (Compartment) cg.getCompartmentInstance();
+		this.id = compartmentAliased.getId() + "alias";
+		compartmentAlias.setId(id);
+		this.compartment = compartmentAliased.getId();
+		compartmentAlias.setCompartment(compartmentAliased.getId());
+		bounds = new Bounds();
+		setH(cg.getBoundingBox().getDimensions().getHeight());
+		setW(cg.getBoundingBox().getDimensions().getHeight());
+		setX(cg.getBoundingBox().getPosition().getX());
+		setY(cg.getBoundingBox().getPosition().getY());
+		compartmentAlias.setBounds(bounds);
+		this.clazz = "SQUARE";
+		compartmentAlias.setClazz(clazz);
+		doubleLine = new DoubleLine();
+		doubleLine.setInnerWidth(new BigDecimal(1));
+		doubleLine.setOuterWidth(new BigDecimal(2));
+		doubleLine.setThickness(new BigDecimal(12));
+		compartmentAlias.setDoubleLine(doubleLine);
+		info = new Info();
+		info.setAngle(new BigDecimal(0d));
+		info.setState("empty");
+		compartmentAlias.setInfo(info);
+		namePoint = new Point();
+		compartmentAlias.setNamePoint(namePoint);
+		paint = new Paint();
+		compartmentAlias.setPaint(paint);
+		point = new Point(); 
+		compartmentAlias.setPoint(new Point());
+		
+	}
+	
 	/**
 	 * Gets the name X.
 	 *

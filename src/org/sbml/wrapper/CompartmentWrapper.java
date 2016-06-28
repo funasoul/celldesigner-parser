@@ -31,8 +31,9 @@ public class CompartmentWrapper extends Compartment {
 	 * @param modelWrapper the model wrapper
 	 */
 	public CompartmentWrapper(Compartment compartment, ModelWrapper modelWrapper){
-		this.compartment = compartment;
 		this.modelWrapper = modelWrapper;
+		this.compartment = compartment;
+		
 		this.constant = compartment.isConstant();
 		this.id = compartment.getId();
 		this.metaid = compartment.getMetaid();
@@ -56,6 +57,7 @@ public class CompartmentWrapper extends Compartment {
 		this.annotation = new CompartmentAnnotationType();
 		compartment.setAnnotation(annotation);
 		annotation.setExtension(new Extension());
+		annotation.getExtension().setName(compartment.getId());
 	}
 	
 	/* (non-Javadoc)

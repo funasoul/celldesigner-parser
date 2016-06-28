@@ -6,12 +6,19 @@ package org.sbml.wrapper;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.sbml._2001.ns.celldesigner.Bounds;
+import org.sbml._2001.ns.celldesigner.BriefView;
 import org.sbml._2001.ns.celldesigner.CompartmentAlias;
 import org.sbml._2001.ns.celldesigner.ComplexSpeciesAlias;
+import org.sbml._2001.ns.celldesigner.Info;
 import org.sbml._2001.ns.celldesigner.ListOfSpeciesTag;
 import org.sbml._2001.ns.celldesigner.Species;
 import org.sbml._2001.ns.celldesigner.SpeciesAlias;
 import org.sbml._2001.ns.celldesigner.SpeciesTag;
+import org.sbml._2001.ns.celldesigner.StructuralStateAngle;
+import org.sbml._2001.ns.celldesigner.UsualView;
+import org.sbml._2001.ns.celldesigner.View;
+import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -25,43 +32,40 @@ import org.sbml._2001.ns.celldesigner.SpeciesTag;
 public class SpeciesAliasWrapper extends SpeciesAlias {
 
   /** The model wrapper. */
-  private	ModelWrapper modelWrapper;
+  private ModelWrapper modelWrapper;
   
   /** The species aliased. */
-  private	Species speciesAliased;
+  private Species speciesAliased;
   
   /** The species wrapper. */
-  private	SpeciesWrapper speciesWrapper;
+  private SpeciesWrapper speciesWrapper;
   
   /** The compartment alias. */
-  private	CompartmentAlias compartmentAlias;
-  
-  /** The compatment alias wrapper. */
-  private	CompartmentAliasWrapper compatmentAliasWrapper;
-  
-  /** The complex species alias. */
-  private	ComplexSpeciesAlias complexSpeciesAlias;
-  
-  /** The species alias. */
-  private	SpeciesAlias speciesAlias;
-  
-  /** The species tags. */
-  private	List<SpeciesTag> speciesTags;
-  
-  /** The h. */
-  private	double H;
-  
-  /** The w. */
-  private	double W;
-  
-  /** The x. */
-  private	double X;
-  
-  /** The y. */
-  private	double Y;
+  private CompartmentAlias compartmentAlias;
 	
   /** The compartment alias wrapper. */
   private CompartmentAliasWrapper compartmentAliasWrapper;
+  
+  /** The complex species alias. */
+  private ComplexSpeciesAlias complexSpeciesAlias;
+  
+  /** The species alias. */
+  private SpeciesAlias speciesAlias;
+  
+  /** The species tags. */
+  private List<SpeciesTag> speciesTags;
+  
+  /** The h. */
+  private double H;
+  
+  /** The w. */
+  private double W;
+  
+  /** The x. */
+  private double X;
+  
+  /** The y. */
+  private double Y;
 
 	/**
 	 * Instantiates a new species alias wrapper.
@@ -96,6 +100,42 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.W = bounds.getW().doubleValue();
 		this.X = bounds.getX().doubleValue();
 		this.Y = bounds.getY().doubleValue();
+	}
+
+	/**
+	 * @param sg
+	 * @param modelWrapper2
+	 */
+	public SpeciesAliasWrapper(SpeciesGlyph sg, ModelWrapper modelWrapper) {
+		this.speciesAlias = new SpeciesAlias();
+		this.modelWrapper = modelWrapper;
+		modelWrapper.getListOfSpeciesAliases().add(speciesAlias);
+		this.activity = "inactive";
+		speciesAlias.setActivity(activity);
+		this.bounds = new Bounds();
+		speciesAlias.setBounds(bounds);
+		speciesAlias.setBriefView(new BriefView());
+		String compartmentAliasId = ((org.sbml.jsbml.Species)sg.getSpeciesInstance()).getCompartment()+"alias";
+		this.compartmentAlias = modelWrapper.getCompartmentAliasById(compartmentAliasId);
+		speciesAlias.setCompartmentAlias(compartmentAliasId);
+		this.compartmentAliasWrapper = modelWrapper.getCompartmentAliasWrapperByCompartmentId(id);
+		this.id = sg.getReference() + "alias" ;
+		speciesAlias.setId(id);
+		this.info = new Info();
+		speciesAlias.setInfo(info);
+		setListOfSpeciesTag(new ListOfSpeciesTag());
+		this.view = new View();
+		speciesAlias.setView(view);
+		this.briefView = new BriefView();
+		speciesAlias.setBriefView(briefView);
+		this.usualView = new UsualView();
+		speciesAlias.setUsualView(usualView);
+		this.structuralState = new StructuralStateAngle();
+		speciesAlias.setStructuralState(structuralState);
+		this.setH(sg.getBoundingBox().getDimensions().getHeight());
+		this.setW(sg.getBoundingBox().getDimensions().getWidth());
+		this.setX(sg.getBoundingBox().getPosition().getX());
+		this.setY(sg.getBoundingBox().getPosition().getY());
 	}
 
 	/**

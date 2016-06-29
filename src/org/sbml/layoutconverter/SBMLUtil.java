@@ -41,6 +41,69 @@ public class SBMLUtil {
 	/** The Constant cellDesignerNS. */
 	final static String cellDesignerNS = "http://www.sbml.org/2001/ns/celldesigner";
 	
+    public static final int intSBOTermForModel = 231;
+    public static final int intSBOTermForFunctionDefinition = 64;
+    public static final int intSBOTermForCompartmentType = 240;
+    public static final int intSBOTermForSpeciesType = 240;
+    public static final int intSBOTermForCompartment = 240;
+    public static final int intSBOTermForSpecies = 240;
+    public static final int intSBOTermForReaction = 231;
+    public static final int intSBOTermForParameter = 2;
+    public static final int intSBOTermForSpeciesReference = 3;
+    public static final int intSBOTermForModifierSpeciesReference = 3;
+    public static final int intSBOTermForKineticLaw = 1;
+    public static final int intSBOTermForInitialAssignment = 64;
+    public static final int intSBOTermForAlgebraicRule = 64;
+    public static final int intSBOTermForAssignmentRule = 64;
+    public static final int intSBOTermForRateRule = 64;
+    public static final int intSBOTermForConstraint = 64;
+    public static final int intSBOTermForEvent = 231;
+    public static final int intSBOTermForTrigger = 64;
+    public static final int intSBOTermForDelay = 64;
+    public static final int intSBOTermForEventAssignment = 64;
+    //  Species Aliases
+    public static final int intSBOTermForANTISENSE_RNA = 317;
+    public static final int intSBOTermForCOMPLEX = 253;
+    public static final int intSBOTermForDEGRADED = 291;
+    public static final int intSBOTermForDRUG = 298;
+    public static final int intSBOTermForGENE = 243;
+    public static final int intSBOTermForGENERIC = 252;
+    public static final int intSBOTermForION = 327;
+    public static final int intSBOTermForPHENOTYPE = 358;
+    public static final int intSBOTermForPROTEIN = 297;
+    public static final int intSBOTermForRECEPTOR = 244;
+    public static final int intSBOTermForRNA = 250;
+    public static final int intSBOTermForION_CHANNEL = 242;
+    public static final int intSBOTermForSIMPLE_MOLECULE = 247;
+    public static final int intSBOTermForTRUNCATED = 248;
+    public static final int intSBOTermForUNKNOWN = 285;
+    // Reaction Aliases
+    public static final int intSBOTermForKNOWN_TRANSITION_OMITTED = 397;
+    public static final int intSBOTermForSTATE_TRANSITION = 176;
+    public static final int intSBOTermForTRANSCRIPTION = 183;
+    public static final int intSBOTermForTRANSLATION = 184;
+    public static final int intSBOTermForTRANSPORT = 185;
+    public static final int intSBOTermForHETERODIMER_ASSOCIATION = 177; // non-covalent binding
+    public static final int intSBOTermForDISSOCIATION = 180;
+    public static final int intSBOTermForTRUNCATION = 178; // Cleavage
+    public static final int intSBOTermForUNKNOWN_TRANSITION = 396;
+    public static final int intSBOTermForReactant = 10;
+    public static final int intSBOTermForProduct = 11;
+    public static final int intSBOTermForModifier = 19;
+    // Modifier Aliases
+    public static final int intSBOTermForCATALYSIS = 13;
+    public static final int intSBOTermForINHIBITION = 20;
+    public static final int intSBOTermForMODULATION = 19;
+    public static final int intSBOTermForPHYSICAL_STIMULATION = 21;
+    public static final int intSBOTermForTRANSCRIPTIONAL_ACTIVATION = 459;
+    public static final int intSBOTermForTRANSCRIPTIONAL_INHIBITION = 20;
+    public static final int intSBOTermForTRANSLATIONAL_ACTIVATION = 459;
+    public static final int intSBOTermForTRANSLATIONAL_INHIBITION = 20;
+    public static final int intSBOTermForTRIGGER = 461;
+    public static final int intSBOTermForUNKNOWN_CATALYSIS = 13;
+    public static final int intSBOTermForUNKNOWN_INHIBITION = 20;
+
+	
 	/**
 	 * Checks if is sets the cell designer name space.
 	 *

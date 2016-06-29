@@ -11,6 +11,7 @@ import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
@@ -42,13 +43,38 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 */
 	public Layout2CDConverter(File file) throws XMLStreamException, IOException, JAXBException {
 		super(file);
+		init();
+	}
+	
+	/**
+	 * Instantiates a new layout 2 CD converter.
+	 *
+	 * @param file the file
+	 * @param outputFileName the output file name
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws JAXBException the JAXB exception
+	 */
+	public Layout2CDConverter(File file, String outputFileName) throws XMLStreamException, IOException, JAXBException {
+		super(file, outputFileName);
+		init();
+	}
+	
+	/**
+	 * Inits the.
+	 *
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SBMLException the SBML exception
+	 * @throws JAXBException the JAXB exception
+	 * @throws XMLStreamException the XML stream exception
+	 */
+	public void init() throws IOException, SBMLException, JAXBException, XMLStreamException{
 		if (!SBMLUtil.isSetLayoutNameSpace(document))
 			throw new IOException("Missing Layout Namespace");
 		
 		SBMLDocument document2 = SBMLLevelandVersionHandler.downgrade(document.clone());
 		mWrapper = ObjectFactory.unmarshalSBMLFromString(JSBML.writeSBMLToString(document2));
 		model = document.getModel();
-	
 	}
 	
 	/* (non-Javadoc)
@@ -116,6 +142,11 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		}
 	}
 	
+	/**
+	 * Convert text to CD.
+	 *
+	 * @param tgList the tg list
+	 */
 	public void convertTextToCD(List<TextGlyph> tgList){
 		for(TextGlyph tg : tgList){
 			
@@ -128,7 +159,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	@Override
 	public void save() {
 		try {
-			File file = ObjectFactory.saveModel(mWrapper);
+			File file = ObjectFactory.saveModel(mWrapper, outputFileName);
 			document = SBMLReader.read(file);
 		} catch (JAXBException e) {
 			e.printStackTrace();

@@ -54,7 +54,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	/** The convert default compartment. */
 	private boolean isConvertDefaultCompartment = true;
 
-	
 	/**
 	 * Instantiates a new CD 2 layout converter.
 	 *
@@ -65,6 +64,31 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 */
 	public CD2LayoutConverter(File file) throws XMLStreamException, IOException, JAXBException {
 		super(file);
+		init(file);
+	}
+	
+	/**
+	 * Instantiates a new CD 2 layout converter.
+	 *
+	 * @param file the file
+	 * @param outputFileName the output file name
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws JAXBException the JAXB exception
+	 */
+	public CD2LayoutConverter(File file, String outputFileName) throws XMLStreamException, IOException, JAXBException {
+		super(file, outputFileName);
+		init(file);
+	}
+
+	/**
+	 * Inits the.
+	 *
+	 * @param file the file
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws JAXBException the JAXB exception
+	 */
+	public void init(File file) throws IOException, JAXBException{
 		if (!SBMLUtil.isSetCellDesignerNameSpace(document))
 			throw new IOException("Missing CellDesigner Namespace");
 
@@ -75,7 +99,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		LayoutModelPlugin mplugin = (LayoutModelPlugin) (model.getPlugin("layout"));
 		layout = mplugin.createLayout();
 	}
-
+	
 	/* (non-Javadoc)
 	 * @see org.sbml.layoutconverter.abstractLayoutConverter#convert()
 	 */
@@ -594,8 +618,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	@Override
 	public void save() {
 		try {
-			SBMLWriter.write(document, new File(model.getId()
-					+ "_converted" + ".xml"), ' ', (short) 2);
+			SBMLWriter.write(document, new File(outputFileName), ' ', (short) 2);
 		} catch (SBMLException | XMLStreamException | IOException e) {
 			e.printStackTrace();
 		}

@@ -32,6 +32,9 @@ public abstract class BaseLayoutConverter {
 	/** The model. */
 	protected Model model;
 	
+	/** The output file name. */
+	protected String outputFileName;
+	
 	/** The m wrapper. */
 	protected ModelWrapper mWrapper;
 	
@@ -47,16 +50,28 @@ public abstract class BaseLayoutConverter {
 	/** The Constant DEFAULT_SPECIES_DEPTH. */
 	static final double DEFAULT_SPECIES_DEPTH = 1.0;
 
-	
 	/**
-	 * Instantiates a new abstract layout converter.
+	 * Instantiates a new base layout converter.
 	 *
 	 * @param file the file
 	 * @throws XMLStreamException the XML stream exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public BaseLayoutConverter(File file) throws XMLStreamException, IOException{
-		document = ConverterSBMLReader.read(file);
+		this.document = ConverterSBMLReader.read(file);
+	}
+	
+	/**
+	 * Instantiates a new base layout converter.
+	 *
+	 * @param file the file
+	 * @param outputFileName the output file name
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public BaseLayoutConverter(File file, String outputFileName) throws XMLStreamException, IOException{
+		this(file);
+		this.outputFileName = outputFileName;
 	}
 	
 	/**

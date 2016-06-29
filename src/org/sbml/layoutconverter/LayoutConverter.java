@@ -37,7 +37,7 @@ public class LayoutConverter {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public LayoutConverter(File file) throws JAXBException, XMLStreamException, IOException {
-		this(file, SBMLUtil.isSetCellDesignerNameSpace(file));
+		this(file, SBMLUtil.isSetCellDesignerNameSpace(file), SBMLUtil.createOutputFileName(file));
 	}
 
 	/**
@@ -59,6 +59,37 @@ public class LayoutConverter {
 			converter = new CD2LayoutConverter(file);
 		else
 			converter = new Layout2CDConverter(file);
+	}
+
+	/**
+	 * Instantiates a new layout converter.
+	 *
+	 * @param file the file
+	 * @param isCD2Layout the is CD 2 layout
+	 * @param outputFileName the output file name
+	 * @throws JAXBException the JAXB exception
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public LayoutConverter(File file, boolean isCD2Layout, String outputFileName) throws JAXBException, XMLStreamException, IOException {
+		if(isCD2Layout)
+			converter = new CD2LayoutConverter(file, outputFileName);
+		else
+			converter = new Layout2CDConverter(file, outputFileName);
+	}
+	
+	/**
+	 * Instantiates a new layout converter.
+	 *
+	 * @param file the file
+	 * @param outputFileName the output file name
+	 * @throws JAXBException the JAXB exception
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public LayoutConverter(File file, String outputFileName) throws JAXBException, XMLStreamException, IOException {
+		this(file, SBMLUtil.isSetCellDesignerNameSpace(file), outputFileName);
+		
 	}
 
 	/**
@@ -98,8 +129,13 @@ public class LayoutConverter {
 	public static void main(String[] args) {
 		LayoutConverter converter;
 		try {
-			//converter = new LayoutConverter(new File("sample/link2.xml"));
-			converter = new LayoutConverter(new  File("sample/layout_example1_L3.xml"));
+			if(args.length >= 2)
+				converter = new LayoutConverter(new File(args[0]), args[1]);
+			else if(args.length == 1)
+				converter = new LayoutConverter(new File(args[0]));
+			else
+				converter = new LayoutConverter(new File("sample/sample.xml"));
+				//converter = new LayoutConverter(new File("sample/layout_example1_L3.xml"));
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

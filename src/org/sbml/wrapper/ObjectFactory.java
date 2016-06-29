@@ -140,4 +140,22 @@ public class ObjectFactory {
 
 		return file;
 	}
+	
+	/**
+	 * Save model.
+	 *
+	 * @param modelWrapper the model wrapper
+	 * @param fileName the file name
+	 * @return the file
+	 * @throws JAXBException the JAXB exception
+	 */
+	public static File saveModel(ModelWrapper modelWrapper, String fileName) throws JAXBException{
+		File file = new File(fileName);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+		marshaller.marshal(sbml, file);
+
+		return file;
+	}
 }

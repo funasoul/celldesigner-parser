@@ -618,6 +618,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	@Override
 	public void save() {
 		try {
+			System.out.println(outputFileName);
 			SBMLWriter.write(document, new File(outputFileName), ' ', (short) 2);
 		} catch (SBMLException | XMLStreamException | IOException e) {
 			e.printStackTrace();

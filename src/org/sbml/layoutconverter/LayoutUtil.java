@@ -272,11 +272,29 @@ public class LayoutUtil {
 		CubicBezier bezier = new CubicBezier(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		bezier.setStart(startPoint.clone());
 		bezier.setEnd(endPoint.clone());
-		bezier.setBasePoint1(basePoint.clone());
-		bezier.setBasePoint2(basePoint.clone());
+		
+		bezier.setBasePoint1(calculateBasepointQuadraticToCubic(startPoint, basePoint));
+		bezier.setBasePoint2(calculateBasepointQuadraticToCubic(endPoint, basePoint));
 		lsList.add(bezier);
 		
 		return lsList;
+	}
+	
+	/**
+	 * Calculate basepoint quadratic to cubic.
+	 * CP0 = QP0
+	 * CP3 = QP2
+	 * CP1 = QP0 + 2/3 *(QP1-QP0)
+	 * CP2 = QP2 + 2/3 *(QP1-QP2)
+	 * @return the point
+	 */
+	public static Point calculateBasepointQuadraticToCubic(Point startPoint, Point quadBasePoint){
+		Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+		
+		point.setX(startPoint.getX() + 2d/3d * (quadBasePoint.getX() - startPoint.getX()));
+		point.setY(startPoint.getY() + 2d/3d * (quadBasePoint.getY() - startPoint.getY()));
+		
+		return point;
 	}
 	
 	/**

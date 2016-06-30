@@ -59,6 +59,7 @@ public abstract class BaseLayoutConverter {
 	 */
 	public BaseLayoutConverter(File file) throws XMLStreamException, IOException{
 		this.document = ConverterSBMLReader.read(file);
+		this.outputFileName = SBMLUtil.createOutputFileName(file);
 	}
 	
 	/**

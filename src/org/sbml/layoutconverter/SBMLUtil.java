@@ -8,11 +8,20 @@ import java.util.Map;
 import javax.swing.tree.TreeNode;
 import javax.xml.stream.XMLStreamException;
 
+import org.sbml.jsbml.AssignmentRule;
+import org.sbml.jsbml.Compartment;
+import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.Model;
+import org.sbml.jsbml.ModifierSpeciesReference;
+import org.sbml.jsbml.Parameter;
 import org.sbml.jsbml.Reaction;
+import org.sbml.jsbml.Rule;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBase;
+import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 
 // TODO: Auto-generated Javadoc
@@ -351,6 +360,63 @@ public class SBMLUtil {
 		return true;
 	}
 
+	/**
+	 * Adds the default SBO term.
+	 *
+	 * @param document the document
+	 * @return the SBML document
+	 */
+	public static SBMLDocument addDefaultSBOTerm(SBMLDocument document){
+		TreeNode node = document.getRoot();
+		
+		addDefaultSBOTerm(node);
+		
+		return document;
+	}
+	
+	/**
+	 * Adds the default SBO term.
+	 *
+	 * @param node the node
+	 */
+	public static void addDefaultSBOTerm(TreeNode node){
+		for(int i = 0; i < node.getChildCount(); i++)
+			addDefaultSBOTerm(node.getChildAt(i));
+		
+		if(!(node instanceof SBase) )
+			return ;
+		
+		SBase sbase = (SBase) node;
+		if(sbase.isSetSBOTerm())
+			return;
+		
+		if(sbase instanceof Model){
+			sbase.setSBOTerm(intSBOTermForModel);
+		} else if(sbase instanceof Species){
+			sbase.setSBOTerm(intSBOTermForGENERIC);
+		} else if(sbase instanceof Compartment){
+			sbase.setSBOTerm(intSBOTermForCompartment);
+		}else if(sbase instanceof Parameter){
+			sbase.setSBOTerm(intSBOTermForParameter);
+		}else if(sbase instanceof Rule){
+			sbase.setSBOTerm(intSBOTermForRateRule);
+		}else if(sbase instanceof Compartment){
+			sbase.setSBOTerm(intSBOTermForCompartment);
+		}else if(sbase instanceof Reaction){
+			sbase.setSBOTerm(intSBOTermForReaction);
+		}else if(sbase instanceof SpeciesReference){
+			Reaction r = (Reaction) ((SpeciesReference) sbase).getParentSBMLObject().getParentSBMLObject();
+			if(r.getListOfReactants().contains(sbase))
+				sbase.setSBOTerm(intSBOTermForReactant);
+			else 
+				sbase.setSBOTerm(intSBOTermForProduct);
+		}else if(sbase instanceof ModifierSpeciesReference){
+			sbase.setSBOTerm(intSBOTermForModifierSpeciesReference);
+		}else if(sbase instanceof KineticLaw){
+			sbase.setSBOTerm(intSBOTermForKineticLaw);
+		}
+	}
+	
 	/**
 	 * Creates the output file name.
 	 *

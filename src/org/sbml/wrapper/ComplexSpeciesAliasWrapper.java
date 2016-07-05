@@ -9,6 +9,7 @@ import java.util.List;
 import org.sbml._2001.ns.celldesigner.ComplexSpeciesAlias;
 import org.sbml._2001.ns.celldesigner.ListOfSpeciesTag;
 import org.sbml._2001.ns.celldesigner.SpeciesTag;
+import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -80,6 +81,20 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
 		this.X = bounds.getX().doubleValue();
 		this.Y = bounds.getY().doubleValue();
 	}
+	
+	/**
+	 * Instantiates a new complex species alias wrapper.
+	 *
+	 * @param sg the sg
+	 * @param modelWrapper the model wrapper
+	 */
+	//TODO 
+	public ComplexSpeciesAliasWrapper(SpeciesGlyph sg, ModelWrapper modelWrapper){
+		this.modelWrapper = modelWrapper;
+		complexSpeciesAlias = new ComplexSpeciesAlias();
+		//modelWrapper.addComplexSpeciesAlias(complexSpeciesAlias);
+	}
+	
 	
 	/**
 	 * Gets the h.

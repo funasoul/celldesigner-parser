@@ -135,8 +135,8 @@ public class LayoutConverter {
 				converter = new LayoutConverter(new File(args[0]));
 			else
 				//converter = new LayoutConverter(new File("sample/sample.xml"));
-				//converter = new LayoutConverter(new File("sample/layout_example1_L3.xml"));
-				converter = new LayoutConverter(new File("sample/bezier.xml"));
+				converter = new LayoutConverter(new File("sample/layout_example1_L3.xml"));
+				//converter = new LayoutConverter(new File("sample/sample2.xml"));
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

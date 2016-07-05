@@ -403,12 +403,10 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 			for (ReactantLink link : rlList) {
 				String lineType = link.getLine().getType();
-				SpeciesReferenceGlyph srg = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
-								+ link.getAlias());
+				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + link.getAlias());
 				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
-				Point startPoint = LayoutUtil.createAdjustedPoint(sg, link
-						.getLinkAnchor().getPosition());
+				String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
+				Point startPoint = LayoutUtil.createAdjustedPoint(sg, position);
 				Point endPoint = reactionBB.getPosition();
 				editPointList = new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
@@ -427,22 +425,18 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 			for (ProductLink link : plList) {
 				String lineType = link.getLine().getType();
-				SpeciesReferenceGlyph srg = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
-								+ link.getAlias());
+				SpeciesReferenceGlyph srg = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + link.getAlias());
 				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
-				Point endPoint = LayoutUtil.createAdjustedPoint(sg, link
-						.getLinkAnchor().getPosition());
+				String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
+				Point endPoint = LayoutUtil.createAdjustedPoint(sg, position);
 				Point startPoint = reactionBB.getPosition();
 				editPointList = new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
 
 				if (lineType.equals("Straight"))
-					lsList2 = LayoutUtil.createListOfLineSegment(startPoint,
-							endPoint, editPointList);
+					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, endPoint, editPointList);
 				else
-					lsList2 = LayoutUtil.createListOfBezier(startPoint,
-							endPoint, lsList.get(rectangleIndex + 1).getEnd());
+					lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex + 1).getEnd());
 
 				Curve curve = srg.createCurve();
 				for (LineSegment ls : lsList2) {

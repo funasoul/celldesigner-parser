@@ -103,8 +103,10 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	}
 
 	/**
-	 * @param sg
-	 * @param modelWrapper2
+	 * Instantiates a new species alias wrapper.
+	 *
+	 * @param sg the sg
+	 * @param modelWrapper the model wrapper
 	 */
 	public SpeciesAliasWrapper(SpeciesGlyph sg, ModelWrapper modelWrapper) {
 		this.speciesAlias = new SpeciesAlias();
@@ -114,6 +116,11 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		speciesAlias.setActivity(activity);
 		this.bounds = new Bounds();
 		speciesAlias.setBounds(bounds);
+		this.setH(sg.getBoundingBox().getDimensions().getHeight());
+		this.setW(sg.getBoundingBox().getDimensions().getWidth());
+		this.setX(sg.getBoundingBox().getPosition().getX());
+		this.setY(sg.getBoundingBox().getPosition().getY());
+		
 		speciesAlias.setBriefView(new BriefView());
 		String compartmentAliasId = ((org.sbml.jsbml.Species)sg.getSpeciesInstance()).getCompartment()+"alias";
 		this.compartmentAlias = modelWrapper.getCompartmentAliasById(compartmentAliasId);
@@ -132,10 +139,6 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		speciesAlias.setUsualView(usualView);
 		this.structuralState = new StructuralStateAngle();
 		speciesAlias.setStructuralState(structuralState);
-		this.setH(sg.getBoundingBox().getDimensions().getHeight());
-		this.setW(sg.getBoundingBox().getDimensions().getWidth());
-		this.setX(sg.getBoundingBox().getPosition().getX());
-		this.setY(sg.getBoundingBox().getPosition().getY());
 	}
 
 	/**

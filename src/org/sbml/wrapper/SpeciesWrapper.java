@@ -68,6 +68,7 @@ public class SpeciesWrapper extends Species{
 
 		this.compartmentWrapper = modelWrapper.getCompartmentWrapperById(species.getCompartment());
 		this.annotation = species.getAnnotation();
+		
 		if(annotation != null)
 			setAnnotations();
 		else
@@ -95,19 +96,32 @@ public class SpeciesWrapper extends Species{
 		this.annotation = new SpeciesAnnotationType();
 		species.setAnnotation(annotation);
 		annotation.setExtension(new Extension());
-		
-		setPositionToCompartment(new String());
-		
-		setComplexSpecies(new String());
-		
-		setSpeciesIdentity(new SpeciesIdentity());
-		
+		setPositionToCompartment(new String("inside"));
+		setComplexSpecies(new String());		
 		setListOfCatalyzedReactions(new ListOfCatalyzedReactions());
 		this.catalyzedReactions = annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
-	
-	
+		this.speciesIdentity = new SpeciesIdentity();
+		speciesIdentity.setName(id);
+		setSpeciesIdentity(speciesIdentity);
 	}
 	
+	/**
+	 * Gets the clazz.
+	 *
+	 * @return the clazz
+	 */
+	public String getClazz(){
+		return speciesIdentity.getClazz();
+	}
+	
+	/**
+	 * Sets the clazz.
+	 *
+	 * @param clazz the new clazz
+	 */
+	public void setClazz(String clazz){
+		speciesIdentity.setClazz(clazz);
+	}
 	/**
 	 * Gets the position to compartment.
 	 *

@@ -13,14 +13,18 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
+import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
+import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.TextGlyph;
+import org.sbml.wrapper.CompartmentAliasWrapper;
 import org.sbml.wrapper.ObjectFactory;
+import org.sbml.wrapper.SpeciesWrapper;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -100,7 +104,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 */
 	public void convertModelToCD(Layout layout) {
 		mWrapper.setDimension(layout.getDimensions().getWidth(),layout.getDimensions().getHeight());
-		mWrapper.setModelVersion(4);
+		mWrapper.setModelVersion(SBMLUtil.DEFALUT_CELLDESIGNER_MODEL_VERSION);
 	}
 
 	/**
@@ -113,7 +117,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		for(CompartmentGlyph cg: cgList){
 			Compartment c = (Compartment) cg.getCompartmentInstance();
 			mWrapper.createCompartmentAliasWrapper(cg);
-		
+			
 		}
 	}
 
@@ -125,8 +129,24 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 */
 	public void convertSpeciesToCD(List<SpeciesGlyph> sgList) {
 		for(SpeciesGlyph sg: sgList){
-			Species s = (Species) sg.getSpeciesInstance();
-			mWrapper.createSpeciesAliasWrapper(sg);
+			if(sg.isSetSpecies()){
+				Species s = (Species) sg.getSpeciesInstance();
+				mWrapper.createSpeciesAliasWrapper(sg);
+				SpeciesWrapper sw = mWrapper.getSpeciesWrapperById(s.getId());
+
+				//TODO species over species glyph?
+				int sboterm = SBMLUtil.intSBOTermForPROTEIN;
+				if(s.isSetSBOTerm()){
+					sboterm = s.getSBOTerm();
+				} else if (sg.isSetSBOTerm()){
+					s.setSBOTerm(sg.getSBOTerm());
+					sboterm = s.getSBOTerm();
+				}
+				mWrapper.createSpeciesObjectFromSBOTerm(sg, sboterm);
+				sw.setClazz(SBMLUtil.SBOTermToString(sboterm));
+			} else {
+			// included species?	
+			}
 		}
 	}
 
@@ -149,7 +169,14 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 */
 	public void convertTextToCD(List<TextGlyph> tgList){
 		for(TextGlyph tg : tgList){
-			
+			SBase reference = tg.getReferenceInstance();
+			if(reference instanceof CompartmentGlyph){
+				Compartment c = (Compartment) ((CompartmentGlyph)reference).getCompartmentInstance();
+				CompartmentAliasWrapper caw = mWrapper.getCompartmentAliasWrapperByCompartmentId(c.getId());
+				Point namePoint = tg.getBoundingBox().getPosition();
+				caw.setNameX(namePoint.getX());
+				caw.setNameY(namePoint.getY());
+			}
 		}
 	}
 	

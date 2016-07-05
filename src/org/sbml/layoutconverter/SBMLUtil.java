@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.swing.tree.TreeNode;
 import javax.xml.stream.XMLStreamException;
 
-import org.sbml.jsbml.AssignmentRule;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.ListOf;
@@ -36,16 +35,19 @@ import org.sbml.jsbml.ext.layout.LayoutConstants;
 public class SBMLUtil {
 
 	/** The defaultsbmllevel. */
-	public static int DEFAULT_SBML_LEVEL = 3;
+	public static final int DEFAULT_SBML_LEVEL = 3;
 	
 	/** The defaultsbmlversion. */
-	public static int DEFAULT_SBML_VERSION = 1;
+	public static final int DEFAULT_SBML_VERSION = 1;
 	
 	/** The defaultCellDesignersbmllevel. */
-	public static int DEFAULT_CELLDESIGNER_SBML_LEVEL = 2;
+	public static final int DEFAULT_CELLDESIGNER_SBML_LEVEL = 2;
 	
 	/** The defaultCellDesignersbmlversion. */
-	public static int DEFAULT_CELLDESIGNER_SBML_VERSION = 4;
+	public static final int DEFAULT_CELLDESIGNER_SBML_VERSION = 4;
+	
+	/** The Constant DEFALUT_CELLDESIGNER_MODEL_VERSION. */
+	public static final int DEFALUT_CELLDESIGNER_MODEL_VERSION = 4;
 	
 	/** The Constant cellDesignerNS. */
 	final static String cellDesignerNS = "http://www.sbml.org/2001/ns/celldesigner";
@@ -227,7 +229,11 @@ public class SBMLUtil {
     /** The Constant intSBOTermForUNKNOWN_INHIBITION. */
     public static final int intSBOTermForUNKNOWN_INHIBITION = 20;
 
+    /** The Constant intSBOTermForDEFAULT_SPECIES. */
+    public static final int intSBOTermForDEFAULT_SPECIES = intSBOTermForPROTEIN;
 	
+    
+    
 	/**
 	 * Checks if is sets the cell designer name space.
 	 *
@@ -426,5 +432,80 @@ public class SBMLUtil {
 	public static String createOutputFileName(File file) {
 		String path = file.getPath();
 		return path.substring(0, path.indexOf(".")) + "_converted.xml";		
+	}
+
+	/**
+	 * SBO term to string.
+	 *
+	 * @param sboTerm the sbo term
+	 * @return String
+	 * TODO
+	 */
+	public static String SBOTermToString(int sboTerm) {
+		switch (sboTerm){
+		case intSBOTermForANTISENSE_RNA :
+			return "ANTISENSE_RNA";
+		case intSBOTermForCOMPLEX :
+			return "COMPLEX";
+		case intSBOTermForDEGRADED :
+			return "DEGRADED";
+		case intSBOTermForDRUG :
+			return "DRUG";
+		case intSBOTermForGENE :
+			return "GENE";
+		case intSBOTermForGENERIC :
+			return "GENERIC";
+		case intSBOTermForION :
+			return "ION";
+		case intSBOTermForPHENOTYPE :
+			return "PHENOTYPE";
+		case intSBOTermForPROTEIN :
+			return "PROTEIN";
+		case intSBOTermForRECEPTOR :
+			return "RECEPTOR";
+		case intSBOTermForRNA :
+			return "RNA";
+		case intSBOTermForION_CHANNEL :
+			return "ION_CHANNEL";
+		case intSBOTermForSIMPLE_MOLECULE :
+			return "SIMPLE_MOLECULE";
+		case intSBOTermForTRUNCATED :
+			return "TRUNCATED";
+		case intSBOTermForUNKNOWN :
+			return "UNKNOWN";
+		case intSBOTermForKNOWN_TRANSITION_OMITTED :
+			return "KNOWN_TRANSITION_OMITTED";
+		case intSBOTermForSTATE_TRANSITION :
+			return "STATE_TRANSITION";
+		case intSBOTermForTRANSCRIPTION :
+			return "TRANSCRIPTION";
+		case intSBOTermForTRANSLATION :
+			return "TRANSLATION";
+		case intSBOTermForTRANSPORT :
+			return "TRANSPORT";
+		case intSBOTermForHETERODIMER_ASSOCIATION :
+			return "HETERODIMER_ASSOCIATION";
+		case intSBOTermForDISSOCIATION :
+			return "DISSOCIATION";
+		case intSBOTermForTRUNCATION :
+			return "TRUNCATION";
+		case intSBOTermForUNKNOWN_TRANSITION :
+			return "UNKNOWN_TRANSITION";
+		case intSBOTermForModifier : // = intSBOTermForMODULATION
+			return "Modifier";
+		case intSBOTermForCATALYSIS : // = intSBOTermForUNKNOWN_CATALYSIS
+			return "CATALYSIS";
+		case intSBOTermForINHIBITION : // = intSBOTermForTRANSLATIONAL_INHIBITION = intSBOTermForTRANSCRIPTIONAL_INHIBITION = intSBOTermForUNKNOWN_INHIBITION
+			return "INHIBITION";
+		case intSBOTermForPHYSICAL_STIMULATION :
+			return "PHYSICAL_STIMULATION";
+		case intSBOTermForTRANSCRIPTIONAL_ACTIVATION : //  = intSBOTermForTRANSLATIONAL_ACTIVATION
+			return "TRANSCRIPTIONAL_ACTIVATION";
+		case intSBOTermForTRIGGER :
+			return "TRIGGER";
+
+			default:
+				return "";
+		}
 	}
 }

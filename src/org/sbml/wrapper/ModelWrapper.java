@@ -33,6 +33,7 @@ import org.sbml._2001.ns.celldesigner.RNA;
 import org.sbml._2001.ns.celldesigner.SpeciesAlias;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.layoutconverter.SBMLUtil;
 import org.sbml.sbml.level2.version4.Compartment;
 import org.sbml.sbml.level2.version4.Model;
 import org.sbml.sbml.level2.version4.Reaction;
@@ -496,6 +497,12 @@ public class ModelWrapper extends Model {
 		return null;
 	}
 	
+	/**
+	 * Creates the species alias wrapper.
+	 *
+	 * @param sg the sg
+	 * @return the species alias wrapper
+	 */
 	public SpeciesAliasWrapper createSpeciesAliasWrapper(SpeciesGlyph sg){
 		SpeciesAliasWrapper saw =  new SpeciesAliasWrapper(sg, this);
 		sAliasList.add(saw);
@@ -510,7 +517,7 @@ public class ModelWrapper extends Model {
 	 * @return List<ComplexSpeciesAliasWrapper>
 	 * TODO
 	 */
-	private List<ComplexSpeciesAliasWrapper> createComplexWrapperList(List<ComplexSpeciesAlias> complexSpeciesAliasList) {
+	public List<ComplexSpeciesAliasWrapper> createComplexWrapperList(List<ComplexSpeciesAlias> complexSpeciesAliasList) {
 		List<ComplexSpeciesAliasWrapper> csawList = new ArrayList<ComplexSpeciesAliasWrapper>(complexSpeciesAliasList.size());
 
 		for(ComplexSpeciesAlias csa : complexSpeciesAliasList)
@@ -529,6 +536,12 @@ public class ModelWrapper extends Model {
 		return complexWrapperList;
 	}
 
+//	public ComplexSpeciesAliasWrapper createComplexSpeciesAliasWrapper(){
+//		ComplexSpeciesAliasWrapper csaw = new ComplexSpeciesAliasWrapper(complexSpeciesAlias, this);
+//		complexWrapperList.add(csaw);
+//	}
+	
+	
 	/**
 	 * Gets the complex alias wrapper by id.
 	 *
@@ -559,6 +572,12 @@ public class ModelWrapper extends Model {
 		return null;
 	}
 
+	/**
+	 * Creates the compartment alias wrapper.
+	 *
+	 * @param cg the cg
+	 * @return the compartment alias wrapper
+	 */
 	public CompartmentAliasWrapper createCompartmentAliasWrapper(CompartmentGlyph cg){
 		CompartmentAliasWrapper caw = new CompartmentAliasWrapper(cg, this);
 		cAliasWrapperList.add(caw);
@@ -890,7 +909,22 @@ public class ModelWrapper extends Model {
     	proteinList.remove(protein);
     }
 
-
+    /**
+     * Creates the protein.
+     *
+     * @param species the species
+     * @return the protein
+     */
+    public Protein createProtein(org.sbml.jsbml.Species species){
+    	Protein protein = new Protein();
+    	protein.setId("pr" + (proteinList.size() + 1));
+    	protein.setName(species.getId());
+    	protein.setType(SBMLUtil.SBOTermToString(species.getSBOTerm()));
+    	addProtein(protein);
+    	
+    	return protein;
+    }
+    
     /**
      * Gets the list of genes.
      *
@@ -932,6 +966,22 @@ public class ModelWrapper extends Model {
     }
 
     /**
+     * Creates the gene.
+     *
+     * @param species the species
+     * @return the gene
+     */
+    public Gene createGene(org.sbml.jsbml.Species species){
+    	Gene gene = new Gene();
+    	gene.setName(species.getId());
+    	gene.setId("gn" + (geneList.size() + 1));
+    	gene.setType(SBMLUtil.SBOTermToString(species.getSBOTerm()));
+    	addGene(gene);
+    	
+    	return gene;
+    }
+    
+    /**
      * Gets the list of RN as.
      *
      * @return ListOfRNAs
@@ -972,6 +1022,21 @@ public class ModelWrapper extends Model {
     }
 
     /**
+     * Creates the RNA.
+     *
+     * @param species the species
+     * @return the rna
+     */
+    public RNA createRNA(org.sbml.jsbml.Species species){
+    	RNA rna = new RNA();
+    	rna.setName(species.getId());
+    	rna.setId("rn" + (rnaList.size() + 1));
+    	rna.setType(SBMLUtil.SBOTermToString(species.getSBOTerm()));
+    	
+    	return rna;
+    }
+    
+    /**
      * Gets the list of antisense RN as.
      *
      * @return ListOfAntisenseRNAs
@@ -1011,6 +1076,21 @@ public class ModelWrapper extends Model {
     	antiSenseRNAList.remove(antisenseRNA);
     }
 
+    /**
+     * Creates the antisense RNA.
+     *
+     * @param s the s
+     * @return the antisense RNA
+     */
+    public AntisenseRNA createAntisenseRNA(org.sbml.jsbml.Species s){
+    	AntisenseRNA arn = new AntisenseRNA();
+    	arn.setName(s.getId());
+    	arn.setId("arn" + (antiSenseRNAList.size() + 1));
+    	arn.setType(SBMLUtil.SBOTermToString(s.getSBOTerm()));
+    	addAntisenseRNA(arn);
+    	
+    	return arn;
+    }
     /**
      * Gets the list of layers.
      *
@@ -1117,14 +1197,54 @@ public class ModelWrapper extends Model {
 	}
 
 	/**
-	 * @param reference
-	 * @return
-	 * org.sbml._2001.ns.celldesigner.Species
+	 * Creates the species object from SBO term.
+	 *
+	 * @param sg the sg
+	 * @param sboterm the sboterm
+	 * @return org.sbml._2001.ns.celldesigner.Species
 	 * TODO
 	 */
-	public org.sbml._2001.ns.celldesigner.Species getSpeciesById(String reference) {
-		List<Species> list = model.getListOfSpecies().getSpecies();
-		return null;
-	}
+//	public org.sbml._2001.ns.celldesigner.Species getSpeciesById(String reference) {
+//		List<Species> list = model.getListOfSpecies().getSpecies();
+//		
+//		return ;
+//	}
 
+	public void createSpeciesObjectFromSBOTerm(SpeciesGlyph sg, int sboterm){
+		switch (sboterm) {
+			case SBMLUtil.intSBOTermForCOMPLEX:
+
+			break;
+			
+			case SBMLUtil.intSBOTermForANTISENSE_RNA:
+				createAntisenseRNA((org.sbml.jsbml.Species) sg.getSpeciesInstance());
+			break;
+			
+			case SBMLUtil.intSBOTermForDEGRADED:
+			case SBMLUtil.intSBOTermForDRUG:
+			case SBMLUtil.intSBOTermForSIMPLE_MOLECULE:
+			case SBMLUtil.intSBOTermForUNKNOWN:
+			case SBMLUtil.intSBOTermForION:
+			case SBMLUtil.intSBOTermForPHENOTYPE:
+				//nothing to do
+			break;
+			
+			case SBMLUtil.intSBOTermForGENE:
+				createGene((org.sbml.jsbml.Species) sg.getSpeciesInstance());
+			break;
+				
+			case SBMLUtil.intSBOTermForRNA:
+				createRNA((org.sbml.jsbml.Species) sg.getSpeciesInstance());
+			break;
+			
+			case SBMLUtil.intSBOTermForPROTEIN:
+			case SBMLUtil.intSBOTermForGENERIC:
+			case SBMLUtil.intSBOTermForRECEPTOR:
+			case SBMLUtil.intSBOTermForION_CHANNEL:
+			case SBMLUtil.intSBOTermForTRUNCATED:
+			default:
+				createProtein((org.sbml.jsbml.Species) sg.getSpeciesInstance());
+				break;
+		}
+	}
 }

@@ -301,7 +301,7 @@ public class SBMLUtil {
 	 * @return true, if is level and version match with CD
 	 */
 	public static boolean isLevelAndVersionMatchWithCD(SBMLDocument document){
-		return (document.getLevel() == DEFAULT_CELLDESIGNER_SBML_LEVEL) && (document.getVersion() == DEFAULT_CELLDESIGNER_SBML_LEVEL);
+		return (document.getLevel() == DEFAULT_CELLDESIGNER_SBML_LEVEL) && (document.getVersion() == DEFAULT_CELLDESIGNER_SBML_VERSION);
 	}
 	
 	/**

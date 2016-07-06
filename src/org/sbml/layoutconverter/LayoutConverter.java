@@ -128,7 +128,7 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "sample/layout_example1_L3.xml";
+		String filepath = "";
 		String outputpath = "";
 		Boolean isCD2Layout = null;
 		
@@ -145,7 +145,8 @@ public class LayoutConverter {
 				
 			}
 		}
-		
+		System.out.println(filepath);
+		System.out.println(outputpath);
 		try {
 			if(!filepath.isEmpty() && !outputpath.isEmpty() && isCD2Layout != null)
 				converter = new LayoutConverter(new File(filepath), isCD2Layout, outputpath);

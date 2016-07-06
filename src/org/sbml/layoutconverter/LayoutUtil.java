@@ -542,14 +542,14 @@ public class LayoutUtil {
 	 */
 	//TODO
 	public static String getPositionToCompartment(SpeciesGlyph sg, CompartmentGlyph cg){
-		Point sPoint = sg.getBoundingBox().getPosition();
-		Dimensions sDim = sg.getBoundingBox().getDimensions();
-
-		Point cPoinct = cg.getBoundingBox().getPosition();
-		Dimensions cDim = cg.getBoundingBox().getDimensions();
+//		Point sPoint = sg.getBoundingBox().getPosition();
+//		Dimensions sDim = sg.getBoundingBox().getDimensions();
+//
+//		Point cPoint = cg.getBoundingBox().getPosition();
+//		Dimensions cDim = cg.getBoundingBox().getDimensions();
 
 		
 		
-		return "";
+		return "inside";
 	}
 }

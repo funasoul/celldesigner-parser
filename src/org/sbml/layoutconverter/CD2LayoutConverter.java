@@ -16,7 +16,9 @@ import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml._2001.ns.celldesigner.ProductLink;
 import org.sbml._2001.ns.celldesigner.ReactantLink;
 import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
+import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
@@ -87,7 +89,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 * @param file the file
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws JAXBException the JAXB exception
-	 * @throws XMLStreamException 
+	 * @throws XMLStreamException the XML stream exception
 	 */
 	public void init(File file) throws IOException, JAXBException, XMLStreamException{
 		if (!SBMLUtil.isSetCellDesignerNameSpace(document))

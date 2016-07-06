@@ -15,6 +15,7 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
+import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
@@ -84,6 +85,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			throw new IOException("Missing Layout Namespace");
 		
 		SBMLDocument document2 = SBMLLevelandVersionHandler.downgrade(document.clone());
+		SBMLWriter.write(document2, System.out, ' ', (short) 2);
 		mWrapper = ObjectFactory.unmarshalSBMLFromString(JSBML.writeSBMLToString(document2));
 		model = document.getModel();
 	}
@@ -138,9 +140,11 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		for(SpeciesGlyph sg: sgList){
 			if(sg.isSetSpecies()){
 				Species s = (Species) sg.getSpeciesInstance();
-				mWrapper.createSpeciesAliasWrapper(sg);
+				SpeciesAliasWrapper saw = mWrapper.createSpeciesAliasWrapper(sg);
+				
 				SpeciesWrapper sw = mWrapper.getSpeciesWrapperById(s.getId());
-
+				sw.getSpeciesIdentity().setName(saw.getId());
+				
 				//TODO species over species glyph?
 				int sboterm = SBMLUtil.intSBOTermForPROTEIN;
 				if(s.isSetSBOTerm()){
@@ -151,7 +155,12 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				}
 				mWrapper.createSpeciesObjectFromSBOTerm(sg, sboterm);
 				sw.setClazz(SBMLUtil.SBOTermToString(sboterm));
-				sw.setPositionToCompartment(LayoutUtil.getPositionToCompartment(sg, getCompartmentGlyphByCompartmentId(s.getCompartment())));
+				
+				CompartmentGlyph cg = getCompartmentGlyphByCompartmentId(s.getCompartment());
+				if(cg != null)
+					sw.setPositionToCompartment(LayoutUtil.getPositionToCompartment(sg, cg));
+				else 
+					sw.setPositionToCompartment("inside");
 			} else {
 			// included species?	
 			}
@@ -182,6 +191,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	public void convertReactionsToCD(List<ReactionGlyph> rgList) {
 		for(ReactionGlyph rg : rgList){
 			Reaction r = (Reaction) rg.getReactionInstance();
+			
 			ListOf<SpeciesReference> reactantList = r.getListOfReactants();
 			ListOf<SpeciesReference> productList = r.getListOfProducts();
 			ListOf<ModifierSpeciesReference> modifierList = r.getListOfModifiers();

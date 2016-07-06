@@ -233,7 +233,6 @@ public class SBMLUtil {
     public static final int intSBOTermForDEFAULT_SPECIES = intSBOTermForPROTEIN;
 	
     
-    
 	/**
 	 * Checks if is sets the cell designer name space.
 	 *
@@ -256,8 +255,7 @@ public class SBMLUtil {
 	 */
 	public static boolean isSetCellDesignerNameSpace(File file) throws XMLStreamException, IOException{
 		return isSetCellDesignerNameSpace(SBMLReader.read(file));
-	}
-	
+	}	
 	
 	/**
 	 * Checks if is sets the cell designer name space.
@@ -284,6 +282,27 @@ public class SBMLUtil {
 		return document;
 	}
 	
+	/**
+	 * Checks if is level and version match with CD.
+	 *
+	 * @param file the file
+	 * @return true, if is level and version match with CD
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public static boolean isLevelAndVersionMatchWithCD(File file) throws XMLStreamException, IOException{
+		return isLevelAndVersionMatchWithCD(SBMLReader.read(file));
+	}
+	
+	/**
+	 * Checks if is level and version match with CD.
+	 *
+	 * @param document the document
+	 * @return true, if is level and version match with CD
+	 */
+	public static boolean isLevelAndVersionMatchWithCD(SBMLDocument document){
+		return (document.getLevel() == DEFAULT_CELLDESIGNER_SBML_LEVEL) && (document.getVersion() == DEFAULT_CELLDESIGNER_SBML_LEVEL);
+	}
 	
 	/**
 	 * The main method.
@@ -301,7 +320,6 @@ public class SBMLUtil {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 	}
 
 	/**

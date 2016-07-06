@@ -498,6 +498,20 @@ public class ModelWrapper extends Model {
 	}
 	
 	/**
+	 * Gets the species alias wrapper by species id.
+	 *
+	 * @param id the id
+	 * @return the species alias wrapper by species id
+	 */
+	public SpeciesAliasWrapper getSpeciesAliasWrapperBySpeciesId(String id){
+		for(SpeciesAliasWrapper saw : sAliasWrapperList)
+			if(saw.getSpecies().equals(id))
+				return saw;
+		
+		return null;
+	}
+	
+	/**
 	 * Creates the species alias wrapper.
 	 *
 	 * @param sg the sg
@@ -505,7 +519,7 @@ public class ModelWrapper extends Model {
 	 */
 	public SpeciesAliasWrapper createSpeciesAliasWrapper(SpeciesGlyph sg){
 		SpeciesAliasWrapper saw =  new SpeciesAliasWrapper(sg, this);
-		sAliasList.add(saw);
+		sAliasWrapperList.add(saw);
 		
 		return saw;
 	}

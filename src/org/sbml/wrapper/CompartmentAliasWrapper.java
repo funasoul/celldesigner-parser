@@ -37,6 +37,12 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 	/** The compartment alias. */
 	private	CompartmentAlias compartmentAlias;
   	
+	public static final double DEFAULT_COMPARTMENT_WIDTH = 12d;
+	
+	public static final double DEFAULT_COMPARTMENT_INNER_WIDTH = 1d;
+	
+	public static final double DEFAULT_COMPARTMENT_OUTER_WIDTH = 2d;
+	
 	  /** The h. */
 	private	double H;
   	
@@ -106,9 +112,9 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 		this.clazz = "SQUARE";
 		compartmentAlias.setClazz(clazz);
 		doubleLine = new DoubleLine();
-		doubleLine.setInnerWidth(new BigDecimal(1));
-		doubleLine.setOuterWidth(new BigDecimal(2));
-		doubleLine.setThickness(new BigDecimal(12));
+		doubleLine.setInnerWidth(new BigDecimal(DEFAULT_COMPARTMENT_INNER_WIDTH));
+		doubleLine.setOuterWidth(new BigDecimal(DEFAULT_COMPARTMENT_OUTER_WIDTH));
+		doubleLine.setThickness(new BigDecimal(DEFAULT_COMPARTMENT_WIDTH));
 		compartmentAlias.setDoubleLine(doubleLine);
 		info = new Info();
 		info.setAngle(new BigDecimal(0d));

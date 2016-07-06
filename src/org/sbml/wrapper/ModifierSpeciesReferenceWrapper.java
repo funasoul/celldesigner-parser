@@ -7,6 +7,8 @@ import java.awt.geom.Point2D;
 import java.util.List;
 
 import org.sbml._2001.ns.celldesigner.Modification;
+import org.sbml._2001.ns.celldesigner.SpeciesReferenceAnnotationType;
+import org.sbml._2001.ns.celldesigner.SpeciesReferenceAnnotationType.Extension;
 import org.sbml.layoutconverter.LayoutUtil;
 import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 
@@ -67,14 +69,35 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 this.type = modification.getType();
 			
 		 this.annotation = sRef.getAnnotation();
+		 
+		 if(annotation != null)
+			 setAnnotation();
+		 else
+			 initAnnotation();
+		 
+	}
+
+	void setAnnotation(){
 		 this.alias = annotation.getExtension().getAlias();
 		 
 		 if(modification.getEditPoints() != null)
 			 this.editPointList = LayoutUtil.createEditPointsAsList(modification.getEditPoints());
 		 if(modification.getTargetLineIndex() != null)
-			setTargetLineIndex(modification.getTargetLineIndex());
+			setTargetLineIndex(modification.getTargetLineIndex());		
 	}
-
+	
+	
+	void initAnnotation(){
+		this.annotation = new SpeciesReferenceAnnotationType();
+		sRef.setAnnotation(annotation);
+		annotation.setExtension(new Extension());
+		
+		this.alias = new String();
+		annotation.getExtension().setAlias(alias);
+		
+		
+	}
+	
 	/**
 	 * Gets the alias.
 	 *

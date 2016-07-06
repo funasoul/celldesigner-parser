@@ -111,6 +111,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 	public SpeciesAliasWrapper(SpeciesGlyph sg, ModelWrapper modelWrapper) {
 		this.speciesAlias = new SpeciesAlias();
 		this.modelWrapper = modelWrapper;
+		this.species = sg.getReference();
 		modelWrapper.getListOfSpeciesAliases().add(speciesAlias);
 		this.activity = "inactive";
 		speciesAlias.setActivity(activity);

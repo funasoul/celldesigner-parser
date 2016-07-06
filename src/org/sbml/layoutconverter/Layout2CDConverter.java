@@ -9,12 +9,15 @@ import javax.xml.stream.XMLStreamException;
 
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.JSBML;
+import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
@@ -23,7 +26,11 @@ import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.TextGlyph;
 import org.sbml.wrapper.CompartmentAliasWrapper;
+import org.sbml.wrapper.ModifierSpeciesReferenceWrapper;
 import org.sbml.wrapper.ObjectFactory;
+import org.sbml.wrapper.ReactionWrapper;
+import org.sbml.wrapper.SpeciesAliasWrapper;
+import org.sbml.wrapper.SpeciesReferenceWrapper;
 import org.sbml.wrapper.SpeciesWrapper;
 
 // TODO: Auto-generated Javadoc
@@ -144,12 +151,28 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				}
 				mWrapper.createSpeciesObjectFromSBOTerm(sg, sboterm);
 				sw.setClazz(SBMLUtil.SBOTermToString(sboterm));
+				sw.setPositionToCompartment(LayoutUtil.getPositionToCompartment(sg, getCompartmentGlyphByCompartmentId(s.getCompartment())));
 			} else {
 			// included species?	
 			}
 		}
 	}
 
+	/**
+	 * Gets the compartment glyph by compartment id.
+	 *
+	 * @param id the id
+	 * @return the compartment glyph by compartment id
+	 */
+	public CompartmentGlyph getCompartmentGlyphByCompartmentId(String id){
+		for(CompartmentGlyph cg : layout.getListOfCompartmentGlyphs()){
+			if(cg.getCompartmentInstance().getId().equals(id))
+				return cg;
+		}
+
+		return null;
+	}
+	
 	/**
 	 * Convert reactions to CD.
 	 *
@@ -159,6 +182,29 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	public void convertReactionsToCD(List<ReactionGlyph> rgList) {
 		for(ReactionGlyph rg : rgList){
 			Reaction r = (Reaction) rg.getReactionInstance();
+			ListOf<SpeciesReference> reactantList = r.getListOfReactants();
+			ListOf<SpeciesReference> productList = r.getListOfProducts();
+			ListOf<ModifierSpeciesReference> modifierList = r.getListOfModifiers();
+			ReactionWrapper rw = mWrapper.getReactionWrapperById(r.getId());
+			
+			for(SpeciesReference sr : reactantList){
+				SpeciesReferenceWrapper srw = rw.getReactantWrapperById(sr.getSpecies());
+				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperBySpeciesId(sr.getSpecies());
+				srw.setAlias(saw.getId());
+			}
+			
+			for(SpeciesReference sr : productList){
+				SpeciesReferenceWrapper srw = rw.getProductWrapperById(sr.getSpecies());
+				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperBySpeciesId(sr.getSpecies());
+				
+				srw.setAlias(saw.getId());
+			}
+			
+			for(ModifierSpeciesReference msr : modifierList){
+				ModifierSpeciesReferenceWrapper msrw = rw.getModifierWrapperById(msr.getSpecies());
+				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperBySpeciesId(msr.getSpecies());
+				msrw.setAlias(saw.getId());
+			}
 		}
 	}
 	

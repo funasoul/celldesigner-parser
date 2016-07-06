@@ -55,7 +55,7 @@ public class LayoutConverter {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public LayoutConverter(File file, boolean isCD2Layout) throws JAXBException, XMLStreamException, IOException {
-		if(isCD2Layout)
+		if(isCD2Layout )
 			converter = new CD2LayoutConverter(file);
 		else
 			converter = new Layout2CDConverter(file);
@@ -128,15 +128,35 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
+		String filepath = "sample/layout_example1_L3.xml";
+		String outputpath = "";
+		Boolean isCD2Layout = null;
+		
+		for(int i = 0 ; i < args.length; i++){
+			if(filepath.isEmpty() && args[i].endsWith(".xml")){
+				filepath = args[i];
+			} else if(outputpath.isEmpty()  && args[i].endsWith(".xml")){
+				outputpath = args[i];
+			} else if(args[i].contains("CD2Layout")){
+				isCD2Layout = true;
+			} else if(args[i].contains("Layout2CD")){
+				isCD2Layout = false;
+			} else{
+				
+			}
+		}
+		
 		try {
-			if(args.length >= 2)
-				converter = new LayoutConverter(new File(args[0]), args[1]);
-			else if(args.length == 1)
-				converter = new LayoutConverter(new File(args[0]));
+			if(!filepath.isEmpty() && !outputpath.isEmpty() && isCD2Layout != null)
+				converter = new LayoutConverter(new File(filepath), isCD2Layout, outputpath);
+			else if(!filepath.isEmpty() && !outputpath.isEmpty())
+				converter = new LayoutConverter(new File(filepath), outputpath);
+			else if(!filepath.isEmpty() && isCD2Layout != null)
+				converter = new LayoutConverter(new File(filepath), isCD2Layout);
 			else
-				//converter = new LayoutConverter(new File("sample/sample.xml"));
-				converter = new LayoutConverter(new File("sample/layout_example1_L3.xml"));
-				//converter = new LayoutConverter(new File("sample/sample2.xml"));
+				converter = new LayoutConverter(new File(filepath));
+
+			//converter = new LayoutConverter(new File());
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

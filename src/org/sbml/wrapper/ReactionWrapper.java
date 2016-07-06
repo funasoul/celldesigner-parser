@@ -212,10 +212,8 @@ public class ReactionWrapper extends Reaction{
 		productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
 
 		setConnectScheme(new ConnectScheme());
-		connectScheme = annotation.getExtension().getConnectScheme();
 
 		setOffset(new Offset());
-		offset = annotation.getExtension().getOffset();
 
 	}
 
@@ -562,6 +560,20 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
+        * Gets the reactant wrapper by id.
+        *
+        * @param id the id
+        * @return the reactant wrapper by id
+        */
+       public SpeciesReferenceWrapper getReactantWrapperById(String id){
+    	   for(SpeciesReferenceWrapper srw : reactantWrapperList)
+    		  if(srw.getSpecies().equals(id))
+    			  return srw;
+    	   
+    		   return null;
+       }
+       
+       /**
         * Creates the product wrapper list.
         *
         * @param srList the sr list
@@ -577,24 +589,17 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
-        * Gets the rectangle index.
+        * Gets the product wrapper by id.
         *
-        * @return int
-        * TODO
+        * @param id the id
+        * @return the product wrapper by id
         */
-       public int getRectangleIndex(){
-    	   return rectangleIndex;
-       }
-
-       /**
-        * Sets the rectangle index.
-        *
-        * @param index void
-        * TODO
-        */
-       public void setRectangleIndex(int index){
-    	   annotation.getExtension().getConnectScheme().setRectangleIndex(String.valueOf(index));
-    	   this.rectangleIndex = index;
+       public SpeciesReferenceWrapper getProductWrapperById(String id){
+    	   for(SpeciesReferenceWrapper srw : productWrapperList)
+    		  if(srw.getSpecies().equals(id))
+    			  return srw;
+    	   
+    		   return null;
        }
 
        /**
@@ -632,6 +637,20 @@ public class ReactionWrapper extends Reaction{
     	   return modifierWrapperList;
        }
 
+       /**
+        * Gets the modifiert wrapper by id.
+        *
+        * @param id the id
+        * @return the modifier wrapper by id
+        */
+       public ModifierSpeciesReferenceWrapper getModifierWrapperById(String id){
+    	   for(ModifierSpeciesReferenceWrapper msrw : modifierWrapperList)
+    		  if(msrw.getSpecies().equals(id))
+    			  return msrw;
+    	   
+    		   return null;
+       }
+       
        /**
         * Checks if is sets the modifier.
         *
@@ -684,4 +703,26 @@ public class ReactionWrapper extends Reaction{
 
     	   return lt;
        }
+
+       /**
+        * Gets the rectangle index.
+        *
+        * @return int
+        * TODO
+        */
+       public int getRectangleIndex(){
+    	   return rectangleIndex;
+       }
+
+       /**
+        * Sets the rectangle index.
+        *
+        * @param index void
+        * TODO
+        */
+       public void setRectangleIndex(int index){
+    	   annotation.getExtension().getConnectScheme().setRectangleIndex(String.valueOf(index));
+    	   this.rectangleIndex = index;
+       }
+
 }

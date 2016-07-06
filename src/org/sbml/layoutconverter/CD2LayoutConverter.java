@@ -87,11 +87,14 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 * @param file the file
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 * @throws JAXBException the JAXB exception
+	 * @throws XMLStreamException 
 	 */
-	public void init(File file) throws IOException, JAXBException{
+	public void init(File file) throws IOException, JAXBException, XMLStreamException{
 		if (!SBMLUtil.isSetCellDesignerNameSpace(document))
 			throw new IOException("Missing CellDesigner Namespace");
-
+		if(!SBMLUtil.isLevelAndVersionMatchWithCD(file))
+			throw new IOException("Level and Version does not match the CellDesigner defaults");
+		
 		document = SBMLLevelandVersionHandler.upgrade(document);
 
 		mWrapper = ObjectFactory.unmarshalSBML(file);

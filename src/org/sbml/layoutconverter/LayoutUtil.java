@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.CubicBezier;
 import org.sbml.jsbml.ext.layout.Dimensions;
+import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.LineSegment;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
@@ -286,6 +288,9 @@ public class LayoutUtil {
 	 * CP3 = QP2
 	 * CP1 = QP0 + 2/3 *(QP1-QP0)
 	 * CP2 = QP2 + 2/3 *(QP1-QP2)
+	 *
+	 * @param startPoint the start point
+	 * @param quadBasePoint the quad base point
 	 * @return the point
 	 */
 	public static Point calculateBasepointQuadraticToCubic(Point startPoint, Point quadBasePoint){
@@ -514,17 +519,37 @@ public class LayoutUtil {
 	/**
 	 * Creates the center point.
 	 *
-	 * @param sg the sg
+	 * @param go the go
 	 * @return the point
 	 */
-	public static Point createCenterPoint(SpeciesGlyph sg) {
+	public static Point createCenterPoint(GraphicalObject go) {
 		Point point = new Point();
-		Point p = sg.getBoundingBox().getPosition();
-		Dimensions d = sg.getBoundingBox().getDimensions();
+		Point p = go.getBoundingBox().getPosition();
+		Dimensions d = go.getBoundingBox().getDimensions();
 		
 		point.setX(p.getX() + d.getWidth() / 2);
 		point.setY(p.getY() + d.getHeight() / 2);
 		
 		return point;
+	}
+	
+	/**
+	 * Gets the position to compartment.
+	 *
+	 * @param sg the sg
+	 * @param cg the cg
+	 * @return the position to compartment
+	 */
+	//TODO
+	public static String getPositionToCompartment(SpeciesGlyph sg, CompartmentGlyph cg){
+		Point sPoint = sg.getBoundingBox().getPosition();
+		Dimensions sDim = sg.getBoundingBox().getDimensions();
+
+		Point cPoinct = cg.getBoundingBox().getPosition();
+		Dimensions cDim = cg.getBoundingBox().getDimensions();
+
+		
+		
+		return "";
 	}
 }

@@ -37,10 +37,13 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 	/** The compartment alias. */
 	private	CompartmentAlias compartmentAlias;
   	
+	/** The Constant DEFAULT_COMPARTMENT_WIDTH. */
 	public static final double DEFAULT_COMPARTMENT_WIDTH = 12d;
 	
+	/** The Constant DEFAULT_COMPARTMENT_INNER_WIDTH. */
 	public static final double DEFAULT_COMPARTMENT_INNER_WIDTH = 1d;
 	
+	/** The Constant DEFAULT_COMPARTMENT_OUTER_WIDTH. */
 	public static final double DEFAULT_COMPARTMENT_OUTER_WIDTH = 2d;
 	
 	  /** The h. */

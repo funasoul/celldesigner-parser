@@ -65,9 +65,7 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 this.notes = sRef.getNotes();
 		 this.species = sRef.getSpecies();
 		 this.speciesWrapper = modelWrapper.getSpeciesWrapperById(sRef.getSpecies());
-		 this.modification = reactionWrapper.getModificationByModifierId(species);
-		 this.type = modification.getType();
-			
+		 	
 		 this.annotation = sRef.getAnnotation();
 		 
 		 if(annotation != null)
@@ -77,16 +75,25 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 
 	}
 
+	/**
+	 * Sets the annotation.
+	 */
 	void setAnnotation(){
 		 this.alias = annotation.getExtension().getAlias();
+		 
+		 this.modification = reactionWrapper.getModificationByModifierId(species);
+		 this.type = modification.getType();	
 		 
 		 if(modification.getEditPoints() != null)
 			 this.editPointList = LayoutUtil.createEditPointsAsList(modification.getEditPoints());
 		 if(modification.getTargetLineIndex() != null)
-			setTargetLineIndex(modification.getTargetLineIndex());		
+			setTargetLineIndex(modification.getTargetLineIndex());
+		 
 	}
 	
-	
+	/**
+	 * Inits the annotation.
+	 */
 	void initAnnotation(){
 		this.annotation = new SpeciesReferenceAnnotationType();
 		sRef.setAnnotation(annotation);
@@ -95,7 +102,8 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		this.alias = new String();
 		annotation.getExtension().setAlias(alias);
 		
-		
+		setModification(new Modification());
+		setType(new String());
 	}
 	
 	/**
@@ -158,6 +166,7 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 	 */
 	public void setType(String type){
 		this.type = type;
+		modification.setType(type);
 	}
 
 	/**

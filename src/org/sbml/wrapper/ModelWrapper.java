@@ -239,6 +239,9 @@ public class ModelWrapper extends Model {
 		modelDisplay = new ModelDisplay();
 		setModelDisplay(modelDisplay);
 		
+		model.setListOfFunctionDefinitions(null);	// add later
+		model.setListOfRules(null);		// add later
+		
 	}
 	
 //

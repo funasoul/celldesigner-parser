@@ -45,7 +45,6 @@ public class Application {
 			else
 				converter = new LayoutConverter(new File(filepath));
 
-			//converter = new LayoutConverter(new File());
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

@@ -5,15 +5,25 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.swing.AbstractAction;
 import javax.swing.tree.TreeNode;
 import javax.xml.stream.XMLStreamException;
 
+import org.sbml.jsbml.AbstractMathContainer;
 import org.sbml.jsbml.Compartment;
+import org.sbml.jsbml.Constraint;
+import org.sbml.jsbml.Delay;
+import org.sbml.jsbml.Event;
+import org.sbml.jsbml.EventAssignment;
+import org.sbml.jsbml.FunctionDefinition;
+import org.sbml.jsbml.InitialAssignment;
 import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.MathContainer;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Parameter;
+import org.sbml.jsbml.Priority;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.Rule;
 import org.sbml.jsbml.SBMLDocument;
@@ -21,6 +31,8 @@ import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
+import org.sbml.jsbml.StoichiometryMath;
+import org.sbml.jsbml.Trigger;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 
 // TODO: Auto-generated Javadoc
@@ -524,6 +536,78 @@ public class SBMLUtil {
 
 			default:
 				return "";
+		}
+	}
+	
+	/**
+	 * Sets the maths.
+	 *
+	 * @param d1 the d 1
+	 * @param d2 the d 2
+	 * @return the SBML document
+	 */
+	public static SBMLDocument setMaths(SBMLDocument d1, SBMLDocument d2) {
+		TreeNode node2 = d2.getRoot();
+		setMaths(d1, node2);
+		return d1;
+	}
+
+	/**
+	 * Sets the maths.
+	 *
+	 * @param d1 the d 1
+	 * @param node2 the node 2
+	 */
+	public static void setMaths(SBMLDocument d1, TreeNode node2){
+		for(int i = 0; i< node2.getChildCount(); i++){
+			TreeNode node = node2.getChildAt(i);
+			if(node instanceof AbstractMathContainer){
+				setMathObject(d1, (AbstractMathContainer) node);
+			}
+			setMaths(d1, node);
+		}
+	}
+
+	/**
+	 * Sets the math object.
+	 *
+	 * @param d the d
+	 * @param math the math
+	 */
+	@SuppressWarnings("deprecation")
+	public static void setMathObject(SBMLDocument d, AbstractMathContainer math){
+		
+		if(math instanceof FunctionDefinition){
+			d.getModel().getListOfFunctionDefinitions().add((FunctionDefinition) math.clone());
+		} else if(math instanceof KineticLaw){
+			KineticLaw kl = (KineticLaw) math;
+			d.getModel().getReaction(kl.getParent().getId()).setKineticLaw((KineticLaw) math.clone());
+		} else if(math instanceof EventAssignment){
+			EventAssignment ea = (EventAssignment) math;
+			Event e = (Event) ea.getParentSBMLObject();
+			d.getModel().getEvent(e.getId()).getListOfEventAssignments().append((EventAssignment) math.clone());
+		} else if(math instanceof InitialAssignment){
+			d.getModel().getListOfInitialAssignments().append((InitialAssignment) math.clone());
+		} else if(math instanceof Rule){
+			d.getModel().getListOfRules().append((Rule) math.clone());
+		} else if(math instanceof Priority){
+			Priority p = (Priority) math;
+			Event e = p.getParent();
+			d.getModel().getEvent(e.getId()).setPriority((Priority) math.clone());
+		} else if(math instanceof StoichiometryMath){
+
+		} else if(math instanceof Trigger){
+			Trigger t = (Trigger) math;
+			Event e = t.getParent();
+			d.getModel().getEvent(e.getId()).setTrigger((Trigger) math.clone());
+		} else if(math instanceof Constraint){
+			d.getModel().addConstraint((Constraint) math.clone());
+		} else if(math instanceof Delay){
+			Delay delay = (Delay) math;
+			Event e = delay.getParent();
+			d.getModel().getEvent(e.getId()).setDelay((Delay) math.clone());
+		} else {
+			System.err.println("Unknown class");
 		}
 	}
 }

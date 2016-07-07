@@ -111,7 +111,9 @@ public class ReactionWrapper extends Reaction{
 		this.name = reaction.getName(); // same as annotation.getExtension().getName()?
 		this.notes = reaction.getNotes();
 		this.reversible = reaction.isReversible();
-
+		
+		
+		
 		reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
 		productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
 		
@@ -215,6 +217,7 @@ public class ReactionWrapper extends Reaction{
 
 		setOffset(new Offset());
 
+		this.reaction.setKineticLaw(null); // reset the kinetic law later
 	}
 
 	

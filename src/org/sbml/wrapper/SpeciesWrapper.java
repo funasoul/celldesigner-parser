@@ -96,8 +96,8 @@ public class SpeciesWrapper extends Species{
 		this.annotation = new SpeciesAnnotationType();
 		species.setAnnotation(annotation);
 		annotation.setExtension(new Extension());
-		setPositionToCompartment(new String("inside"));
-		setComplexSpecies(new String());		
+		setPositionToCompartment(new String());
+	//	setComplexSpecies(new String());		
 		setListOfCatalyzedReactions(new ListOfCatalyzedReactions());
 		this.catalyzedReactions = annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
 		this.speciesIdentity = new SpeciesIdentity();

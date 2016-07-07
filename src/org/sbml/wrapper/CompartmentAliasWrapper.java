@@ -126,6 +126,8 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 		namePoint = new Point();
 		compartmentAlias.setNamePoint(namePoint);
 		paint = new Paint();
+		paint.setColor("ffcccc00");
+		paint.setScheme("Color");
 		compartmentAlias.setPaint(paint);
 		point = new Point(); 
 		compartmentAlias.setPoint(new Point());

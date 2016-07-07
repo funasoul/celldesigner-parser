@@ -45,6 +45,8 @@ import org.sbml.wrapper.SpeciesWrapper;
 
 public class Layout2CDConverter extends BaseLayoutConverter {
 
+	SBMLDocument downgrade_document;
+	
 	/**
 	 * Instantiates a new layout 2 CD converter.
 	 *
@@ -84,9 +86,8 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		if (!SBMLUtil.isSetLayoutNameSpace(document))
 			throw new IOException("Missing Layout Namespace");
 		
-		SBMLDocument document2 = SBMLLevelandVersionHandler.downgrade(document.clone());
-		SBMLWriter.write(document2, System.out, ' ', (short) 2);
-		mWrapper = ObjectFactory.unmarshalSBMLFromString(JSBML.writeSBMLToString(document2));
+		downgrade_document = SBMLLevelandVersionHandler.downgrade(document.clone());
+		mWrapper = ObjectFactory.unmarshalSBMLFromString(JSBML.writeSBMLToString(downgrade_document));
 		model = document.getModel();
 	}
 	
@@ -243,7 +244,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	public void save() {
 		try {
 			File file = ObjectFactory.saveModel(mWrapper, outputFileName);
-			document = SBMLReader.read(file);
+			document = SBMLUtil.setMaths(SBMLReader.read(file), downgrade_document);
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} catch (XMLStreamException e) {

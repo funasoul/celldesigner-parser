@@ -19,12 +19,15 @@
         <configuration>
           <archive>
             <manifest>
-              <mainClass>org.sbml.layoutconverter.LayoutConverter</mainClass>
+              <mainClass>org.sbml.layoutconverter.Application</mainClass>
             </manifest>
           </archive>
           <descriptorRefs>
             <descriptorRef>jar-with-dependencies</descriptorRef>
           </descriptorRefs>
+          <descriptors>
+            <descriptor>descriptor.xml</descriptor>
+          </descriptors>
         </configuration>
         <executions>
           <execution>

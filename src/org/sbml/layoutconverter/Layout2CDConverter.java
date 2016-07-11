@@ -141,10 +141,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			if(sg.isSetSpecies()){
 				Species s = (Species) sg.getSpeciesInstance();
 				SpeciesAliasWrapper saw = mWrapper.createSpeciesAliasWrapper(sg);
-				
-				SpeciesWrapper sw = mWrapper.getSpeciesWrapperById(s.getId());
-				sw.getSpeciesIdentity().setName(saw.getId());
-				
+
 				//TODO species over species glyph?
 				int sboterm = SBMLUtil.intSBOTermForPROTEIN;
 				if(s.isSetSBOTerm()){
@@ -155,6 +152,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				}
 				mWrapper.createSpeciesObjectFromSBOTerm(sg, sboterm);
 				String clazz = SBMLUtil.SBOTermToCDClass(sboterm); 
+				SpeciesWrapper sw = mWrapper.getSpeciesWrapperById(s.getId());
 				sw.setClazz(clazz);
 				
 				if(clazz.equals("PROTEIN")){
@@ -165,6 +163,8 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					sw.getSpeciesIdentity().setRnaReference(mWrapper.getRNABySpeciesId(s.getId()).getId());
 				} else if(clazz.equals("ANTISENSE_RNA")){
 					sw.getSpeciesIdentity().setAntisensernaReference(mWrapper.getAntisenseRNABySpeciesId(s.getId()).getId());
+				} else {
+					sw.getSpeciesIdentity().setName(sw.getId());
 				}
 				
 				CompartmentGlyph cg = getCompartmentGlyphByCompartmentId(s.getCompartment());

@@ -101,7 +101,6 @@ public class SpeciesWrapper extends Species{
 		setListOfCatalyzedReactions(new ListOfCatalyzedReactions());
 		this.catalyzedReactions = annotation.getExtension().getListOfCatalyzedReactions().getCatalyzed();
 		this.speciesIdentity = new SpeciesIdentity();
-		speciesIdentity.setName(new String());
 		setSpeciesIdentity(speciesIdentity);
 	}
 	

@@ -112,6 +112,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.speciesAlias = new SpeciesAlias();
 		this.modelWrapper = modelWrapper;
 		this.species = sg.getReference();
+		speciesAlias.setSpecies(species);
 		modelWrapper.getListOfSpeciesAliases().add(speciesAlias);
 		this.activity = "inactive";
 		speciesAlias.setActivity(activity);
@@ -133,6 +134,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		speciesAlias.setInfo(info);
 		setListOfSpeciesTag(new ListOfSpeciesTag());
 		this.view = new View();
+		view.setState("usual");
 		speciesAlias.setView(view);
 		this.briefView = new BriefView();
 		speciesAlias.setBriefView(briefView);

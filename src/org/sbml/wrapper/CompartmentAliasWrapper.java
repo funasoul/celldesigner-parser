@@ -108,7 +108,7 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 		compartmentAlias.setCompartment(compartmentAliased.getId());
 		bounds = new Bounds();
 		setH(cg.getBoundingBox().getDimensions().getHeight());
-		setW(cg.getBoundingBox().getDimensions().getHeight());
+		setW(cg.getBoundingBox().getDimensions().getWidth());
 		setX(cg.getBoundingBox().getPosition().getX());
 		setY(cg.getBoundingBox().getPosition().getY());
 		compartmentAlias.setBounds(bounds);

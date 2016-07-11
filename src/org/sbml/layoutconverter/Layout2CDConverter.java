@@ -15,7 +15,6 @@ import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
-import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
@@ -34,7 +33,7 @@ import org.sbml.wrapper.SpeciesAliasWrapper;
 import org.sbml.wrapper.SpeciesReferenceWrapper;
 import org.sbml.wrapper.SpeciesWrapper;
 
-// TODO: Auto-generated Javadoc
+
 /**
  * The Class Layout2CDConverter.
  *
@@ -155,7 +154,18 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					sboterm = s.getSBOTerm();
 				}
 				mWrapper.createSpeciesObjectFromSBOTerm(sg, sboterm);
-				sw.setClazz(SBMLUtil.SBOTermToString(sboterm));
+				String clazz = SBMLUtil.SBOTermToCDClass(sboterm); 
+				sw.setClazz(clazz);
+				
+				if(clazz.equals("PROTEIN")){
+					sw.getSpeciesIdentity().setProteinReference(mWrapper.getProteinBySpeciesId(s.getId()).getId());
+				} else if(clazz.equals("GENE")){
+					sw.getSpeciesIdentity().setGeneReference(mWrapper.getGeneBySpeciesId(s.getId()).getId());
+				} else if(clazz.equals("RNA")){
+					sw.getSpeciesIdentity().setRnaReference(mWrapper.getRNABySpeciesId(s.getId()).getId());
+				} else if(clazz.equals("ANTISENSE_RNA")){
+					sw.getSpeciesIdentity().setAntisensernaReference(mWrapper.getAntisenseRNABySpeciesId(s.getId()).getId());
+				}
 				
 				CompartmentGlyph cg = getCompartmentGlyphByCompartmentId(s.getCompartment());
 				if(cg != null)
@@ -248,10 +258,8 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

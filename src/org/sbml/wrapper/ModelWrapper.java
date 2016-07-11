@@ -128,9 +128,20 @@ public class ModelWrapper extends Model {
 		this.notes = model.getNotes();
 		this.annotation = model.getAnnotation();
 
-		this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
-		this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
-		this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
+		if(model.getListOfCompartments() != null)
+			this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments().getCompartment());
+		else
+			this.cWrapperList = new ArrayList<CompartmentWrapper>();
+		
+		if(model.getListOfSpecies() != null)
+			this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies().getSpecies());
+		else
+			this.sWrapperList = new ArrayList<SpeciesWrapper>();
+
+		if(model.getListOfReactions() != null)
+			this.rWrapperList = createReactionWrapperList(model.getListOfReactions().getReaction());
+		else
+			this.rWrapperList = new ArrayList<ReactionWrapper>();
 		
 		if(annotation != null)
 			setAnnotations();
@@ -1049,6 +1060,7 @@ public class ModelWrapper extends Model {
     	rna.setName(species.getId());
     	rna.setId("rn" + (rnaList.size() + 1));
     	rna.setType(SBMLUtil.SBOTermToString(species.getSBOTerm()));
+    	addRNA(rna);
     	
     	return rna;
     }
@@ -1263,5 +1275,57 @@ public class ModelWrapper extends Model {
 				createProtein((org.sbml.jsbml.Species) sg.getSpeciesInstance());
 				break;
 		}
+	}
+
+	/**
+	 * @param id
+	 * void
+	 * TODO
+	 */
+	public Protein getProteinBySpeciesId(String id) {
+		for(Protein p : proteinList)
+			if(p.getName().equals(id))
+				return p;
+		
+		return null;
+	}
+
+	/**
+	 * @param id
+	 * void
+	 * TODO
+	 */
+	public Gene getGeneBySpeciesId(String id) {
+		for(Gene g : geneList)
+			if(g.getName().equals(id))
+				return g;
+		
+		return null;
+	}
+
+	/**
+	 * @param id
+	 * void
+	 * TODO
+	 */
+	public RNA getRNABySpeciesId(String id) {
+		for(RNA rna : rnaList)
+			if(rna.getName().equals(id))
+				return rna;
+		
+		return null;
+	}
+
+	/**
+	 * @param id
+	 * void
+	 * TODO
+	 */
+	public AntisenseRNA getAntisenseRNABySpeciesId(String id) {
+		for(AntisenseRNA asrna : antiSenseRNAList)
+			if(asrna.getName().equals(id))
+				return asrna;
+		
+		return null;		
 	}
 }

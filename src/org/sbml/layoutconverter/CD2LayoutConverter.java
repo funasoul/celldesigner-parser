@@ -221,8 +221,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			List<Point2D.Double> editPointList = rw.getEditPointsAsList();
 			int rectangleIndex = rw.getRectangleIndex();
 			BoundingBox reactionBB = rg.createBoundingBox();
-			reactionBB
-					.setDimensions(new Dimensions(0, 0, 0,
+			reactionBB.setDimensions(new Dimensions(0, 0, 0,
 							SBMLUtil.DEFAULT_SBML_LEVEL,
 							SBMLUtil.DEFAULT_SBML_VERSION));
 			List<LineSegment> lsList = null;

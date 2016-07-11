@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Map;
 
-import javax.swing.AbstractAction;
 import javax.swing.tree.TreeNode;
 import javax.xml.stream.XMLStreamException;
 
@@ -19,7 +18,6 @@ import org.sbml.jsbml.FunctionDefinition;
 import org.sbml.jsbml.InitialAssignment;
 import org.sbml.jsbml.KineticLaw;
 import org.sbml.jsbml.ListOf;
-import org.sbml.jsbml.MathContainer;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Parameter;
@@ -539,6 +537,42 @@ public class SBMLUtil {
 		}
 	}
 	
+	public static String SBOTermToCDClass(int sboTerm) {
+		switch (sboTerm){
+		case intSBOTermForANTISENSE_RNA :
+			return "ANTISENSE_RNA";
+		case intSBOTermForCOMPLEX :
+			return "COMPLEX";
+		case intSBOTermForDEGRADED :
+			return "DEGRADED";
+		case intSBOTermForDRUG :
+			return "DRUG";
+		case intSBOTermForGENE :
+			return "GENE";
+		case intSBOTermForGENERIC :
+		case intSBOTermForPROTEIN :
+		case intSBOTermForION_CHANNEL :
+		case intSBOTermForTRUNCATED :
+		case intSBOTermForRECEPTOR :
+			return "PROTEIN";
+		
+		case intSBOTermForION :
+			return "ION";
+		case intSBOTermForPHENOTYPE :
+			return "PHENOTYPE";
+
+		case intSBOTermForRNA :
+			return "RNA";
+		case intSBOTermForSIMPLE_MOLECULE :
+			return "SIMPLE_MOLECULE";
+		case intSBOTermForUNKNOWN :
+			return "UNKNOWN";
+			
+			default:
+				return "";
+		}
+	}
+	
 	/**
 	 * Sets the maths.
 	 *
@@ -595,7 +629,7 @@ public class SBMLUtil {
 			Event e = p.getParent();
 			d.getModel().getEvent(e.getId()).setPriority((Priority) math.clone());
 		} else if(math instanceof StoichiometryMath){
-
+			
 		} else if(math instanceof Trigger){
 			Trigger t = (Trigger) math;
 			Event e = t.getParent();

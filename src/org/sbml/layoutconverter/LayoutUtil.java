@@ -326,7 +326,7 @@ public class LayoutUtil {
 		
 		if(num0 > 0){
 			List<Point2D.Double> subList = editPointList.subList(0, num0);
-			Collections.reverse(subList);																			//since editpoint lists the cordinates starting from the editpoint
+			Collections.reverse(subList);																			//since editpoint lists the coordinates starting from the editpoint
 			List<LineSegment> subLineList = createListOfLineSegment(startPoint, editPoint, editPoint, startPoint, subList);
 			lineList.addAll(lineList.size(), subLineList);
 		} else {
@@ -532,6 +532,17 @@ public class LayoutUtil {
 		
 		return point;
 	}
+	
+	public static Point createLinkPoint(Point nearestPoint, Point centerPoint){
+		Point p = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+		double proportion = 3/4d; 
+		
+		p.setX(nearestPoint.getX() + (centerPoint.getX() - nearestPoint.getX()) * proportion);
+		p.setY(nearestPoint.getY() + (centerPoint.getY() - nearestPoint.getY()) * proportion);
+
+		return p;
+	}
+	
 	
 	/**
 	 * Gets the position to compartment.

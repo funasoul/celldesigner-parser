@@ -16,9 +16,7 @@ import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml._2001.ns.celldesigner.ProductLink;
 import org.sbml._2001.ns.celldesigner.ReactantLink;
 import org.sbml.jsbml.ListOf;
-import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
@@ -142,8 +140,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		cawList = ModelWrapper.reorderCompartmentAccordingToPosition(cawList);
 
 		for (CompartmentAliasWrapper caw : cawList) {
-			CompartmentGlyph cg = layout
-					.createCompartmentGlyph("CompartmentGlyph_" + caw.getId());
+			CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + caw.getId());
 			cg.setCompartment(caw.getCompartment());
 			BoundingBox bb = cg.createBoundingBox();
 			Dimensions dimension = bb.createDimensions();
@@ -159,7 +156,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			tg.setOriginOfText(caw.getCompartment());
 			tg.setGraphicalObject(cg);
 			BoundingBox bb2 = tg.createBoundingBox();
-			;
 			Dimensions dimension2 = bb2.createDimensions();
 			dimension2.setWidth(caw.getId().length() * 3);
 			dimension2.setHeight(10);
@@ -177,8 +173,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	public void convertDefaultCompartment() {
 		CompartmentWrapper cw = mWrapper.getCompartmentWrapperById("default");
 		if (cw != null) {
-			CompartmentGlyph cg = layout
-					.createCompartmentGlyph("CompartmentGlyph_" + cw.getId());
+			CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + cw.getId());
 			cg.setCompartment(cw.getId());
 			BoundingBox bb = cg.createBoundingBox();
 			Dimensions dimension = bb.createDimensions();
@@ -191,7 +186,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			tg.setOriginOfText(cw.getId());
 			tg.setGraphicalObject(cg);
 			BoundingBox bb2 = tg.createBoundingBox();
-			;
+			
 			Dimensions dimension2 = bb2.createDimensions();
 			dimension2.setWidth(cw.getId().length() * 3);
 			dimension2.setHeight(10);
@@ -211,11 +206,9 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 */
 	public void convertReactionsToLayout(List<ReactionWrapper> rList) {
 		for (ReactionWrapper rw : rList) {
-			ReactionGlyph rg = layout.createReactionGlyph("ReactionGlyph_"
-					+ rw.getId());
+			ReactionGlyph rg = layout.createReactionGlyph("ReactionGlyph_" + rw.getId());
 			rg.setReference(rw.getId());
-			ListOf<SpeciesReferenceGlyph> srgList = createSpeciesReferenceGlyph(
-					rg, rw);
+			ListOf<SpeciesReferenceGlyph> srgList = createSpeciesReferenceGlyph(rg, rw);
 			List<BaseReactant> brsList = rw.getBaseReactants();
 			List<BaseProduct> prsList = rw.getBaseProducts();
 			List<Point2D.Double> editPointList = rw.getEditPointsAsList();
@@ -412,15 +405,30 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
 				Point startPoint = LayoutUtil.createAdjustedPoint(sg, position);
 				Point endPoint = reactionBB.getPosition();
+				
 				editPointList = new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
-				if (lineType.equals("Straight"))
-					lsList2 = LayoutUtil.createListOfLineSegment(startPoint,
-							endPoint, editPointList);
-				else
-					lsList2 = LayoutUtil.createListOfBezier(startPoint,
-							endPoint, lsList.get(rectangleIndex).getStart());
+				if (lineType.equals("Curve")){
+					lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex).getStart());
+					
+				} else if(rw.getReactionType().equals("HETERODIMER_ASSOCIATION")){
+					int num0 = rw.getEditPoints().getNum0();
+					int num1 = rw.getEditPoints().getNum1();
+					int tshapeIndex = rw.getEditPoints().getTShapeIndex();
 
+					Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 + 1 + num1 + 1 + tshapeIndex).getStart(), endPoint);		
+					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
+			
+				} else if(rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")){
+					int num0 = rw.getEditPoints().getNum0();
+					int tshapeIndex = rw.getEditPoints().getTShapeIndex();
+					Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 - tshapeIndex).getStart(), endPoint);		
+					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
+			
+				} else {
+					Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(rectangleIndex).getStart(), endPoint);		
+					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
+				}
 				Curve curve = srg.createCurve();
 				for (LineSegment ls : lsList2) {
 					curve.addCurveSegment(ls);
@@ -436,12 +444,30 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				Point startPoint = reactionBB.getPosition();
 				editPointList = new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
-
-				if (lineType.equals("Straight"))
-					lsList2 = LayoutUtil.createListOfLineSegment(startPoint, endPoint, editPointList);
-				else
+				
+				if (lineType.equals("Curve")){
 					lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex + 1).getEnd());
+					
+				} else if(rw.getReactionType().equals("HETERODIMER_ASSOCIATION")){
+					int num0 = rw.getEditPoints().getNum0();
+					int num1 = rw.getEditPoints().getNum1();
+					int tshapeIndex = rw.getEditPoints().getTShapeIndex();
 
+					Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 + 1 + num1 + 1 + tshapeIndex).getEnd(), startPoint);		
+					lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
+			
+				} else if(rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")){
+					int num0 = rw.getEditPoints().getNum0();
+					int tshapeIndex = rw.getEditPoints().getTShapeIndex();
+					
+					Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 - tshapeIndex).getEnd(), startPoint);		
+					lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
+			
+				} else {
+					Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(rectangleIndex + 1).getEnd(), startPoint);
+					lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
+				}
+				
 				Curve curve = srg.createCurve();
 				for (LineSegment ls : lsList2) {
 					curve.addCurveSegment(ls);

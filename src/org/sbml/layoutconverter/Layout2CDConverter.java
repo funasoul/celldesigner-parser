@@ -141,7 +141,6 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			if(sg.isSetSpecies()){
 				Species s = (Species) sg.getSpeciesInstance();
 				SpeciesAliasWrapper saw = mWrapper.createSpeciesAliasWrapper(sg);
-
 				//TODO species over species glyph?
 				int sboterm = SBMLUtil.intSBOTermForPROTEIN;
 				if(s.isSetSBOTerm()){
@@ -174,6 +173,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					sw.setPositionToCompartment("inside");
 			} else {
 			// included species?	
+			// TODO complex spcecies
 			}
 		}
 	}

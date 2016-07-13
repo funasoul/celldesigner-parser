@@ -142,7 +142,14 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			if(sg.isSetSpecies()){
 				Species s = (Species) sg.getSpeciesInstance();
 				SpeciesAliasWrapper saw = mWrapper.createSpeciesAliasWrapper(sg);
-
+				String cid = s.getCompartment();
+				saw.setId(s.getId() + "alias");
+				
+				if(!cid.equals("default")){
+					saw.setCompartmentAlias(cid + "alias");
+					saw.setCompartmentAliasWrapper(cid + "alias");
+				}
+				
 				int sboterm = SBMLUtil.intSBOTermForPROTEIN;
 				if (sg.isSetSBOTerm()){
 					sboterm = s.getSBOTerm();
@@ -172,8 +179,8 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				else 
 					sw.setPositionToCompartment("inside");
 			} else {
-			// included species?	
-			// TODO complex spcecies
+				SpeciesAliasWrapper saw = mWrapper.createSpeciesAliasWrapper(sg);
+				
 			}
 		}
 	}
@@ -217,7 +224,6 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			for(SpeciesReference sr : productList){
 				SpeciesReferenceWrapper srw = rw.getProductWrapperById(sr.getSpecies());
 				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperBySpeciesId(sr.getSpecies());
-				
 				srw.setAlias(saw.getId());
 			}
 			

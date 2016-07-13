@@ -123,13 +123,6 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.setX(sg.getBoundingBox().getPosition().getX());
 		this.setY(sg.getBoundingBox().getPosition().getY());
 		
-		speciesAlias.setBriefView(new BriefView());
-		String compartmentAliasId = ((org.sbml.jsbml.Species)sg.getSpeciesInstance()).getCompartment()+"alias";
-		this.compartmentAlias = modelWrapper.getCompartmentAliasById(compartmentAliasId);
-		speciesAlias.setCompartmentAlias(compartmentAliasId);
-		this.compartmentAliasWrapper = modelWrapper.getCompartmentAliasWrapperByCompartmentId(id);
-		this.id = sg.getReference() + "alias" ;
-		speciesAlias.setId(id);
 		this.info = new Info();
 		speciesAlias.setInfo(info);
 		setListOfSpeciesTag(new ListOfSpeciesTag());
@@ -144,6 +137,14 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		speciesAlias.setStructuralState(structuralState);
 	}
 
+	/* (non-Javadoc)
+	 * @see org.sbml._2001.ns.celldesigner.SpeciesAlias#setId(java.lang.String)
+	 */
+	public void setId(String id){
+		this.id = id;
+		speciesAlias.setId(id);
+	}
+	
 	/**
 	 * Gets the h.
 	 *
@@ -328,7 +329,24 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
     public void setCompartmentAliasWrapper(CompartmentAliasWrapper value) {
         this.compartmentAliasWrapper = value;
     }
-
+    
+    /**
+     * Sets the compartment alias wrapper.
+     *
+     * @param id the new compartment alias wrapper
+     */
+    public void setCompartmentAliasWrapper(String id){
+    	this.compartmentAliasWrapper = modelWrapper.getCompartmentAliasWrapperByCompartmentId(id);
+    }
+    
+    /* (non-Javadoc)
+     * @see org.sbml._2001.ns.celldesigner.SpeciesAlias#setCompartmentAlias(java.lang.String)
+     */
+    public void setCompartmentAlias(String id){
+    	this.compartmentAlias = modelWrapper.getCompartmentAliasById(id);
+		speciesAlias.setCompartmentAlias(id);
+    }
+    
     /**
      * Gets the complex species aliased.
      *

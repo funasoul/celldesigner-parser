@@ -128,9 +128,9 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "sample/dissociation.xml";
+		String filepath = "sample/species_converted.xml";
 		String outputpath = "";
-		Boolean isCD2Layout = null;
+		Boolean isCD2Layout = false;
 		
 		for(int i = 0 ; i < args.length; i++){
 			if(filepath.isEmpty() && args[i].endsWith(".xml")){

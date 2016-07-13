@@ -125,7 +125,8 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	public void convertCompartmentsToCD(List<CompartmentGlyph> cgList) {
 		for(CompartmentGlyph cg: cgList){
 			Compartment c = (Compartment) cg.getCompartmentInstance();
-			mWrapper.createCompartmentAliasWrapper(cg);
+			if(!c.getId().equals("default"))
+				mWrapper.createCompartmentAliasWrapper(cg);
 			
 		}
 	}
@@ -141,12 +142,11 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			if(sg.isSetSpecies()){
 				Species s = (Species) sg.getSpeciesInstance();
 				SpeciesAliasWrapper saw = mWrapper.createSpeciesAliasWrapper(sg);
-				//TODO species over species glyph?
+
 				int sboterm = SBMLUtil.intSBOTermForPROTEIN;
-				if(s.isSetSBOTerm()){
+				if (sg.isSetSBOTerm()){
 					sboterm = s.getSBOTerm();
-				} else if (sg.isSetSBOTerm()){
-					s.setSBOTerm(sg.getSBOTerm());
+				} else if(s.isSetSBOTerm()){
 					sboterm = s.getSBOTerm();
 				}
 				mWrapper.createSpeciesObjectFromSBOTerm(sg, sboterm);

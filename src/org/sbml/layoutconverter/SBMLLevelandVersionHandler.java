@@ -9,7 +9,9 @@ import java.io.IOException;
 import javax.xml.stream.XMLStreamException;
 
 import org.sbml.jsbml.SBMLDocument;
+import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
+import org.sbml.jsbml.SBMLWriter;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -67,10 +69,9 @@ public class SBMLLevelandVersionHandler {
 	 */
 	public static void main(String[] args){
 		try {
-			SBMLDocument d = SBMLReader.read(new File("sample/sample.xml"));
-			SBMLUtil.isSetSBOTerm(d.getRoot());
-			System.out.println(SBMLLevelandVersionHandler.isSetSBOTerm);
-			System.out.println(SBMLUtil.isSetSBOTerm(d));
+			SBMLDocument d = SBMLReader.read(new File("/Users/ii/models/level3/spatial_example1.xml"));
+			d = SBMLLevelandVersionHandler.downgrade(d);
+			
 		} catch (XMLStreamException | IOException e) {
 			e.printStackTrace();
 		}

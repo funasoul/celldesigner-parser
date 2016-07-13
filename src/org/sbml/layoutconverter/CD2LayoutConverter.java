@@ -563,7 +563,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 					+ saw.getId());
 			if (model.getSpecies(saw.getSpecies()) != null)
 				sg.setReference(saw.getSpecies());
-
 			BoundingBox bb = sg.createBoundingBox();
 			Dimensions dimension = bb.createDimensions();
 			dimension.setWidth(saw.getW());

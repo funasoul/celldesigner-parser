@@ -4,6 +4,7 @@
 package org.sbml.wrapper;
 
 import java.awt.geom.Point2D;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -195,9 +196,9 @@ public class ReactionWrapper extends Reaction{
 
 		setReactionType(new String());
 		
-		setEditPoints(new EditPoints());
+	//	setEditPoints(new EditPoints());
 		this.editPointList = new ArrayList<Point2D.Double>();
-
+	
 		setListOfModification(new ListOfModification());
 		this.modificationList = annotation.getExtension().getListOfModification().getModification();
 
@@ -206,20 +207,41 @@ public class ReactionWrapper extends Reaction{
 		
 		setBaseProducts(new BaseProducts());
 		baseProducts = annotation.getExtension().getBaseProducts().getBaseProduct();
-		
-		setListOfReactantLinks(new ListOfReactantLinks());
-		reactantLinks = annotation.getExtension().getListOfReactantLinks().getReactantLink();
-		
-		setListOfProductLinks(new ListOfProductLinks());
-		productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
-
+			
 		setConnectScheme(new ConnectScheme());
-
 		setOffset(new Offset());
 
+		Line line = new Line();
+		line.setWidth(new BigDecimal(1.0d));
+		line.setColor("ff000000");
+		setLine(line);
+		
 		this.reaction.setKineticLaw(null); // reset the kinetic law later
 	}
 
+	/**
+	 * Creates the reactant link.
+	 *
+	 * @return the list
+	 */
+	public List<ReactantLink> createReactantLink(){
+		setListOfReactantLinks(new ListOfReactantLinks());
+		reactantLinks = annotation.getExtension().getListOfReactantLinks().getReactantLink();
+	
+		return reactantLinks;
+	}
+	
+	/**
+	 * Creates the product link.
+	 *
+	 * @return the list
+	 */
+	public List<ProductLink> createProductLink(){
+		setListOfProductLinks(new ListOfProductLinks());
+		productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
+
+		return productLinks;
+	}
 	
 	   /* (non-Javadoc)
 	    * @see org.sbml.sbml.level2.version4.OriginalReaction#getName()
@@ -727,5 +749,35 @@ public class ReactionWrapper extends Reaction{
     	   annotation.getExtension().getConnectScheme().setRectangleIndex(String.valueOf(index));
     	   this.rectangleIndex = index;
        }
+
+	/**
+	 * Creates the base reactant.
+	 *
+	 * @param saw the saw
+	 */
+	public void createBaseReactant(SpeciesAliasWrapper saw) {
+		BaseReactant br = new BaseReactant();
+		br.setSpecies(saw.getSpecies());
+		br.setAlias(saw.getId());
+		LinkAnchor anchor = new LinkAnchor();
+		anchor.setPosition("INACTIVE");
+		br.setLinkAnchor(anchor);
+		baseReactants.add(br);
+	}
+
+	/**
+	 * Creates the base product.
+	 *
+	 * @param saw the saw
+	 */
+	public void createBaseProduct(SpeciesAliasWrapper saw) {
+		BaseProduct bp = new BaseProduct();
+		bp.setSpecies(saw.getSpecies());
+		bp.setAlias(saw.getId());
+		LinkAnchor anchor = new LinkAnchor();
+		anchor.setPosition("INACTIVE");
+		bp.setLinkAnchor(anchor);
+		baseProducts.add(bp);
+	}
 
 }

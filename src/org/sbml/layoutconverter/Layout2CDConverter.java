@@ -44,7 +44,7 @@ import org.sbml.wrapper.SpeciesWrapper;
 
 public class Layout2CDConverter extends BaseLayoutConverter {
 
-	SBMLDocument downgrade_document;
+	private SBMLDocument downgrade_document;
 	
 	/**
 	 * Instantiates a new layout 2 CD converter.
@@ -127,7 +127,6 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			Compartment c = (Compartment) cg.getCompartmentInstance();
 			if(!c.getId().equals("default"))
 				mWrapper.createCompartmentAliasWrapper(cg);
-			
 		}
 	}
 
@@ -138,7 +137,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 *            the sg list
 	 */
 	public void convertSpeciesToCD(List<SpeciesGlyph> sgList) {
-		for(SpeciesGlyph sg: sgList){
+		for(SpeciesGlyph sg: sgList){			
 			if(sg.isSetSpecies()){
 				Species s = (Species) sg.getSpeciesInstance();
 				SpeciesAliasWrapper saw = mWrapper.createSpeciesAliasWrapper(sg);
@@ -156,11 +155,11 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				} else if(s.isSetSBOTerm()){
 					sboterm = s.getSBOTerm();
 				}
+				
 				mWrapper.createSpeciesObjectFromSBOTerm(sg, sboterm);
-				String clazz = SBMLUtil.SBOTermToCDClass(sboterm); 
+				String clazz = SBMLUtil.SBOTermToCDSpecies(sboterm); 
 				SpeciesWrapper sw = mWrapper.getSpeciesWrapperById(s.getId());
 				sw.setClazz(clazz);
-				
 				if(clazz.equals("PROTEIN")){
 					sw.getSpeciesIdentity().setProteinReference(mWrapper.getProteinBySpeciesId(s.getId()).getId());
 				} else if(clazz.equals("GENE")){
@@ -178,9 +177,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					sw.setPositionToCompartment(LayoutUtil.getPositionToCompartment(sg, cg));
 				else 
 					sw.setPositionToCompartment("inside");
-			} else {
-				SpeciesAliasWrapper saw = mWrapper.createSpeciesAliasWrapper(sg);
 				
+			} else {
+				//TODO label?
 			}
 		}
 	}
@@ -208,12 +207,18 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 */
 	public void convertReactionsToCD(List<ReactionGlyph> rgList) {
 		for(ReactionGlyph rg : rgList){
-			Reaction r = (Reaction) rg.getReactionInstance();
-			
+			Reaction r = (Reaction) rg.getReactionInstance();			
 			ListOf<SpeciesReference> reactantList = r.getListOfReactants();
 			ListOf<SpeciesReference> productList = r.getListOfProducts();
 			ListOf<ModifierSpeciesReference> modifierList = r.getListOfModifiers();
 			ReactionWrapper rw = mWrapper.getReactionWrapperById(r.getId());
+			int sboterm = SBMLUtil.intSBOTermForPROTEIN;
+			if (rg.isSetSBOTerm()){
+				sboterm = r.getSBOTerm();
+			} else if(r.isSetSBOTerm()){
+				sboterm = r.getSBOTerm();
+			}
+			rw.setReactionType(SBMLUtil.SBOTermToCDReaction(sboterm));
 			
 			for(SpeciesReference sr : reactantList){
 				SpeciesReferenceWrapper srw = rw.getReactantWrapperById(sr.getSpecies());
@@ -231,7 +236,38 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				ModifierSpeciesReferenceWrapper msrw = rw.getModifierWrapperById(msr.getSpecies());
 				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperBySpeciesId(msr.getSpecies());
 				msrw.setAlias(saw.getId());
+				SpeciesWrapper sw = saw.getSpeciesWrapperAliased();
+				sw.createCatalyzedReaction(rg.getReaction());
 			}
+			
+			if(reactantList.size() == 1 && productList.size() == 1){
+				SpeciesReference reactant = reactantList.get(0);
+				SpeciesReference product = productList.get(0);		
+				rw.createBaseReactant(mWrapper.getSpeciesAliasWrapperBySpeciesId(reactant.getSpecies()));
+				rw.createBaseProduct(mWrapper.getSpeciesAliasWrapperBySpeciesId(product.getSpecies()));	
+
+				
+				
+			} else if(reactantList.size() == 2 && productList.size() == 1){
+				SpeciesReference reactant1 = reactantList.get(0);
+				SpeciesReference reactant2 = reactantList.get(1);
+				SpeciesReference product = productList.get(0);		
+				rw.createBaseReactant(mWrapper.getSpeciesAliasWrapperBySpeciesId(reactant1.getSpecies()));
+				rw.createBaseReactant(mWrapper.getSpeciesAliasWrapperBySpeciesId(reactant2.getSpecies()));
+				rw.createBaseProduct(mWrapper.getSpeciesAliasWrapperBySpeciesId(product.getSpecies()));
+			} else if(reactantList.size() == 1 && productList.size() == 2){
+				SpeciesReference reactant = reactantList.get(0);
+				SpeciesReference product1 = productList.get(0);		
+				SpeciesReference product2 = productList.get(1);		
+				
+				rw.createBaseReactant(mWrapper.getSpeciesAliasWrapperBySpeciesId(reactant.getSpecies()));
+				rw.createBaseProduct(mWrapper.getSpeciesAliasWrapperBySpeciesId(product1.getSpecies()));	
+				rw.createBaseProduct(mWrapper.getSpeciesAliasWrapperBySpeciesId(product2.getSpecies()));	
+			} else {
+				
+			}
+			
+	
 		}
 	}
 	

@@ -537,7 +537,7 @@ public class SBMLUtil {
 		}
 	}
 	
-	public static String SBOTermToCDClass(int sboTerm) {
+	public static String SBOTermToCDSpecies(int sboTerm) {
 		switch (sboTerm){
 		case intSBOTermForANTISENSE_RNA :
 			return "ANTISENSE_RNA";
@@ -548,30 +548,66 @@ public class SBMLUtil {
 		case intSBOTermForDRUG :
 			return "DRUG";
 		case intSBOTermForGENE :
-			return "GENE";
-		case intSBOTermForGENERIC :
-		case intSBOTermForPROTEIN :
-		case intSBOTermForION_CHANNEL :
-		case intSBOTermForTRUNCATED :
-		case intSBOTermForRECEPTOR :
-			return "PROTEIN";
-		
+			return "GENE";	
 		case intSBOTermForION :
 			return "ION";
 		case intSBOTermForPHENOTYPE :
 			return "PHENOTYPE";
-
 		case intSBOTermForRNA :
 			return "RNA";
 		case intSBOTermForSIMPLE_MOLECULE :
 			return "SIMPLE_MOLECULE";
 		case intSBOTermForUNKNOWN :
 			return "UNKNOWN";
-			
-			default:
-				return "";
+		case intSBOTermForGENERIC :
+		case intSBOTermForPROTEIN :
+		case intSBOTermForION_CHANNEL :
+		case intSBOTermForTRUNCATED :
+		case intSBOTermForRECEPTOR :
+		default:
+				return "PROTEIN";
 		}
 	}
+
+	/**
+	 * @param sboterm
+	 * @return
+	 * String
+	 * TODO
+	 */
+	public static String SBOTermToCDReaction(int sboterm) {
+		switch(sboterm){
+		case intSBOTermForKNOWN_TRANSITION_OMITTED :
+			return "KNOWN_TRANSITION_OMITTED";
+		case intSBOTermForTRANSCRIPTION :
+			return "TRANSCRIPTION";
+		case intSBOTermForTRANSLATION :
+			return "TRANSLATION";
+		case intSBOTermForTRANSPORT :
+			return "TRANSPORT";
+		case intSBOTermForHETERODIMER_ASSOCIATION :
+			return "HETERODIMER_ASSOCIATION";
+		case intSBOTermForDISSOCIATION :
+			return "DISSOCIATION";
+		case intSBOTermForTRUNCATION :
+			return "TRUNCATION";
+		case intSBOTermForUNKNOWN_TRANSITION :
+			return "UNKNOWN_TRANSITION";
+		case intSBOTermForCATALYSIS : // = intSBOTermForUNKNOWN_CATALYSIS
+			return "CATALYSIS";
+		case intSBOTermForINHIBITION : // = intSBOTermForTRANSLATIONAL_INHIBITION = intSBOTermForTRANSCRIPTIONAL_INHIBITION = intSBOTermForUNKNOWN_INHIBITION
+			return "INHIBITION";
+		case intSBOTermForPHYSICAL_STIMULATION :
+			return "PHYSICAL_STIMULATION";
+		case intSBOTermForTRANSCRIPTIONAL_ACTIVATION : //  = intSBOTermForTRANSLATIONAL_ACTIVATION
+			return "TRANSCRIPTIONAL_ACTIVATION";
+		case intSBOTermForSTATE_TRANSITION :
+			default:
+			return "STATE_TRANSITION";
+	
+		}
+	}
+	
 	
 	/**
 	 * Sets the maths.
@@ -644,4 +680,5 @@ public class SBMLUtil {
 			System.err.println("Unknown class");
 		}
 	}
+
 }

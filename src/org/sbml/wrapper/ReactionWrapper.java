@@ -111,9 +111,7 @@ public class ReactionWrapper extends Reaction{
 		this.metaid = reaction.getMetaid();
 		this.name = reaction.getName(); // same as annotation.getExtension().getName()?
 		this.notes = reaction.getNotes();
-		this.reversible = reaction.isReversible();
-		
-		
+		this.reversible = reaction.isReversible();	
 		
 		reactantWrapperList = createReactantWrapperList(listOfReactants.getSpeciesReference());
 		productWrapperList = createProductWrapperList(listOfProducts.getSpeciesReference());
@@ -123,12 +121,7 @@ public class ReactionWrapper extends Reaction{
 			setAnnotations();
 		else
 			initAnnotations();
-
-		if (listOfModifiers != null)
-			modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
-		else
-			isSetModifiers = false;
-
+		
 	}
 
 	/**
@@ -184,6 +177,10 @@ public class ReactionWrapper extends Reaction{
 		if (connectScheme != null && connectScheme.getRectangleIndex() != null)
 			rectangleIndex = Integer.valueOf(annotation.getExtension().getConnectScheme().getRectangleIndex());
 		
+		if (listOfModifiers != null)
+			modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
+		else
+			isSetModifiers = false;
 	}
 	
 	/**
@@ -199,9 +196,26 @@ public class ReactionWrapper extends Reaction{
 	//	setEditPoints(new EditPoints());
 		this.editPointList = new ArrayList<Point2D.Double>();
 	
-		setListOfModification(new ListOfModification());
-		this.modificationList = annotation.getExtension().getListOfModification().getModification();
-
+		if (listOfModifiers != null)
+			modifierWrapperList = createModifierWrapperList(listOfModifiers.getModifierSpeciesReference());
+		else
+			isSetModifiers = false;
+		
+		if (listOfModifiers != null){
+			setListOfModification(new ListOfModification());
+			this.modificationList = annotation.getExtension().getListOfModification().getModification();
+			for(ModifierSpeciesReferenceWrapper msrw: modifierWrapperList){
+				Modification m = new Modification();
+				m.setAliases(msrw.getAlias());
+				m.setModifiers(msrw.getSpecies());
+				Line line = new Line();
+				line.setWidth(new BigDecimal(1.0d));
+				line.setColor("ff000000");
+				m.setLine(line);
+				modificationList.add(m);
+			}
+		}
+		
 		setBaseReactants(new BaseReactants());
 		baseReactants = annotation.getExtension().getBaseReactants().getBaseReactant();
 		
@@ -217,8 +231,9 @@ public class ReactionWrapper extends Reaction{
 		setLine(line);
 		
 		this.reaction.setKineticLaw(null); // reset the kinetic law later
+		
 	}
-
+	
 	/**
 	 * Creates the reactant link.
 	 *
@@ -551,6 +566,8 @@ public class ReactionWrapper extends Reaction{
         * TODO
         */
        public Modification getModificationByModifierId(String id){
+    	   if(modificationList == null ) return null;
+    	   
     	   for(Modification m : modificationList){
     		   if(m.getModifiers().equals(id))
     			   return m;

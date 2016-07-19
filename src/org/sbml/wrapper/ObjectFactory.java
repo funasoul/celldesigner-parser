@@ -14,8 +14,6 @@ import javax.xml.bind.Unmarshaller;
 
 import org.sbml.sbml.level2.version4.Model;
 import org.sbml.sbml.level2.version4.Sbml;
-import org.w3._1998.math.mathml.Apply;
-import org.w3._1998.math.mathml.Ci;
 
 // TODO: Auto-generated Javadoc
 /**

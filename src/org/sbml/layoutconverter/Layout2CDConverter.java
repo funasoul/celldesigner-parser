@@ -7,6 +7,7 @@ import java.util.List;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.JSBML;
 import org.sbml.jsbml.ListOf;
@@ -149,7 +150,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					saw.setCompartmentAliasWrapper(cid + "alias");
 				}
 				
-				int sboterm = SBMLUtil.intSBOTermForPROTEIN;
+				int sboterm = SBMLUtil.intSBOTermForDEFAULT_SPECIES;
 				if (sg.isSetSBOTerm()){
 					sboterm = s.getSBOTerm();
 				} else if(s.isSetSBOTerm()){
@@ -212,9 +213,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 			ListOf<SpeciesReference> productList = r.getListOfProducts();
 			ListOf<ModifierSpeciesReference> modifierList = r.getListOfModifiers();
 			ReactionWrapper rw = mWrapper.getReactionWrapperById(r.getId());
-			int sboterm = SBMLUtil.intSBOTermForPROTEIN;
+			int sboterm = SBMLUtil.intSBOTermForDEFAULT_REACTION;
 			if (rg.isSetSBOTerm()){
-				sboterm = r.getSBOTerm();
+				sboterm = rg.getSBOTerm();
 			} else if(r.isSetSBOTerm()){
 				sboterm = r.getSBOTerm();
 			}
@@ -237,7 +238,12 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperBySpeciesId(msr.getSpecies());
 				msrw.setAlias(saw.getId());
 				SpeciesWrapper sw = saw.getSpeciesWrapperAliased();
-				sw.createCatalyzedReaction(rg.getReaction());
+				sw.createCatalyzedReaction(rg.getReference());
+
+				Modification modification = rw.getModificationByModifierId(sw.getId());
+				modification.setAliases(msrw.getAlias());
+				modification.setType(SBMLUtil.SBOTermToCDModifier(msr.getSBOTerm()));
+				//modification.getLinkTarget()
 			}
 			
 			if(reactantList.size() == 1 && productList.size() == 1){
@@ -248,14 +254,15 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 
 				
 				
-			} else if(reactantList.size() == 2 && productList.size() == 1){
+			} else if(reactantList.size() == 2 && productList.size() == 1 && sboterm == SBMLUtil.intSBOTermForHETERODIMER_ASSOCIATION){
 				SpeciesReference reactant1 = reactantList.get(0);
 				SpeciesReference reactant2 = reactantList.get(1);
 				SpeciesReference product = productList.get(0);		
 				rw.createBaseReactant(mWrapper.getSpeciesAliasWrapperBySpeciesId(reactant1.getSpecies()));
 				rw.createBaseReactant(mWrapper.getSpeciesAliasWrapperBySpeciesId(reactant2.getSpecies()));
 				rw.createBaseProduct(mWrapper.getSpeciesAliasWrapperBySpeciesId(product.getSpecies()));
-			} else if(reactantList.size() == 1 && productList.size() == 2){
+		
+			} else if(reactantList.size() == 1 && productList.size() == 2 && sboterm == SBMLUtil.intSBOTermForDISSOCIATION && sboterm == SBMLUtil.intSBOTermForTRUNCATION){
 				SpeciesReference reactant = reactantList.get(0);
 				SpeciesReference product1 = productList.get(0);		
 				SpeciesReference product2 = productList.get(1);		

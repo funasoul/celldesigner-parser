@@ -116,6 +116,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		modelWrapper.getListOfSpeciesAliases().add(speciesAlias);
 		this.activity = "inactive";
 		speciesAlias.setActivity(activity);
+		this.speciesWrapper = modelWrapper.getSpeciesWrapperById(speciesAlias.getSpecies());
 		this.bounds = new Bounds();
 		speciesAlias.setBounds(bounds);
 		this.setH(sg.getBoundingBox().getDimensions().getHeight());

@@ -71,8 +71,7 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 if(annotation != null)
 			 setAnnotation();
 		 else
-			 initAnnotation();
-		 
+			 initAnnotation();	 
 	}
 
 	/**

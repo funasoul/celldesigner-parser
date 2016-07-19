@@ -55,7 +55,7 @@ public class LayoutConverter {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public LayoutConverter(File file, boolean isCD2Layout) throws JAXBException, XMLStreamException, IOException {
-		if(isCD2Layout )
+		if(isCD2Layout)
 			converter = new CD2LayoutConverter(file);
 		else
 			converter = new Layout2CDConverter(file);
@@ -128,7 +128,7 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "basic_converted.xml";
+		String filepath = "translation_converted.xml";
 		String outputpath = "";
 		Boolean isCD2Layout = false;
 		

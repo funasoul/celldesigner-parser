@@ -242,6 +242,8 @@ public class SBMLUtil {
     /** The Constant intSBOTermForDEFAULT_SPECIES. */
     public static final int intSBOTermForDEFAULT_SPECIES = intSBOTermForPROTEIN;
 	
+    /** The Constant intSBOTermForDEFAULT_REACTION. */
+    public static final int intSBOTermForDEFAULT_REACTION = intSBOTermForSTATE_TRANSITION;
     
 	/**
 	 * Checks if is sets the cell designer name space.
@@ -537,6 +539,12 @@ public class SBMLUtil {
 		}
 	}
 	
+	/**
+	 * SBO term to CD species.
+	 *
+	 * @param sboTerm the sbo term
+	 * @return the string
+	 */
 	public static String SBOTermToCDSpecies(int sboTerm) {
 		switch (sboTerm){
 		case intSBOTermForANTISENSE_RNA :
@@ -570,15 +578,18 @@ public class SBMLUtil {
 	}
 
 	/**
-	 * @param sboterm
-	 * @return
-	 * String
+	 * SBO term to CD reaction.
+	 *
+	 * @param sboterm the sboterm
+	 * @return String
 	 * TODO
 	 */
 	public static String SBOTermToCDReaction(int sboterm) {
 		switch(sboterm){
 		case intSBOTermForKNOWN_TRANSITION_OMITTED :
 			return "KNOWN_TRANSITION_OMITTED";
+		case intSBOTermForINHIBITION : // = intSBOTermForTRANSLATIONAL_INHIBITION = intSBOTermForTRANSCRIPTIONAL_INHIBITION = intSBOTermForUNKNOWN_INHIBITION
+			return "INHIBITION";
 		case intSBOTermForTRANSCRIPTION :
 			return "TRANSCRIPTION";
 		case intSBOTermForTRANSLATION :
@@ -593,21 +604,37 @@ public class SBMLUtil {
 			return "TRUNCATION";
 		case intSBOTermForUNKNOWN_TRANSITION :
 			return "UNKNOWN_TRANSITION";
-		case intSBOTermForCATALYSIS : // = intSBOTermForUNKNOWN_CATALYSIS
-			return "CATALYSIS";
-		case intSBOTermForINHIBITION : // = intSBOTermForTRANSLATIONAL_INHIBITION = intSBOTermForTRANSCRIPTIONAL_INHIBITION = intSBOTermForUNKNOWN_INHIBITION
-			return "INHIBITION";
-		case intSBOTermForPHYSICAL_STIMULATION :
-			return "PHYSICAL_STIMULATION";
-		case intSBOTermForTRANSCRIPTIONAL_ACTIVATION : //  = intSBOTermForTRANSLATIONAL_ACTIVATION
-			return "TRANSCRIPTIONAL_ACTIVATION";
 		case intSBOTermForSTATE_TRANSITION :
 			default:
 			return "STATE_TRANSITION";
-	
 		}
 	}
-	
+
+	/**
+	 * SBO term to CD modifier.
+	 *
+	 * @param sboterm the sboterm
+	 * @return the string
+	 */
+	public static String SBOTermToCDModifier(int sboterm){
+		switch(sboterm){
+		case intSBOTermForINHIBITION : // = intSBOTermForTRANSLATIONAL_INHIBITION = intSBOTermForTRANSCRIPTIONAL_INHIBITION = intSBOTermForUNKNOWN_INHIBITION
+			return "INHIBITION";
+		case intSBOTermForTRANSCRIPTIONAL_ACTIVATION : //  = intSBOTermForTRANSLATIONAL_ACTIVATION
+			return "TRANSCRIPTIONAL_ACTIVATION";
+		case intSBOTermForTrigger:
+			return "TRIGGER";
+		case intSBOTermForPHYSICAL_STIMULATION :
+			return "PHYSICAL_STIMULATION";
+		case intSBOTermForHETERODIMER_ASSOCIATION :
+			return "HETERODIMER_ASSOCIATION";
+		case intSBOTermForMODULATION :
+			return "MODULATION";
+		case intSBOTermForCATALYSIS : // = intSBOTermForUNKNOWN_CATALYSIS
+			default:
+			return "CATALYSIS";
+		}
+	}
 	
 	/**
 	 * Sets the maths.

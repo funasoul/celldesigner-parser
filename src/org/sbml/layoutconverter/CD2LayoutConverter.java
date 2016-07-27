@@ -509,11 +509,12 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
 			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH, DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
-			bb.createPosition(0, 0, 0);
+			SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
+			bb.setPosition(sg.getBoundingBox().getPosition().clone());
+			//bb.createPosition(0, 0, 0);
 		}
 
-		List<SpeciesReferenceWrapper> productList = rw
-				.getListOfProductWrapper();
+		List<SpeciesReferenceWrapper> productList = rw.getListOfProductWrapper();
 		for (SpeciesReferenceWrapper srw : productList) {
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_"
 							+ rg.getReaction() + "_" + srw.getAlias());
@@ -521,7 +522,10 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			srg.setRole(SpeciesReferenceRole.PRODUCT);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
 			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH, DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
-			bb.createPosition(0, 0, 0);
+			SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
+			bb.setPosition(sg.getBoundingBox().getPosition().clone());
+
+			//bb.createPosition(0, 0, 0);
 		}
 
 		if (rw.isSetModifier()) {
@@ -534,7 +538,10 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				srg.setSpeciesReference(msrw.getSpecies());
 				srg.setSpeciesGlyph("SpeciesGlyph_" + msrw.getAlias());
 				BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH, DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
-				bb.createPosition(0, 0, 0);
+				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
+				bb.setPosition(sg.getBoundingBox().getPosition().clone());
+
+				//bb.createPosition(0, 0, 0);
 				String s = rw.getModifierTypeByModifierId(msrw.getSpecies());
 
 				if (s.equals("CATALYSIS") || s.equals("UNKNOWN_CATALYSIS")) {

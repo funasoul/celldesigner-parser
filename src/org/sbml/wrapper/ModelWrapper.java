@@ -5,6 +5,8 @@ package org.sbml.wrapper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 import org.sbml._2001.ns.celldesigner.AntisenseRNA;
@@ -1216,8 +1218,7 @@ public class ModelWrapper extends Model {
 				CompartmentAliasWrapper outside = cw.getAliasWrapper();
 				int outIndex = cawList.indexOf(outside);
 				if(outIndex > i){
-					cawList.remove(c);
-					cawList.add(outIndex , c);
+					Collections.swap(cawList, outIndex, i);
 				}
 			}
 		}
@@ -1327,5 +1328,20 @@ public class ModelWrapper extends Model {
 				return asrna;
 		
 		return null;		
+	}
+
+	/**
+	 * @param x
+	 * @param y
+	 * @return
+	 * SpeciesAliasWrapper
+	 * TODO
+	 */
+	public SpeciesAliasWrapper getSpeciesAliasWrapperByPosition(double x, double y) {
+		for(SpeciesAliasWrapper saw : sAliasWrapperList)
+			if((int)saw.getX() == (int) x && (int)saw.getY() == (int) y)
+				return saw;
+		
+		return null;
 	}
 }

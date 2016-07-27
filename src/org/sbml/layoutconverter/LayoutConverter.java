@@ -128,7 +128,7 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "translation_converted.xml";
+		String filepath = "b_converted.xml";
 		String outputpath = "";
 		Boolean isCD2Layout = false;
 		

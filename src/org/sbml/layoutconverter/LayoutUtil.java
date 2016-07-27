@@ -73,7 +73,7 @@ public class LayoutUtil {
 	 * TODO
 	 */
 	public static Point getEditPointPosition(Point origin, Point axis1, Point axis2, Point2D.Double editPoint){
-		Point point = origin.clone();
+		Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 
 		double x = (axis1.getX() - origin.getX()) * editPoint.getX();
 		x += (axis2.getX() - origin.getX()) * editPoint.getY();
@@ -303,6 +303,21 @@ public class LayoutUtil {
 	}
 	
 	/**
+	 * Calculate basepoint cubic to quadratic.
+	 *
+	 * @param startPoint the start point
+	 * @param basePoint1 the base point 1
+	 * @param basePoint2 the base point 2
+	 * @param endPoint the end point
+	 * @return the point
+	 */
+	public static Point calculateBasepointCubicToQuadratic(Point startPoint, Point basePoint1, Point basePoint2, Point endPoint){
+		Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_CELLDESIGNER_SBML_VERSION);
+		
+		return point;
+	}
+	
+	/**
 	 * Creates the list of line segment.
 	 *
 	 * @param startPoint the start point
@@ -498,6 +513,25 @@ public class LayoutUtil {
  	   return list;
     }
 
+    /**
+     * Edits the point list to string.
+     *
+     * @param editPointList the edit point list
+     * @return the string
+     */
+    public static String editPointListToString(List<Point2D.Double> editPointList){
+    	StringBuilder sb = new StringBuilder();
+    	for(Point2D.Double point : editPointList){
+    		sb.append(point.x);
+    		sb.append(",");
+    		sb.append(point.y);
+    		sb.append(" ");
+    	}
+    	sb.deleteCharAt(sb.length());
+    	
+    	return sb.toString();
+    }
+    
 	/**
 	 * Creates the center point.
 	 *
@@ -517,6 +551,22 @@ public class LayoutUtil {
 	}
 	
 	/**
+	 * Convert edit points to proportion.
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint the end point
+	 * @param editPoints the edit points
+	 * @return the list
+	 */
+	public static List<Point2D.Double> convertEditPointsToProportion(Point startPoint, Point endPoint, List<Point2D.Double> editPoints){
+		List<Point2D.Double> editPointList = new ArrayList<Point2D.Double>();
+		Point perpPoint = createPerpendicularPoint(startPoint, endPoint);
+		
+		
+		return editPointList;
+	}
+	
+	/**
 	 * Creates the center point.
 	 *
 	 * @param go the go
@@ -533,6 +583,13 @@ public class LayoutUtil {
 		return point;
 	}
 	
+	/**
+	 * Creates the link point.
+	 *
+	 * @param nearestPoint the nearest point
+	 * @param centerPoint the center point
+	 * @return the point
+	 */
 	public static Point createLinkPoint(Point nearestPoint, Point centerPoint){
 		Point p = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		double proportion = 3/4d; 
@@ -543,7 +600,6 @@ public class LayoutUtil {
 		return p;
 	}
 	
-	
 	/**
 	 * Gets the position to compartment.
 	 *
@@ -551,7 +607,7 @@ public class LayoutUtil {
 	 * @param cg the cg
 	 * @return the position to compartment
 	 */
-	//TODO
+	//TODO determine the species position depending on how each glyphs are layed out
 	public static String getPositionToCompartment(SpeciesGlyph sg, CompartmentGlyph cg){
 //		Point sPoint = sg.getBoundingBox().getPosition();
 //		Dimensions sDim = sg.getBoundingBox().getDimensions();
@@ -559,8 +615,23 @@ public class LayoutUtil {
 //		Point cPoint = cg.getBoundingBox().getPosition();
 //		Dimensions cDim = cg.getBoundingBox().getDimensions();
 
-		
-		
 		return "inside";
 	}
+	
+	
+    /**
+     * Convert line type to CD string.
+     *
+     * @param type the type
+     * @return the string
+     */
+    public static String convertLineTypeToCDString(String type){
+    	if(type.equals("CUBIC_BEZIER")){
+ 		   return "Curve";
+ 	   } else if(type.equals("LINE_SEGMENT")){
+ 		   return "Straight";
+ 	   } else {
+ 		   return "";
+ 	   }	   
+    }
 }

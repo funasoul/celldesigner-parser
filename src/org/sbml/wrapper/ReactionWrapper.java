@@ -15,6 +15,7 @@ import org.sbml._2001.ns.celldesigner.BaseReactants;
 import org.sbml._2001.ns.celldesigner.ConnectScheme;
 import org.sbml._2001.ns.celldesigner.EditPoints;
 import org.sbml._2001.ns.celldesigner.Line;
+import org.sbml._2001.ns.celldesigner.LineType2;
 import org.sbml._2001.ns.celldesigner.LinkAnchor;
 import org.sbml._2001.ns.celldesigner.LinkTarget;
 import org.sbml._2001.ns.celldesigner.ListOfModification;
@@ -26,6 +27,7 @@ import org.sbml._2001.ns.celldesigner.ProductLink;
 import org.sbml._2001.ns.celldesigner.ReactantLink;
 import org.sbml._2001.ns.celldesigner.ReactionAnnotationType;
 import org.sbml._2001.ns.celldesigner.ReactionAnnotationType.Extension;
+import org.sbml.jsbml.ext.layout.CurveSegment.Type;
 import org.sbml.layoutconverter.LayoutUtil;
 import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 import org.sbml.sbml.level2.version4.Reaction;
@@ -239,8 +241,9 @@ public class ReactionWrapper extends Reaction{
 	 *
 	 * @return the list
 	 */
-	public List<ReactantLink> createReactantLink(){
-		setListOfReactantLinks(new ListOfReactantLinks());
+	public List<ReactantLink> createReactantLinks(){
+		if(annotation.getExtension().getListOfReactantLinks() == null )
+			setListOfReactantLinks(new ListOfReactantLinks());
 		reactantLinks = annotation.getExtension().getListOfReactantLinks().getReactantLink();
 	
 		return reactantLinks;
@@ -251,8 +254,9 @@ public class ReactionWrapper extends Reaction{
 	 *
 	 * @return the list
 	 */
-	public List<ProductLink> createProductLink(){
-		setListOfProductLinks(new ListOfProductLinks());
+	public List<ProductLink> createProductLinks(){
+		if(annotation.getExtension().getListOfProductLinks() == null )
+			setListOfProductLinks(new ListOfProductLinks());
 		productLinks = annotation.getExtension().getListOfProductLinks().getProductLink();
 
 		return productLinks;
@@ -375,6 +379,40 @@ public class ReactionWrapper extends Reaction{
        }
 
        /**
+        * Creates the reactant link.
+        *
+        * @param saw the saw
+        */
+       public void createReactantLink(SpeciesAliasWrapper saw){
+    	   ReactantLink link = new ReactantLink();
+    	   link.setReactant(saw.getSpecies());
+    	   link.setAlias(saw.getId());
+    	   LinkAnchor anchor = new LinkAnchor();
+    	   anchor.setPosition("INACTIVE");
+    	   link.setLinkAnchor(anchor);
+    	   
+    	   LineType2 line = new LineType2();
+    	   line.setWidth(new BigDecimal(1.0d));
+    	   line.setColor("ff000000");
+    	   link.setLine(line);
+    	   
+    	   reactantLinks.add(link);
+       }
+       
+       /**
+        * Sets the reactant link line type.
+        *
+        * @param id the id
+        * @param type the type
+        */
+       public void setReactantLinkLineType(String id, Type type){
+    	   for(ReactantLink link : reactantLinks){
+    		   if(link.getReactant().equals(id))
+    			   link.getLine().setType(LayoutUtil.convertLineTypeToCDString(type.name()));
+    	   }
+       }
+      
+       /**
         * Gets the list of product links.
         *
         * @return ListOfProductLinks
@@ -414,6 +452,39 @@ public class ReactionWrapper extends Reaction{
     	   productLinks.remove(link);
        }
 
+       /**
+        * Creates the product link.
+        *
+        * @param saw the saw
+        */
+       public void createProductLink(SpeciesAliasWrapper saw){
+    	   ProductLink link = new ProductLink();
+    	   link.setProduct(saw.getSpecies());
+    	   link.setAlias(saw.getId());
+    	   LinkAnchor anchor = new LinkAnchor();
+    	   anchor.setPosition("INACTIVE");
+    	   link.setLinkAnchor(anchor);
+    	   
+    	   LineType2 line = new LineType2();
+    	   line.setWidth(new BigDecimal(1.0d));
+    	   line.setColor("ff000000");
+    	   link.setLine(line);
+    	   productLinks.add(link);
+       }
+       
+       /**
+        * Sets the product link line type.
+        *
+        * @param id the id
+        * @param type the type
+        */
+       public void setProductLinkLineType(String id, Type type){
+    	   for(ProductLink link : productLinks){
+    		   if(link.getProduct().equals(id))
+    			   link.getLine().setType(LayoutUtil.convertLineTypeToCDString(type.name()));
+    	   }
+       }
+       
        /**
         * Gets the connect scheme.
         *
@@ -770,12 +841,12 @@ public class ReactionWrapper extends Reaction{
 	/**
 	 * Creates the base reactant.
 	 *
-	 * @param saw the saw
+	 * @param srw the srw
 	 */
-	public void createBaseReactant(SpeciesAliasWrapper saw) {
+	public void createBaseReactant(SpeciesReferenceWrapper srw) {
 		BaseReactant br = new BaseReactant();
-		br.setSpecies(saw.getSpecies());
-		br.setAlias(saw.getId());
+		br.setSpecies(srw.getSpecies());
+		br.setAlias(srw.getAlias());
 		LinkAnchor anchor = new LinkAnchor();
 		anchor.setPosition("INACTIVE");
 		br.setLinkAnchor(anchor);
@@ -785,12 +856,12 @@ public class ReactionWrapper extends Reaction{
 	/**
 	 * Creates the base product.
 	 *
-	 * @param saw the saw
+	 * @param srw the srw
 	 */
-	public void createBaseProduct(SpeciesAliasWrapper saw) {
+	public void createBaseProduct(SpeciesReferenceWrapper srw) {
 		BaseProduct bp = new BaseProduct();
-		bp.setSpecies(saw.getSpecies());
-		bp.setAlias(saw.getId());
+		bp.setSpecies(srw.getSpecies());
+		bp.setAlias(srw.getAlias());
 		LinkAnchor anchor = new LinkAnchor();
 		anchor.setPosition("INACTIVE");
 		bp.setLinkAnchor(anchor);

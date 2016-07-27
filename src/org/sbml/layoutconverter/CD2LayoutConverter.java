@@ -511,7 +511,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH, DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
 			SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 			bb.setPosition(sg.getBoundingBox().getPosition().clone());
-			//bb.createPosition(0, 0, 0);
 		}
 
 		List<SpeciesReferenceWrapper> productList = rw.getListOfProductWrapper();
@@ -524,8 +523,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH, DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
 			SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 			bb.setPosition(sg.getBoundingBox().getPosition().clone());
-
-			//bb.createPosition(0, 0, 0);
 		}
 
 		if (rw.isSetModifier()) {
@@ -540,8 +537,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				BoundingBox bb = srg.createBoundingBox(DEFAULT_SPECIES_WIDTH, DEFAULT_SPECIES_HEIGHT, DEFAULT_SPECIES_DEPTH);
 				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 				bb.setPosition(sg.getBoundingBox().getPosition().clone());
-
-				//bb.createPosition(0, 0, 0);
 				String s = rw.getModifierTypeByModifierId(msrw.getSpecies());
 
 				if (s.equals("CATALYSIS") || s.equals("UNKNOWN_CATALYSIS")) {

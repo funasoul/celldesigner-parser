@@ -19,6 +19,7 @@ public class Application {
 		String filepath = "";
 		String outputpath = "";
 		Boolean isCD2Layout = null;
+		Boolean defaultCompartment = null;
 		
 		for(int i = 0 ; i < args.length; i++){
 			if(filepath.isEmpty() && args[i].endsWith(".xml")){

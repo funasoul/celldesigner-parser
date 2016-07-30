@@ -51,9 +51,6 @@ import org.sbml.wrapper.SpeciesReferenceWrapper;
 
 public class CD2LayoutConverter extends BaseLayoutConverter {
 
-	/** The convert default compartment. */
-	private boolean isConvertDefaultCompartment = true;
-
 	/**
 	 * Instantiates a new CD 2 layout converter.
 	 *
@@ -78,6 +75,36 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 */
 	public CD2LayoutConverter(File file, String outputFileName) throws XMLStreamException, IOException, JAXBException {
 		super(file, outputFileName);
+		init(file);
+	}
+
+
+	/**
+	 * Instantiates a new CD 2 layout converter.
+	 *
+	 * @param file the file
+	 * @param defaultCompartment the default compartment
+	 * @param outputFileName the output file name
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws JAXBException the JAXB exception
+	 */
+	public CD2LayoutConverter(File file, boolean defaultCompartment, String outputFileName) throws XMLStreamException, IOException, JAXBException {
+		super(file, defaultCompartment, outputFileName);
+		init(file);
+	}
+
+	/**
+	 * Instantiates a new CD 2 layout converter.
+	 *
+	 * @param file the file
+	 * @param defaultCompartment the default compartment
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws JAXBException the JAXB exception
+	 */
+	public CD2LayoutConverter(File file, boolean defaultCompartment) throws XMLStreamException, IOException, JAXBException {
+		super(file, defaultCompartment);
 		init(file);
 	}
 
@@ -134,7 +161,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 *            the caw list
 	 */
 	public void convertCompartmentsToLayout( List<CompartmentAliasWrapper> cawList) {
-		if (isConvertDefaultCompartment)
+		if (convertDefaultCompartment)
 			convertDefaultCompartment();
 
 		cawList = ModelWrapper.reorderCompartmentAccordingToPosition(cawList);

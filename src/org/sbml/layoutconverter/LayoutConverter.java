@@ -20,7 +20,6 @@ import javax.xml.stream.XMLStreamException;
 
 public class LayoutConverter {
 
-
 	/** The converter. */
 	private BaseLayoutConverter converter;
 
@@ -37,45 +36,42 @@ public class LayoutConverter {
 	 *             Signals that an I/O exception has occurred.
 	 */
 	public LayoutConverter(File file) throws JAXBException, XMLStreamException, IOException {
-		this(file, SBMLUtil.isSetCellDesignerNameSpace(file), SBMLUtil.createOutputFileName(file));
+		this(file, false, SBMLUtil.isSetCellDesignerNameSpace(file), SBMLUtil.createOutputFileName(file));
 	}
 
 	/**
 	 * Instantiates a new layout converter.
 	 *
-	 * @param file
-	 *            the file
-	 * @param isCD2Layout
-	 *            the is CD 2 layout
-	 * @throws JAXBException
-	 *             the JAXB exception
-	 * @throws XMLStreamException
-	 *             the XML stream exception
-	 * @throws IOException
-	 *             Signals that an I/O exception has occurred.
+	 * @param file            the file
+	 * @param defaultCompartment the default compartment
+	 * @param isCD2Layout            the is CD 2 layout
+	 * @throws JAXBException             the JAXB exception
+	 * @throws XMLStreamException             the XML stream exception
+	 * @throws IOException             Signals that an I/O exception has occurred.
 	 */
-	public LayoutConverter(File file, boolean isCD2Layout) throws JAXBException, XMLStreamException, IOException {
+	public LayoutConverter(File file, boolean defaultCompartment, boolean isCD2Layout) throws JAXBException, XMLStreamException, IOException {
 		if(isCD2Layout)
-			converter = new CD2LayoutConverter(file);
+			converter = new CD2LayoutConverter(file, defaultCompartment);
 		else
-			converter = new Layout2CDConverter(file);
+			converter = new Layout2CDConverter(file, defaultCompartment);
 	}
 
 	/**
 	 * Instantiates a new layout converter.
 	 *
 	 * @param file the file
+	 * @param defaultCompartment the default compartment
 	 * @param isCD2Layout the is CD 2 layout
 	 * @param outputFileName the output file name
 	 * @throws JAXBException the JAXB exception
 	 * @throws XMLStreamException the XML stream exception
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
-	public LayoutConverter(File file, boolean isCD2Layout, String outputFileName) throws JAXBException, XMLStreamException, IOException {
+	public LayoutConverter(File file, boolean defaultCompartment, boolean isCD2Layout, String outputFileName) throws JAXBException, XMLStreamException, IOException {
 		if(isCD2Layout)
-			converter = new CD2LayoutConverter(file, outputFileName);
+			converter = new CD2LayoutConverter(file, defaultCompartment, outputFileName);
 		else
-			converter = new Layout2CDConverter(file, outputFileName);
+			converter = new Layout2CDConverter(file, defaultCompartment, outputFileName);
 	}
 	
 	/**
@@ -88,8 +84,29 @@ public class LayoutConverter {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public LayoutConverter(File file, String outputFileName) throws JAXBException, XMLStreamException, IOException {
-		this(file, SBMLUtil.isSetCellDesignerNameSpace(file), outputFileName);
-		
+		this(file, false, SBMLUtil.isSetCellDesignerNameSpace(file), outputFileName);	
+	}
+
+	/**
+	 * Instantiates a new layout converter.
+	 *
+	 * @param file the file
+	 * @param defaultCompartment the default compartment
+	 */
+	public LayoutConverter(File file, Boolean defaultCompartment) {
+		// TODO Auto-generated constructor stub
+	}
+
+	/**
+	 * Instantiates a new layout converter.
+	 *
+	 * @param file the file
+	 * @param defaultCompartment the default compartment
+	 * @param outputpath the outputpath
+	 */
+	public LayoutConverter(File file, Boolean defaultCompartment,
+			String outputpath) {
+		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -131,6 +148,7 @@ public class LayoutConverter {
 		String filepath = "b_converted.xml";
 		String outputpath = "";
 		Boolean isCD2Layout = false;
+		Boolean defaultCompartment = false;
 		
 		for(int i = 0 ; i < args.length; i++){
 			if(filepath.isEmpty() && args[i].endsWith(".xml")){
@@ -141,21 +159,23 @@ public class LayoutConverter {
 				isCD2Layout = true;
 			} else if(args[i].contains("Layout2CD")){
 				isCD2Layout = false;
-			} else{
-				
+			} else if(args[i].contains("defaultCompartment")){
+				defaultCompartment = true;
+			} else {
+				Application.printUsage();
+				return ;
 			}
 		}
-		System.out.println(filepath);
-		System.out.println(outputpath);
+		
 		try {
 			if(!filepath.isEmpty() && !outputpath.isEmpty() && isCD2Layout != null)
-				converter = new LayoutConverter(new File(filepath), isCD2Layout, outputpath);
+				converter = new LayoutConverter(new File(filepath), defaultCompartment, isCD2Layout, outputpath);
 			else if(!filepath.isEmpty() && !outputpath.isEmpty())
-				converter = new LayoutConverter(new File(filepath), outputpath);
+				converter = new LayoutConverter(new File(filepath), defaultCompartment, outputpath);
 			else if(!filepath.isEmpty() && isCD2Layout != null)
-				converter = new LayoutConverter(new File(filepath), isCD2Layout);
+				converter = new LayoutConverter(new File(filepath), defaultCompartment, isCD2Layout);
 			else
-				converter = new LayoutConverter(new File(filepath));
+				converter = new LayoutConverter(new File(filepath), defaultCompartment);
 
 			//converter = new LayoutConverter(new File());
 		} catch (JAXBException e) {

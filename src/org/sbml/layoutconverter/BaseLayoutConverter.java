@@ -41,6 +41,9 @@ public abstract class BaseLayoutConverter {
 	/** The layout. */
 	protected Layout layout;
 	
+	/** The convert default compartment. */
+	protected boolean convertDefaultCompartment = false;
+	
 	/** The Constant DEFAULT_SPECIES_WIDTH. */
 	static final double DEFAULT_SPECIES_WIDTH = 80.0;
 
@@ -73,6 +76,33 @@ public abstract class BaseLayoutConverter {
 	public BaseLayoutConverter(File file, String outputFileName) throws XMLStreamException, IOException{
 		this(file);
 		this.outputFileName = outputFileName;
+	}
+	
+	/**
+	 * Instantiates a new base layout converter.
+	 *
+	 * @param file the file
+	 * @param defaultCompartment the default compartment
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public BaseLayoutConverter(File file, boolean defaultCompartment) throws XMLStreamException, IOException{
+		this(file);
+		this.convertDefaultCompartment = defaultCompartment;
+	}
+	
+	/**
+	 * Instantiates a new base layout converter.
+	 *
+	 * @param file the file
+	 * @param defaultCompartment the default compartment
+	 * @param outputFileName the output file name
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public BaseLayoutConverter(File file, boolean defaultCompartment, String outputFileName) throws XMLStreamException, IOException{
+		this(file, outputFileName);
+		this.convertDefaultCompartment = defaultCompartment;
 	}
 	
 	/**

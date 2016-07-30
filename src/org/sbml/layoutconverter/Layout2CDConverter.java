@@ -2,7 +2,6 @@ package org.sbml.layoutconverter;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -21,7 +20,6 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBase;
-import org.sbml.jsbml.SimpleSpeciesReference;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
@@ -84,6 +82,37 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	}
 	
 	/**
+	 * Instantiates a new layout 2 CD converter.
+	 *
+	 * @param file the file
+	 * @param defaultCompartment the default compartment
+	 * @param outputFileName the output file name
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SBMLException the SBML exception
+	 * @throws JAXBException the JAXB exception
+	 */
+	public Layout2CDConverter(File file, boolean defaultCompartment, String outputFileName) throws XMLStreamException, IOException, SBMLException, JAXBException {
+		super(file, defaultCompartment, outputFileName);
+		init();
+	}
+
+	/**
+	 * Instantiates a new layout 2 CD converter.
+	 *
+	 * @param file the file
+	 * @param defaultCompartment the default compartment
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws SBMLException the SBML exception
+	 * @throws JAXBException the JAXB exception
+	 */
+	public Layout2CDConverter(File file, boolean defaultCompartment) throws XMLStreamException, IOException, SBMLException, JAXBException {
+		super(file, defaultCompartment);
+		init();
+	}
+
+	/**
 	 * Inits the.
 	 *
 	 * @throws IOException Signals that an I/O exception has occurred.
@@ -135,7 +164,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	public void convertCompartmentsToCD(List<CompartmentGlyph> cgList) {
 		for(CompartmentGlyph cg: cgList){
 			Compartment c = (Compartment) cg.getCompartmentInstance();
-			if(!c.getId().equals("default"))
+			if(!c.getId().equals("default") || (c.getId().equals("default") && convertDefaultCompartment))
 				mWrapper.createCompartmentAliasWrapper(cg);
 		}
 	}

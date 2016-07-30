@@ -24,31 +24,31 @@ import org.sbml.sbml.level2.version4.ModifierSpeciesReference;
 public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 
   /** The s ref. */
-  private	ModifierSpeciesReference sRef;
+  private ModifierSpeciesReference sRef;
   
   /** The model wrapper. */
-  private	ModelWrapper modelWrapper;
+  private ModelWrapper modelWrapper;
   
   /** The species wrapper. */
-  private	SpeciesWrapper speciesWrapper;
+  private SpeciesWrapper speciesWrapper;
   
   /** The modification. */
-  private	Modification modification;
+  private Modification modification;
   
   /** The reaction wrapper. */
-  private	ReactionWrapper reactionWrapper;
+  private ReactionWrapper reactionWrapper;
   
   /** The type. */
-  private	String type;
+  private String type;
   
   /** The alias. */
-  private	String alias;
+  private String alias;
   
   /** The edit point list. */
-  private	List<Point2D.Double> editPointList;
+  private List<Point2D.Double> editPointList;
   
   /** The target line index. */
-  private	Point2D.Double targetLineIndex;
+  private Point2D.Double targetLineIndex;
 
 	/**
 	 * Instantiates a new modifier species reference wrapper.

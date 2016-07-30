@@ -5,7 +5,6 @@ package org.sbml.wrapper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -53,70 +52,70 @@ import org.sbml.sbml.level2.version4.Species;
 public class ModelWrapper extends Model {
 
   /** The model. */
-  private	Model model;
+  private Model model;
   
   /** The c wrapper list. */
-  private	List<CompartmentWrapper> cWrapperList;
+  private List<CompartmentWrapper> cWrapperList;
   
   /** The r wrapper list. */
-  private	List<ReactionWrapper> rWrapperList;
+  private List<ReactionWrapper> rWrapperList;
   
   /** The s wrapper list. */
-  private	List<SpeciesWrapper> sWrapperList;
+  private List<SpeciesWrapper> sWrapperList;
   
   /** The s alias wrapper list. */
-  private	List<SpeciesAliasWrapper> sAliasWrapperList;
+  private List<SpeciesAliasWrapper> sAliasWrapperList;
   
   /** The c alias wrapper list. */
-  private	List<CompartmentAliasWrapper>  cAliasWrapperList;
+  private List<CompartmentAliasWrapper>  cAliasWrapperList;
   
   /** The complex wrapper list. */
-  private	List<ComplexSpeciesAliasWrapper> complexWrapperList;
+  private List<ComplexSpeciesAliasWrapper> complexWrapperList;
 
   /** The anti sense RNA list. */
-  private	List<AntisenseRNA> antiSenseRNAList;
+  private List<AntisenseRNA> antiSenseRNAList;
   
   /** The block diagram list. */
-  private	List<BlockDiagram> blockDiagramList;
+  private List<BlockDiagram> blockDiagramList;
   
   /** The c alias list. */
-  private	List<CompartmentAlias> cAliasList;
+  private List<CompartmentAlias> cAliasList;
   
   /** The s alias list. */
-  private	List<SpeciesAlias> sAliasList;
+  private List<SpeciesAlias> sAliasList;
   
   /** The complex species alias list. */
-  private	List<ComplexSpeciesAlias> complexSpeciesAliasList;
+  private List<ComplexSpeciesAlias> complexSpeciesAliasList;
   
   /** The gene list. */
-  private	List<Gene> geneList;
+  private List<Gene> geneList;
   
   /** The group list. */
-  private	List<Group> groupList;
+  private List<Group> groupList;
   
   /** The included species list. */
-  private	List<org.sbml._2001.ns.celldesigner.Species> includedSpeciesList;
+  private List<org.sbml._2001.ns.celldesigner.Species> includedSpeciesList;
   
   /** The layer list. */
-  private	List<Layer> layerList;
+  private List<Layer> layerList;
   
   /** The protein list. */
-  private	List<Protein> proteinList;
+  private List<Protein> proteinList;
   
   /** The rna list. */
-  private	List<RNA> rnaList;
+  private List<RNA> rnaList;
   
   /** The width. */
-  private	double width;
+  private double width;
   
   /** The height. */
-  private	double height;
+  private double height;
 
   /** The model display. */
-  private	ModelDisplay modelDisplay;
+  private ModelDisplay modelDisplay;
   
   /** The version. */
-  private	int version;
+  private int version;
 
 	/**
 	 * Instantiates a new model wrapper.
@@ -1279,9 +1278,11 @@ public class ModelWrapper extends Model {
 	}
 
 	/**
-	 * @param id
-	 * void
+	 * Gets the protein by species id.
+	 *
+	 * @param id void
 	 * TODO
+	 * @return the protein by species id
 	 */
 	public Protein getProteinBySpeciesId(String id) {
 		for(Protein p : proteinList)
@@ -1292,9 +1293,11 @@ public class ModelWrapper extends Model {
 	}
 
 	/**
-	 * @param id
-	 * void
+	 * Gets the gene by species id.
+	 *
+	 * @param id void
 	 * TODO
+	 * @return the gene by species id
 	 */
 	public Gene getGeneBySpeciesId(String id) {
 		for(Gene g : geneList)
@@ -1305,9 +1308,11 @@ public class ModelWrapper extends Model {
 	}
 
 	/**
-	 * @param id
-	 * void
+	 * Gets the RNA by species id.
+	 *
+	 * @param id void
 	 * TODO
+	 * @return the RNA by species id
 	 */
 	public RNA getRNABySpeciesId(String id) {
 		for(RNA rna : rnaList)
@@ -1318,9 +1323,11 @@ public class ModelWrapper extends Model {
 	}
 
 	/**
-	 * @param id
-	 * void
+	 * Gets the antisense RNA by species id.
+	 *
+	 * @param id void
 	 * TODO
+	 * @return the antisense RNA by species id
 	 */
 	public AntisenseRNA getAntisenseRNABySpeciesId(String id) {
 		for(AntisenseRNA asrna : antiSenseRNAList)
@@ -1331,10 +1338,11 @@ public class ModelWrapper extends Model {
 	}
 
 	/**
-	 * @param x
-	 * @param y
-	 * @return
-	 * SpeciesAliasWrapper
+	 * Gets the species alias wrapper by position.
+	 *
+	 * @param x the x
+	 * @param y the y
+	 * @return SpeciesAliasWrapper
 	 * TODO
 	 */
 	public SpeciesAliasWrapper getSpeciesAliasWrapperByPosition(double x, double y) {

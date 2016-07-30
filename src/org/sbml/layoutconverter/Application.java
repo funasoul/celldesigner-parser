@@ -6,20 +6,28 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class Application.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: Jul 7, 2016
  */
 
 public class Application {
 
+	/**
+	 * Instantiates a new application.
+	 *
+	 * @param args the args
+	 */
 	public Application(String[] args){
 		LayoutConverter converter;
 		String filepath = "";
 		String outputpath = "";
 		Boolean isCD2Layout = null;
-		Boolean defaultCompartment = null;
+		Boolean defaultCompartment = false;
 		
 		for(int i = 0 ; i < args.length; i++){
 			if(filepath.isEmpty() && args[i].endsWith(".xml")){
@@ -30,21 +38,24 @@ public class Application {
 				isCD2Layout = true;
 			} else if(args[i].contains("Layout2CD")){
 				isCD2Layout = false;
-			} else{
-				
+			} else if(args[i].contains("defaultCompartment")){
+				defaultCompartment = true;
+			} else {
+				Application.printUsage();
+				return ;
 			}
 		}
 		System.out.println(filepath);
 		System.out.println(outputpath);
 		try {
 			if(!filepath.isEmpty() && !outputpath.isEmpty() && isCD2Layout != null)
-				converter = new LayoutConverter(new File(filepath), isCD2Layout, outputpath);
+				converter = new LayoutConverter(new File(filepath), defaultCompartment, isCD2Layout, outputpath);
 			else if(!filepath.isEmpty() && !outputpath.isEmpty())
-				converter = new LayoutConverter(new File(filepath), outputpath);
+				converter = new LayoutConverter(new File(filepath), defaultCompartment, outputpath);
 			else if(!filepath.isEmpty() && isCD2Layout != null)
-				converter = new LayoutConverter(new File(filepath), isCD2Layout);
+				converter = new LayoutConverter(new File(filepath), defaultCompartment, isCD2Layout);
 			else
-				converter = new LayoutConverter(new File(filepath));
+				converter = new LayoutConverter(new File(filepath), defaultCompartment);
 
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
@@ -62,6 +73,19 @@ public class Application {
 		converter.validate();
 	}
 	
+	/**
+	 * Prints the usage.
+	 */
+	public static void printUsage(){
+		
+	}
+	
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 */
 	public static void main(String[] args){
 		new Application(args);
 	}

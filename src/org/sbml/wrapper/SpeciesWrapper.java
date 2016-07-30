@@ -24,25 +24,25 @@ import org.sbml.sbml.level2.version4.Species;
 public class SpeciesWrapper extends Species{
 
   /** The model wrapper. */
-  private	ModelWrapper modelWrapper;
+  private ModelWrapper modelWrapper;
   
   /** The species. */
-  private	Species species;
+  private Species species;
   
   /** The compartment wrapper. */
-  private	CompartmentWrapper compartmentWrapper;
+  private CompartmentWrapper compartmentWrapper;
   
   /** The position to compartment. */
-  private	String positionToCompartment;
+  private String positionToCompartment;
   
   /** The complex species. */
-  private	String complexSpecies; // TODO
+  private String complexSpecies; // TODO
   
   /** The species identity. */
-  private	SpeciesIdentity speciesIdentity;
+  private SpeciesIdentity speciesIdentity;
   
   /** The catalyzed reactions. */
-  private	List<Catalyzed> catalyzedReactions;
+  private List<Catalyzed> catalyzedReactions;
 
 	/**
 	 * Instantiates a new species wrapper.
@@ -303,5 +303,4 @@ public class SpeciesWrapper extends Species{
 		return catalyzed;
 	}
 
-	//TODO species identity handling
 }

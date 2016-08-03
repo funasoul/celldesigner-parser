@@ -241,32 +241,23 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			List<Point2D.Double> editPointList = rw.getEditPointsAsList();
 			int rectangleIndex = rw.getRectangleIndex();
 			BoundingBox reactionBB = rg.createBoundingBox();
-			reactionBB.setDimensions(new Dimensions(0, 0, 0,
-							SBMLUtil.DEFAULT_SBML_LEVEL,
-							SBMLUtil.DEFAULT_SBML_VERSION));
+			reactionBB.setDimensions(new Dimensions(0, 0, 0, SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION));
 			List<LineSegment> lsList = null;
 
 			if (brsList.size() == 1 && prsList.size() == 1) {
 				BaseReactant br = brsList.get(0);
 				BaseProduct bp = prsList.get(0);
-				SpeciesReferenceGlyph srg1 = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
-								+ br.getAlias());
+				SpeciesReferenceGlyph srg1 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + br.getAlias());
 				SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
-				SpeciesReferenceGlyph srg2 = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
-								+ bp.getAlias());
+				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + bp.getAlias());
 				SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
 
-				Point startPoint = LayoutUtil.createAdjustedPoint(sg1, br
-						.getLinkAnchor().getPosition());
-				Point endPoint = LayoutUtil.createAdjustedPoint(sg2, bp
-						.getLinkAnchor().getPosition());
+				Point startPoint = LayoutUtil.createAdjustedPoint(sg1, br.getLinkAnchor().getPosition());
+				Point endPoint = LayoutUtil.createAdjustedPoint(sg2, bp.getLinkAnchor().getPosition());
 				Point reactantPoint = LayoutUtil.createCenterPoint(sg1);
 				Point productPoint = LayoutUtil.createCenterPoint(sg2);
 				lsList = LayoutUtil.createListOfLineSegment(startPoint,
-						endPoint, reactantPoint, productPoint, editPointList,
-						rectangleIndex);
+						endPoint, reactantPoint, productPoint, editPointList, rectangleIndex);
 
 				Curve curve = srg1.createCurve();
 				for (int i = 0; i <= rectangleIndex; i++) {
@@ -278,33 +269,28 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 					curve.addCurveSegment(lsList.get(i));
 				}
 
-				reactionBB.setPosition(new Point(curve.getCurveSegment(0)
-						.getStart()));
+				reactionBB.setPosition(new Point(curve.getCurveSegment(0).getStart()));
 
 			} else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
 				BaseReactant br1 = brsList.get(0);
 				SpeciesReferenceGlyph srg1 = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
-								+ br1.getAlias());
+						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + br1.getAlias());
 				SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
 				Point startPoint = LayoutUtil.createAdjustedPoint(sg1, br1
 						.getLinkAnchor().getPosition());
 
 				BaseReactant br2 = brsList.get(1);
 				SpeciesReferenceGlyph srg2 = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
-								+ br2.getAlias());
+						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + br2.getAlias());
 				SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
 				Point endPoint1 = LayoutUtil.createAdjustedPoint(sg2, br2
 						.getLinkAnchor().getPosition());
 
 				BaseProduct bp1 = prsList.get(0);
 				SpeciesReferenceGlyph srg3 = srgList
-						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
-								+ bp1.getAlias());
+						.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + bp1.getAlias());
 				SpeciesGlyph sg3 = srg3.getSpeciesGlyphInstance();
-				Point endPoint2 = LayoutUtil.createAdjustedPoint(sg3, bp1
-						.getLinkAnchor().getPosition());
+				Point endPoint2 = LayoutUtil.createAdjustedPoint(sg3, bp1.getLinkAnchor().getPosition());
 
 				Point reactantPoint1 = LayoutUtil.createCenterPoint(sg1);
 				Point reactantPoint2 = LayoutUtil.createCenterPoint(sg2);
@@ -315,9 +301,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 				lsList = LayoutUtil.createListOfLineSegment(startPoint,
 						endPoint1, endPoint2, reactantPoint1, reactantPoint2,
-						productPoint1, editPointList, num0, num1, num2, rw
-								.getReactionType(), rw.getEditPoints()
-								.getTShapeIndex());
+						productPoint1, editPointList, num0, num1, num2, rw.getReactionType(), rw.getEditPoints().getTShapeIndex());
 				int reactant1 = num0;
 				int reactant2 = num0 + num1 + 1;
 
@@ -375,7 +359,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				lsList = LayoutUtil.createListOfLineSegment(startPoint,
 						endPoint1, endPoint2, reactantPoint, productPoint1,
 						productPoint2, editPointList, num0, num1, num2, rw.getReactionType(), rw.getEditPoints().getTShapeIndex());
-				int reactant1 = num0 + 1;
+				int reactant1 = num0 ;
 				int reactant2 = num0 + num1 + 1;
 
 				Curve curve = srg1.createCurve();

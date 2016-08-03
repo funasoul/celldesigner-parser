@@ -77,7 +77,8 @@ public class Application {
 	 * Prints the usage.
 	 */
 	public static void printUsage(){
-		
+		System.err.println("Illegal option");
+		System.err.println("");
 	}
 	
 	

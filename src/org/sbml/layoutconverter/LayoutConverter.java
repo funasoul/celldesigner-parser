@@ -92,9 +92,12 @@ public class LayoutConverter {
 	 *
 	 * @param file the file
 	 * @param defaultCompartment the default compartment
+	 * @throws IOException 
+	 * @throws XMLStreamException 
+	 * @throws JAXBException 
 	 */
-	public LayoutConverter(File file, Boolean defaultCompartment) {
-		// TODO Auto-generated constructor stub
+	public LayoutConverter(File file, Boolean defaultCompartment) throws JAXBException, XMLStreamException, IOException {
+		this(file, defaultCompartment, SBMLUtil.isSetCellDesignerNameSpace(file), SBMLUtil.createOutputFileName(file));
 	}
 
 	/**
@@ -103,10 +106,12 @@ public class LayoutConverter {
 	 * @param file the file
 	 * @param defaultCompartment the default compartment
 	 * @param outputpath the outputpath
+	 * @throws IOException 
+	 * @throws XMLStreamException 
+	 * @throws JAXBException 
 	 */
-	public LayoutConverter(File file, Boolean defaultCompartment,
-			String outputpath) {
-		// TODO Auto-generated constructor stub
+	public LayoutConverter(File file, Boolean defaultCompartment, String outputpath) throws JAXBException, XMLStreamException, IOException {
+		this(file, defaultCompartment, SBMLUtil.isSetCellDesignerNameSpace(file), outputpath);
 	}
 
 	/**
@@ -145,7 +150,7 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "b_converted.xml";
+		String filepath = "dissociation_converted.xml";
 		String outputpath = "";
 		Boolean isCD2Layout = false;
 		Boolean defaultCompartment = false;
@@ -177,7 +182,6 @@ public class LayoutConverter {
 			else
 				converter = new LayoutConverter(new File(filepath), defaultCompartment);
 
-			//converter = new LayoutConverter(new File());
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			e.printStackTrace();

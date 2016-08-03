@@ -30,13 +30,13 @@ public class LayoutUtil {
 	/**
 	 * Gets the center of glyph.
 	 *
-	 * @param sg the sg
+	 * @param go the go
 	 * @return Point
 	 * TODO
 	 */
-	public static Point getCenterOfGlyph(SpeciesGlyph sg){
-		Dimensions dimension = sg.getBoundingBox().getDimensions();
-		Point point = sg.getBoundingBox().getPosition().clone();
+	public static Point getCenterOfGlyph(GraphicalObject go){
+		Dimensions dimension = go.getBoundingBox().getDimensions();
+		Point point = go.getBoundingBox().getPosition().clone();
 		point.setX(point.getX() + dimension.getWidth() / 2);
 		point.setY(point.getY() + dimension.getHeight() / 2);
 		
@@ -103,6 +103,17 @@ public class LayoutUtil {
 		
 		return point;
 	}
+
+	/**
+	 * Gets the length.
+	 *
+	 * @param p1 the p 1
+	 * @param p2 the p 2
+	 * @return the length
+	 */
+	public static double getLength(Point p1, Point p2){
+		return Math.hypot(p1.getX()-p2.getX(), p1.getY()-p2.getY());
+	}
 	
 	/**
 	 * Gets the length.
@@ -115,6 +126,26 @@ public class LayoutUtil {
 	 */
 	public static double getLength(Point p1, Point p2, double proportion){
 		return Math.hypot(p1.getX()-p2.getX(), p1.getY()-p2.getY()) * proportion;
+	}
+	
+	/**
+	 * Dot product.
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint1 the end point 1
+	 * @param endPoint2 the end point 2
+	 * @return the double
+	 */
+	public static double dotProduct(Point startPoint, Point endPoint1, Point endPoint2){
+		Point vec1 = endPoint1.clone();
+		vec1.setX(endPoint1.getX() - startPoint.getX());
+		vec1.setY(endPoint1.getY() - startPoint.getY());
+
+		Point vec2 = endPoint2.clone();
+		vec2.setX(endPoint2.getX() - startPoint.getX());
+		vec2.setY(endPoint2.getY() - startPoint.getY());
+
+		return vec1.getX() * vec2.getX() + vec1.getY() * vec2.getY();
 	}
 	
 	/**
@@ -341,7 +372,7 @@ public class LayoutUtil {
 		
 		if(num0 > 0){
 			List<Point2D.Double> subList = editPointList.subList(0, num0);
-			Collections.reverse(subList);																			//since editpoint lists the coordinates starting from the editpoint
+			Collections.reverse(subList);	//since editpoint lists the coordinates starting from the editpoint
 			List<LineSegment> subLineList = createListOfLineSegment(startPoint, editPoint, editPoint, startPoint, subList);
 			lineList.addAll(lineList.size(), subLineList);
 		} else {
@@ -384,23 +415,23 @@ public class LayoutUtil {
 			lineList.add(ls);
 		}
 		
-		if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
-			LineSegment l1 = lineList.get(num0 - tshapeIndex);
-			LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
-			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
-			l2.setEnd(l1.getEnd().clone());
-			l1.setEnd(p.clone());
-			l2.setStart(p.clone());
-			lineList.add(num0 - tshapeIndex + 1, l2);
-		} else {
-			LineSegment l1 = lineList.get(num0 + 1 + num1 + 1 + tshapeIndex);
-			LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
-			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
-			l2.setEnd(l1.getEnd().clone());
-			l1.setEnd(p.clone());
-			l2.setStart(p.clone());
-			lineList.add(num0 + 1 + num1 + 1 + tshapeIndex + 1, l2);
-		}
+//		if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
+//			LineSegment l1 = lineList.get(num0 - tshapeIndex);
+//			LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+//			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
+//			l2.setEnd(l1.getEnd().clone());
+//			l1.setEnd(p.clone());
+//			l2.setStart(p.clone());
+//			lineList.add(num0 - tshapeIndex + 1, l2);
+//		} //else {
+//			LineSegment l1 = lineList.get(num0 + 1 + num1 + 1 + tshapeIndex);
+//			LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+//			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
+//			l2.setEnd(l1.getEnd().clone());
+//			l1.setEnd(p.clone());
+//			l2.setStart(p.clone());
+//			lineList.add(num0 + 1 + num1 + 1 + tshapeIndex + 1, l2);
+//		}
 		
 		return lineList;
 	}
@@ -444,7 +475,7 @@ public class LayoutUtil {
 	}
 	
 	/**
-	 * create line segments with 2 vectors .
+	 * create line segments with 2 vectors.
 	 *
 	 * @param startPoint the start point
 	 * @param endPoint the end point
@@ -519,17 +550,14 @@ public class LayoutUtil {
      * @param editPointList the edit point list
      * @return the string
      */
-    public static String editPointListToString(List<Point2D.Double> editPointList){
-    	StringBuilder sb = new StringBuilder();
+    public static List<String> editPointListToStringList(List<Point2D.Double> editPointList){
+    	List<String> strList = new ArrayList<String>();
     	for(Point2D.Double point : editPointList){
-    		sb.append(point.x);
-    		sb.append(",");
-    		sb.append(point.y);
-    		sb.append(" ");
+    		String s = point.x + "," + point.y;
+    		strList.add(s);
     	}
-    	sb.deleteCharAt(sb.length());
     	
-    	return sb.toString();
+    	return strList;
     }
     
 	/**
@@ -562,8 +590,125 @@ public class LayoutUtil {
 		List<Point2D.Double> editPointList = new ArrayList<Point2D.Double>();
 		Point perpPoint = createPerpendicularPoint(startPoint, endPoint);
 		
-		
+		for(Point2D.Double point : editPoints){
+			Point2D.Double editPoint = new Point2D.Double();
+			double length1 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
+			editPoint.x = length1 / getLength(startPoint, endPoint);
+			
+			double length2 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
+			editPoint.y = length2 / getLength(startPoint, perpPoint);
+			
+			editPointList.add(editPoint);
+		}
+			
 		return editPointList;
+	}
+	
+	/**
+	 * Convert edit points to proportion.
+	 *
+	 * @param startPoint the start point
+	 * @param vector1 the vector 1
+	 * @param vector2 the vector 2
+	 * @param editPoints the edit points
+	 * @return the list
+	 */
+	public static List<Point2D.Double> convertEditPointsToProportion(Point startPoint, Point vector1, Point vector2, List<Point2D.Double> editPoints){
+		List<Point2D.Double> editPointList = new ArrayList<Point2D.Double>();
+		
+		for(Point2D.Double point : editPoints){
+			Point2D.Double editPoint = new Point2D.Double();
+			
+			Point origin = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+			origin.setX(0);
+			origin.setY(0);
+			
+			Point vec1 = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+			vec1.setX(vector1.getX() - startPoint.getX());
+			vec1.setY(vector1.getY() - startPoint.getY());
+			
+
+			Point vec2 = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+			vec2.setX(vector2.getX() - startPoint.getX());
+			vec2.setY(vector2.getY() - startPoint.getY());
+			
+			Point edit = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+			edit.setX(point.x - startPoint.getX());
+			edit.setY(point.y - startPoint.getY());
+
+			double slope1 = vec1.getY() / vec1.getX();
+			double b = edit.getY()- slope1 * edit.getX();
+			
+			double slope2 = vec2.getY() / vec2.getX();
+			
+			Point intersect = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+			intersect.setX((slope2 - b) / slope1);
+			intersect.setY(slope2 * intersect.getX());			
+	
+			editPoint.x = getLength(edit, intersect) / getLength(vec1, origin);
+			editPoint.y = getLength(origin, intersect) / getLength(origin, vec2);
+			
+			editPointList.add(editPoint);
+		}
+			
+		return editPointList;
+	}
+	
+	/**
+	 * Gets the orthogonal projection length from edit point.
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint the end point
+	 * @param editPoint the edit point
+	 * @return the orthogonal projection length from edit point
+	 */
+	public static double getOrthogonalProjectionLengthFromEditPoint(Point startPoint, Point endPoint, Point2D.Double editPoint){
+		Point edit = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+		edit.setX(editPoint.getX());
+		edit.setY(editPoint.getY());
+		
+		return getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, edit);
+	}
+	
+	/**
+	 * Gets the orthogonal projection length from edit point.
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint the end point
+	 * @param editPoint the edit point
+	 * @return the orthogonal projection length from edit point
+	 */
+	public static double getOrthogonalProjectionLengthFromEditPoint(Point startPoint, Point endPoint, Point editPoint){
+		double radian = angleOf2Vector(startPoint, endPoint, editPoint);
+		return getOrthogonalProjection(startPoint, editPoint, radian);
+	}
+	
+	/**
+	 * Angle of 2 vector.
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint1 the end point 1
+	 * @param endPoint2 the end point 2
+	 * @return the double
+	 */
+	public static double angleOf2Vector(Point startPoint, Point endPoint1, Point endPoint2){
+		double length1 = getLength(startPoint, endPoint1);
+		double length2 = getLength(startPoint, endPoint2);	
+		double cos = dotProduct(startPoint, endPoint1, endPoint2) / (length1 * length2);
+		
+		return Math.acos(cos);
+	}
+	
+	/**
+	 * Gets the orthogonal projection.
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint the end point
+	 * @param radian the radian
+	 * @return the orthogonal projection
+	 */
+	public static double getOrthogonalProjection(Point startPoint, Point endPoint, double radian){
+		return getLength(startPoint, endPoint) * Math.cos(radian);
 	}
 	
 	/**

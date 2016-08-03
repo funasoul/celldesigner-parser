@@ -195,7 +195,6 @@ public class ReactionWrapper extends Reaction{
 
 		setReactionType(new String());
 		
-	//	setEditPoints(new EditPoints());
 		this.editPointList = new ArrayList<Point2D.Double>();
 	
 		if (listOfModifiers != null)
@@ -223,7 +222,9 @@ public class ReactionWrapper extends Reaction{
 		
 		setBaseProducts(new BaseProducts());
 		baseProducts = annotation.getExtension().getBaseProducts().getBaseProduct();
-			
+		
+		this.connectScheme = new ConnectScheme();
+		connectScheme.setConnectPolicy("direct");
 		setConnectScheme(new ConnectScheme());
 		setOffset(new Offset());
 
@@ -234,6 +235,14 @@ public class ReactionWrapper extends Reaction{
 		
 		this.reaction.setKineticLaw(null); // reset the kinetic law later
 		
+	}
+	
+	public List<String> createEditPointList(List<String> editPointList){
+		editPoints = new EditPoints();
+		setEditPoints(editPoints);
+		editPoints.getValue().addAll(editPointList);
+		
+		return editPoints.getValue();
 	}
 	
 	/**
@@ -569,6 +578,17 @@ public class ReactionWrapper extends Reaction{
     	   return editPointList;
        }
 
+       public void setNum(int num0, int num1, int num2){
+    	   setNum(num0, num1, num2, 0);
+       }
+       
+       public void setNum(int num0, int num1, int num2, int tshapeIndex){
+    	   editPoints.setNum0((short)num0);
+    	   editPoints.setNum1((short)num1);
+    	   editPoints.setNum2((short)num2);
+    	   editPoints.setTShapeIndex((short)tshapeIndex);
+       }
+       
        /**
         * Gets the line.
         *

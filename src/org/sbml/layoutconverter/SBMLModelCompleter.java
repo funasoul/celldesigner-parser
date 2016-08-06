@@ -58,50 +58,13 @@ public class SBMLModelCompleter {
 		return document;
 	}
 	
-//	public static void autocomplete(TreeNode node){
-//		System.out.println(node.getClass());
-//		
-//		for(int i = 0; i < node.getChildCount(); i++){
-//			TreeNode n = node.getChildAt(i);
-//			     
-//			if(n instanceof Model){
-//				Model model = (Model) n;
-//				model.initDefaults(level, version);
-//			} else if(n instanceof Compartment){
-//				Compartment compartment = (Compartment) n;
-//				compartment.initDefaults(level, version);
-//			} else if(n instanceof Parameter){
-//				Parameter parameter = (Parameter) n;
-//				parameter.initDefaults(level, version);
-//			} else if(n instanceof Species){
-//				Species species = (Species) n;
-//				species.initDefaults(level, version);
-//			}  else if(n instanceof Unit){
-//				Unit unit = (Unit) n;
-//				unit.initDefaults(level, version);
-//			} else if(n instanceof Reaction){
-//				Reaction reaction = (Reaction) n;
-//				reaction.initDefaults(level, version);
-//			} else if(n instanceof Event){
-//				Event event = (Event) n;
-//				event.initDefaults(level, version);
-//			} else if(n instanceof KineticLaw){
-//				KineticLaw kineticLaw = (KineticLaw) n;
-//				kineticLaw.initDefaults();
-//			} 
-//	
-//			autocomplete(n);
-//		}
-//	}
-	
-	
 	/**
- * Complete unit definitions.
- *
- * @param unitDefinitions the unit definitions
- * @return ListOf<UnitDefinition>
- * TODO
- */
+	 * Complete unit definitions.
+	 *
+	 * @param unitDefinitions the unit definitions
+	 * @return ListOf<UnitDefinition>
+	 *	TODO
+	 */
 	public static ListOf<UnitDefinition> completeUnitDefinitions(ListOf<UnitDefinition> unitDefinitions){
 		for(UnitDefinition ud : unitDefinitions){
 				ListOf<Unit> units = ud.getListOfUnits();
@@ -113,8 +76,7 @@ public class SBMLModelCompleter {
 				if(!u.isSetKind())
 					u.setKind(Kind.INVALID);
 				if(!u.isSetScale())
-					u.setScale(0);
-			
+					u.setScale(0);			
 			}
 		}
 		

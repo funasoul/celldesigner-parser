@@ -11,6 +11,7 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLError;
 import org.sbml.jsbml.SBMLErrorLog;
 import org.sbml.jsbml.SBMLException;
+import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.TidySBMLWriter;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.wrapper.ModelWrapper;
@@ -61,7 +62,7 @@ public abstract class BaseLayoutConverter {
 	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public BaseLayoutConverter(File file) throws XMLStreamException, IOException{
-		this.document = ConverterSBMLReader.read(file);
+		this.document = SBMLReader.read(file);
 		this.outputFileName = SBMLUtil.createOutputFileName(file);
 	}
 	
@@ -176,6 +177,5 @@ public abstract class BaseLayoutConverter {
 			e.printStackTrace();
 		}
 	}
-	
-	
+		
 }

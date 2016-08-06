@@ -140,7 +140,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		convertComplexAliasToLayout(mWrapper.getListOfComplexSpeciesAliasWrapper());
 		convertSpeciesAliasToLayout(mWrapper.getListOfSpeciesAliasWrapper());
 		convertReactionsToLayout(mWrapper.getListOfReactionWrapper());
-
 	}
 
 	/**
@@ -160,7 +159,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 * @param cawList
 	 *            the caw list
 	 */
-	public void convertCompartmentsToLayout( List<CompartmentAliasWrapper> cawList) {
+	public void convertCompartmentsToLayout(List<CompartmentAliasWrapper> cawList) {
 		if (convertDefaultCompartment)
 			convertDefaultCompartment();
 
@@ -654,7 +653,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	@Override
 	public void save() {
 		try {
-			System.out.println(outputFileName);
 			SBMLWriter.write(document, new File(outputFileName), ' ', (short) 2);
 		} catch (SBMLException | XMLStreamException | IOException e) {
 			e.printStackTrace();

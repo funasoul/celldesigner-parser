@@ -37,8 +37,7 @@ public class SBMLLevelandVersionHandler {
 			document.setLevelAndVersion(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			System.out.println("SBML Model converted to Level " + SBMLUtil.DEFAULT_SBML_LEVEL + " Version " + SBMLUtil.DEFAULT_SBML_VERSION);
 		}
-		
-		
+			
 		if(!SBMLUtil.isSetSBOTerm(document))
 			System.err.println("Missing sboterms");
 		
@@ -59,20 +58,5 @@ public class SBMLLevelandVersionHandler {
 		
 		return document;
 	}
-	
-	/**
-	 * The main method.
-	 *
-	 * @param args the arguments
-	 */
-	public static void main(String[] args){
-		try {
-			SBMLDocument d = SBMLReader.read(new File("/Users/ii/models/level3/spatial_example1.xml"));
-			d = SBMLLevelandVersionHandler.downgrade(d);
-			
-		} catch (XMLStreamException | IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 }

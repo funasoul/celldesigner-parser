@@ -22,6 +22,7 @@ import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Curve;
 import org.sbml.jsbml.ext.layout.Dimensions;
+import org.sbml.jsbml.ext.layout.LayoutConstants;
 import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
 import org.sbml.jsbml.ext.layout.LineSegment;
 import org.sbml.jsbml.ext.layout.Point;
@@ -126,7 +127,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 		mWrapper = ObjectFactory.unmarshalSBML(file);
 		model = document.getModel();
-		LayoutModelPlugin mplugin = (LayoutModelPlugin) (model.getPlugin("layout"));
+		LayoutModelPlugin mplugin = (LayoutModelPlugin) model.getPlugin(LayoutConstants.shortLabel);
 		layout = mplugin.createLayout();
 	}
 	
@@ -268,7 +269,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 					curve.addCurveSegment(lsList.get(i));
 				}
 
-				reactionBB.setPosition(new Point(curve.getCurveSegment(0).getStart()));
+				reactionBB.setPosition(new Point(curve.getCurveSegment(rectangleIndex).getStart()));
 
 			} else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
 				BaseReactant br1 = brsList.get(0);
@@ -320,9 +321,8 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				}
 
 				int tshapeIndex = rw.getEditPoints().getTShapeIndex();
-				LineSegment ls = (LineSegment) curve
-						.getCurveSegment(tshapeIndex);
-				reactionBB.setPosition(new Point(ls.getEnd()));
+				LineSegment ls = (LineSegment) curve.getCurveSegment(tshapeIndex);
+				reactionBB.setPosition(new Point(ls.getStart()));
 
 			} else if (rw.getReactionType().equals("DISSOCIATION")
 					|| rw.getReactionType().equals("TRUNCATION")) { // one to
@@ -378,9 +378,8 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 				curve = srg1.getCurve();
 				int tshapeIndex = rw.getEditPoints().getTShapeIndex();
-				LineSegment ls = (LineSegment) curve.getCurveSegment(curve
-						.getCurveSegmentCount() - tshapeIndex - 1);
-				reactionBB.setPosition(new Point(ls.getStart()));
+				LineSegment ls = (LineSegment) curve.getCurveSegment(curve.getCurveSegmentCount() - tshapeIndex - 1);
+				reactionBB.setPosition(new Point(ls.getEnd()));
 			}
 
 			if (rw.isSetModifier()) {
@@ -483,14 +482,8 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 					curve.addCurveSegment(ls);
 				}
 			}
-
-			// create textglyph for reaction near the first base reactant
-			BaseReactant br = brsList.get(0);
-			SpeciesGlyph sg = layout.getSpeciesGlyph("SpeciesGlyph_"
-					+ br.getAlias());
-			Point point = LayoutUtil.createAdjustedPoint(sg, br.getLinkAnchor().getPosition());
-			point = LayoutUtil.adjustPoint(point, br.getLinkAnchor().getPosition());
-
+			
+			Point point = reactionBB.getPosition().clone();
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + rw.getId());
 			tg.setOriginOfText(rw.getId());
 			tg.setGraphicalObject(rg);

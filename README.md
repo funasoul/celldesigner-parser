@@ -96,7 +96,7 @@ public class APITest {
 
 
 #### How to convert file
-    java -jar /path/to/input.xml /path/to/output.xml
+    java -jar layoutconverter-with-dependencies.jar /path/to/input.xml /path/to/output.xml
 
 ## So, what's next?
 - Decide what to do with current implementation of [JSBML](https://github.com/sbmlteam/jsbml).

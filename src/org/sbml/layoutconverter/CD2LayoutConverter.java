@@ -52,6 +52,10 @@ import org.sbml.wrapper.SpeciesReferenceWrapper;
 
 public class CD2LayoutConverter extends BaseLayoutConverter {
 
+	private boolean convert2FBC = true;
+	
+	private boolean convert2Multi = true;
+	
 	/**
 	 * Instantiates a new CD 2 layout converter.
 	 *
@@ -141,6 +145,16 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		convertComplexAliasToLayout(mWrapper.getListOfComplexSpeciesAliasWrapper());
 		convertSpeciesAliasToLayout(mWrapper.getListOfSpeciesAliasWrapper());
 		convertReactionsToLayout(mWrapper.getListOfReactionWrapper());
+		
+		if(convert2FBC){
+			FBCConverter fbcConverter = new FBCConverter(model, mWrapper);
+			fbcConverter.convert();
+		}
+			
+		if(convert2Multi){
+			MultiConverter multiConverter = new MultiConverter(model, mWrapper);
+			multiConverter.convert();
+		}
 	}
 
 	/**
@@ -240,10 +254,32 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			List<BaseProduct> prsList = rw.getBaseProducts();
 			List<Point2D.Double> editPointList = rw.getEditPointsAsList();
 			int rectangleIndex = rw.getRectangleIndex();
-			BoundingBox reactionBB = rg.createBoundingBox();
-			reactionBB.setDimensions(new Dimensions(0, 0, 0, SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION));
 			List<LineSegment> lsList = null;
-
+			Point centerPoint = new Point();
+			
+			BoundingBox reactionBB = rg.createBoundingBox();
+			double xmin = Integer.MAX_VALUE, xmax = Integer.MIN_VALUE, ymin = Integer.MAX_VALUE, ymax = Integer.MIN_VALUE;
+			
+			for(SpeciesReferenceGlyph srg : srgList){
+				Point position = srg.getBoundingBox().getPosition();
+				Dimensions dim = srg.getBoundingBox().getDimensions();
+				
+				if(xmin > position.getX())
+					xmin = position.getX();
+				
+				if(ymin > position.getY())
+					ymin = position.getY();
+				
+				if(xmax < position.getX() + dim.getWidth())
+					xmax = position.getX() + dim.getWidth();
+				
+				if(ymax < position.getY() + dim.getHeight())
+					ymax = position.getY() + dim.getHeight();
+			}
+			
+			reactionBB.setDimensions(new Dimensions(xmax - xmin, ymax - ymin, 0d, SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION));
+			reactionBB.setPosition(new Point(xmin, ymin));		
+			
 			if (brsList.size() == 1 && prsList.size() == 1) {
 				BaseReactant br = brsList.get(0);
 				BaseProduct bp = prsList.get(0);
@@ -269,7 +305,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 					curve.addCurveSegment(lsList.get(i));
 				}
 
-				reactionBB.setPosition(new Point(curve.getCurveSegment(rectangleIndex).getStart()));
+				centerPoint = curve.getCurveSegment(rectangleIndex).getStart().clone();
 
 			} else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
 				BaseReactant br1 = brsList.get(0);
@@ -322,7 +358,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 				int tshapeIndex = rw.getEditPoints().getTShapeIndex();
 				LineSegment ls = (LineSegment) curve.getCurveSegment(tshapeIndex);
-				reactionBB.setPosition(new Point(ls.getStart()));
+				centerPoint = ls.getStart().clone();
 
 			} else if (rw.getReactionType().equals("DISSOCIATION")
 					|| rw.getReactionType().equals("TRUNCATION")) { // one to
@@ -379,7 +415,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				curve = srg1.getCurve();
 				int tshapeIndex = rw.getEditPoints().getTShapeIndex();
 				LineSegment ls = (LineSegment) curve.getCurveSegment(curve.getCurveSegmentCount() - tshapeIndex - 1);
-				reactionBB.setPosition(new Point(ls.getEnd()));
+				centerPoint = ls.getEnd().clone();
 			}
 
 			if (rw.isSetModifier()) {
@@ -394,9 +430,8 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 					LinkTarget lt = rw.getLinkTargetByModifier(m);
 					Point startPoint = LayoutUtil.createAdjustedPoint(sg, lt.getLinkAnchor().getPosition());
-					Point reactionPoint = rg.getBoundingBox().getPosition();
-					List<LineSegment> lsList2 = LayoutUtil.createListOfLineSegment(startPoint, reactionPoint,
-									modifierPoint, reactionPoint, editPointList, rectangleIndex);
+					List<LineSegment> lsList2 = LayoutUtil.createListOfLineSegment(startPoint, centerPoint,
+									modifierPoint, centerPoint, editPointList, rectangleIndex);
 					Curve curve = srg.createCurve();
 					for (LineSegment ls : lsList2) {
 						curve.addCurveSegment(ls);
@@ -413,7 +448,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 				String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
 				Point startPoint = LayoutUtil.createAdjustedPoint(sg, position);
-				Point endPoint = reactionBB.getPosition();
+				Point endPoint = centerPoint;
 				
 				editPointList = new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
@@ -450,7 +485,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 				String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
 				Point endPoint = LayoutUtil.createAdjustedPoint(sg, position);
-				Point startPoint = reactionBB.getPosition();
+				Point startPoint = centerPoint;
 				editPointList = new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
 				
@@ -483,12 +518,11 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				}
 			}
 			
-			Point point = reactionBB.getPosition().clone();
 			TextGlyph tg = layout.createTextGlyph("TextGlyph_" + rw.getId());
 			tg.setOriginOfText(rw.getId());
 			tg.setGraphicalObject(rg);
 			BoundingBox bb = tg.createBoundingBox(20, 10, 1d);
-			bb.setPosition(point);
+			bb.setPosition(centerPoint);
 		}
 	}
 

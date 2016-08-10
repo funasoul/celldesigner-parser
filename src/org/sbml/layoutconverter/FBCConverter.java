@@ -86,7 +86,7 @@ public class FBCConverter {
 			if(sw.getClazz().equals("GENE")){
 				Gene gene = mWrapper.getGeneBySpeciesId(sw.getId());
 				GeneProduct geneProduct = fbcPlugin.createGeneProduct(gene.getId());
-				//geneProduct.setLabel(label);
+				geneProduct.setLabel(gene.getType() + "_" + gene.getId());
 				geneProduct.setAssociatedSpecies(sw.getId());
 			}
 		}

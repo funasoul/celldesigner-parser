@@ -25,6 +25,7 @@ import org.sbml.jsbml.SBase;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
+import org.sbml.jsbml.ext.layout.CubicBezier;
 import org.sbml.jsbml.ext.layout.CurveSegment;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.jsbml.ext.layout.LayoutModelPlugin;
@@ -395,6 +396,17 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	
 		for (int i = 0; i < locs.size() - 1; i++) {
 			CurveSegment cs = locs.get(i);
+			if(cs.isCubicBezier()){
+				CubicBezier bezier = (CubicBezier) cs;
+				Point2D.Double basePoint = new Point2D.Double(bezier.getBasePoint1().getX(), bezier.getBasePoint1().getY());
+				pointList.add(basePoint);
+				
+				if(bezier.getBasePoint1().getX() != bezier.getBasePoint2().getX() || bezier.getBasePoint1().getY() != bezier.getBasePoint2().getY()){
+					basePoint = new Point2D.Double(bezier.getBasePoint2().getX(), bezier.getBasePoint2().getY());
+					pointList.add(basePoint);
+				}
+				
+			}
 			Point2D.Double point = new Point2D.Double(cs.getEnd().getX(), cs.getEnd().getY());
 			pointList.add(point);
 		}

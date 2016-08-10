@@ -305,11 +305,12 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				
 				SpeciesReferenceGlyph reactantGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), reactant.getSpecies());
 				SpeciesReferenceGlyph productGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), product.getSpecies());
-				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph, rg.getId());
+				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph);
 				
 				if(!editPointVertices.isEmpty()){				
 					editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterOfGlyph(reactantGlyph) , LayoutUtil.getCenterOfGlyph(productGlyph), editPointVertices);
 					rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
+					rw.setTShapeIndex(reactantGlyph.getCurve().getListOfCurveSegments().getChildCount() - 1);
 				}
 				
 			} else if(reactantList.size() == 2 && productList.size() == 1 && sboterm == SBMLUtil.intSBOTermForHETERODIMER_ASSOCIATION){
@@ -323,7 +324,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				SpeciesReferenceGlyph reactantGlyph1 = getSpeciesReferenceGlyphByReferenceId(rg.getId(), reactant1.getSpecies());
 				SpeciesReferenceGlyph reactantGlyph2 = getSpeciesReferenceGlyphByReferenceId(rg.getId(), reactant2.getSpecies());
 				SpeciesReferenceGlyph productGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), product.getSpecies());
-				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph1, reactantGlyph2, productGlyph, rg.getId(), r.getSBOTerm());
+				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph1, reactantGlyph2, productGlyph, r.getSBOTerm());
 
 				editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterOfGlyph(reactantGlyph1) , LayoutUtil.getCenterOfGlyph(reactantGlyph2), LayoutUtil.getCenterOfGlyph(productGlyph), editPointVertices);
 				rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
@@ -331,8 +332,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				int num0 = reactantGlyph1.getCurve().getListOfCurveSegments().getChildCount() - 1;
 				int num1 = reactantGlyph2.getCurve().getListOfCurveSegments().getChildCount() - 1;
 				int num2 = productGlyph.getCurve().getListOfCurveSegments().getChildCount() - 1;
-				
-				rw.setNum(num0, num1, num2);
+				int tshapeindex = num0 + num1; 
+
+				rw.setNum(num0, num1, num2, tshapeindex);
 				
 			} else if(reactantList.size() == 1 && productList.size() == 2 && (sboterm == SBMLUtil.intSBOTermForDISSOCIATION || sboterm == SBMLUtil.intSBOTermForTRUNCATION)){
 				SpeciesReference reactant = reactantList.get(0);
@@ -346,7 +348,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				SpeciesReferenceGlyph reactantGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), reactant.getSpecies());
 				SpeciesReferenceGlyph productGlyph1 = getSpeciesReferenceGlyphByReferenceId(rg.getId(), product1.getSpecies());
 				SpeciesReferenceGlyph productGlyph2 = getSpeciesReferenceGlyphByReferenceId(rg.getId(), product2.getSpecies());
-				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph1, productGlyph2, rg.getId(), r.getSBOTerm());
+				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph1, productGlyph2, r.getSBOTerm());
 
 				editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterOfGlyph(reactantGlyph) , LayoutUtil.getCenterOfGlyph(productGlyph1), LayoutUtil.getCenterOfGlyph(productGlyph2), editPointVertices);
 				rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
@@ -354,10 +356,10 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				int num0 = reactantGlyph.getCurve().getListOfCurveSegments().getChildCount() - 1;
 				int num1 = productGlyph1.getCurve().getListOfCurveSegments().getChildCount() - 1;
 				int num2 = productGlyph2.getCurve().getListOfCurveSegments().getChildCount() - 1;
+				int tshapeindex = num0; 
 				
-				rw.setNum(num0, num1, num2);
+				rw.setNum(num0, num1, num2, tshapeindex);
 	
-				
 			} else {
 				reactantList = reorderSpeciesReferencesList(reactantList);
 				productList = reorderSpeciesReferencesList(productList);
@@ -366,6 +368,17 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				rw.createBaseReactant(rw.getReactantWrapperById(basereactant.getSpecies()));
 				rw.createBaseProduct(rw.getProductWrapperById(baseproduct.getSpecies()));	
 		
+				SpeciesReferenceGlyph reactantGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), basereactant.getSpecies());
+				SpeciesReferenceGlyph productGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), baseproduct.getSpecies());
+			
+				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph);
+				
+				if(!editPointVertices.isEmpty()){				
+					editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterOfGlyph(reactantGlyph) , LayoutUtil.getCenterOfGlyph(productGlyph), editPointVertices);
+					rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
+					rw.setTShapeIndex(reactantGlyph.getCurve().getListOfCurveSegments().getChildCount() - 1);
+				}
+					
 				if(reactantList.size() > 1){
 					rw.createReactantLinks();
 					for(int i = 1; i < reactantList.size(); i++){
@@ -383,54 +396,87 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 						rw.setProductLinkLineType(sg.getSpeciesReference(), sg.getCurve().getListOfCurveSegments().get(0).getType());
 					}
 				}
-				
 			}
-			
+
+			for(ModifierSpeciesReference msr : modifierList){
+				SpeciesReferenceGlyph modifierGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), msr.getSpecies());
+				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(modifierGlyph);
+
+				if(!editPointVertices.isEmpty()){			
+					SpeciesReference reactant = reactantList.get(0);
+					SpeciesReferenceGlyph reactantGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), reactant.getSpecies());
+					editPointVertices = LayoutUtil.convertEditPointsToProportion(modifierGlyph.getCurve().getListOfCurveSegments().get(0).getStart() , reactantGlyph.getCurve().getListOfCurveSegments().getLast().getEnd(), editPointVertices);
+					ModifierSpeciesReferenceWrapper mw = rw.getModifierWrapperById(msr.getSpecies());
+					mw.setEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
+				}
+			}
 		}
 	}
 	
-	private List<Point2D.Double> convertSRGlyphToPointList(SpeciesReferenceGlyph reactant, SpeciesReferenceGlyph product, String rgid){
+	/**
+	 * Convert SR glyph to point list.
+	 *
+	 * @param modifier the modifier
+	 * @return the list
+	 */
+	private List<Point2D.Double> convertSRGlyphToPointList(SpeciesReferenceGlyph modifier){
+		List<Point2D.Double> pointList = new ArrayList<Point2D.Double>();
+
+		ListOf<CurveSegment> locs = modifier.getCurve().getListOfCurveSegments();
+		
+		for (int i = 0; i < locs.size() - 1; i++) {
+			CurveSegment cs = locs.get(i);
+			pointList.addAll(createPointListFromCurveSegment(cs));
+		}
+
+		return pointList;
+	}
+	
+	
+	/**
+	 * Convert SR glyph to point list.
+	 *
+	 * @param reactant the reactant
+	 * @param product the product
+	 * @return the list
+	 */
+	private List<Point2D.Double> convertSRGlyphToPointList(SpeciesReferenceGlyph reactant, SpeciesReferenceGlyph product){
 		List<Point2D.Double> pointList = new ArrayList<Point2D.Double>();
 
 		ListOf<CurveSegment> locs = reactant.getCurve().getListOfCurveSegments();
 	
 		for (int i = 0; i < locs.size() - 1; i++) {
 			CurveSegment cs = locs.get(i);
-			if(cs.isCubicBezier()){
-				CubicBezier bezier = (CubicBezier) cs;
-				Point2D.Double basePoint = new Point2D.Double(bezier.getBasePoint1().getX(), bezier.getBasePoint1().getY());
-				pointList.add(basePoint);
-				
-				if(bezier.getBasePoint1().getX() != bezier.getBasePoint2().getX() || bezier.getBasePoint1().getY() != bezier.getBasePoint2().getY()){
-					basePoint = new Point2D.Double(bezier.getBasePoint2().getX(), bezier.getBasePoint2().getY());
-					pointList.add(basePoint);
-				}
-				
-			}
-			Point2D.Double point = new Point2D.Double(cs.getEnd().getX(), cs.getEnd().getY());
-			pointList.add(point);
+			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
 		
 		locs = product.getCurve().getListOfCurveSegments();	
 		
 		for (int i = 0; i < locs.size() - 1; i++) {
 			CurveSegment cs = locs.get(i);
-			Point2D.Double point = new Point2D.Double(cs.getEnd().getX(), cs.getEnd().getY());
-			pointList.add(point);
+			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
-		
+
 		return pointList;
 	}
 	
-	private List<Point2D.Double> convertSRGlyphToPointList(SpeciesReferenceGlyph reactant, SpeciesReferenceGlyph reference, SpeciesReferenceGlyph product, String rgid, int sboterm){
+	/**
+	 * Convert SR glyph to point list.
+	 *
+	 * @param reactant the reactant
+	 * @param reference the reference
+	 * @param product the product
+	 * @param sboterm the sboterm
+	 * @return the list
+	 */
+	private List<Point2D.Double> convertSRGlyphToPointList(SpeciesReferenceGlyph reactant, SpeciesReferenceGlyph reference, SpeciesReferenceGlyph product, int sboterm){
 		List<Point2D.Double> pointList = new ArrayList<Point2D.Double>();
 
 		ListOf<CurveSegment> locs = reactant.getCurve().getListOfCurveSegments();
 	
 		for (int i = 0; i < locs.size() - 1; i++) {
 			CurveSegment cs = locs.get(i);
-			Point2D.Double point = new Point2D.Double(cs.getEnd().getX(), cs.getEnd().getY());
-			pointList.add(point);
+			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
 		
 		//add mid point
@@ -443,8 +489,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 
 		for (int i = 0; i < locs.size() - 1; i++) {
 			CurveSegment cs = locs.get(i);
-			Point2D.Double point = new Point2D.Double(cs.getEnd().getX(), cs.getEnd().getY());
-			pointList.add(point);
+			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
 
 		//add mid point
@@ -457,11 +502,34 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 
 		for (int i = 0; i < locs.size() - 1; i++) {
 			CurveSegment cs = locs.get(i);
-			Point2D.Double point = new Point2D.Double(cs.getEnd().getX(), cs.getEnd().getY());
-			pointList.add(point);
+			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
-
 		
+		return pointList;
+	}
+	
+	/**
+	 * Creates the point list from curve segment.
+	 *
+	 * @param cs the cs
+	 * @return the list
+	 */
+	private List<Point2D.Double> createPointListFromCurveSegment(CurveSegment cs){
+		List<Point2D.Double> pointList = new ArrayList<Point2D.Double>();
+
+		if(cs.isCubicBezier()){
+			CubicBezier bezier = (CubicBezier) cs;
+			Point2D.Double basePoint = new Point2D.Double(bezier.getBasePoint1().getX(), bezier.getBasePoint1().getY());
+			pointList.add(basePoint);
+			
+			if(bezier.getBasePoint1().getX() != bezier.getBasePoint2().getX() || bezier.getBasePoint1().getY() != bezier.getBasePoint2().getY()){
+				basePoint = new Point2D.Double(bezier.getBasePoint2().getX(), bezier.getBasePoint2().getY());
+				pointList.add(basePoint);
+			}	
+		}
+		
+		Point2D.Double point = new Point2D.Double(cs.getEnd().getX(), cs.getEnd().getY());
+		pointList.add(point);
 		return pointList;
 	}
 	

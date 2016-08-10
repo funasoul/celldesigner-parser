@@ -334,21 +334,6 @@ public class LayoutUtil {
 	}
 	
 	/**
-	 * Calculate basepoint cubic to quadratic.
-	 *
-	 * @param startPoint the start point
-	 * @param basePoint1 the base point 1
-	 * @param basePoint2 the base point 2
-	 * @param endPoint the end point
-	 * @return the point
-	 */
-	public static Point calculateBasepointCubicToQuadratic(Point startPoint, Point basePoint1, Point basePoint2, Point endPoint){
-		Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_CELLDESIGNER_SBML_VERSION);
-		
-		return point;
-	}
-	
-	/**
 	 * Creates the list of line segment.
 	 *
 	 * @param startPoint the start point
@@ -556,7 +541,6 @@ public class LayoutUtil {
     		String s = point.x + "," + point.y;
     		strList.add(s);
     	}
-    	
     	return strList;
     }
     
@@ -590,18 +574,20 @@ public class LayoutUtil {
 		List<Point2D.Double> editPointList = new ArrayList<Point2D.Double>();
 		Point perpPoint = createPerpendicularPoint(startPoint, endPoint);
 		
-		for(Point2D.Double point : editPoints){
-			Point2D.Double editPoint = new Point2D.Double();
-			double length1 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
-			editPoint.x = length1 / getLength(startPoint, endPoint);
-			
-			double length2 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
-			editPoint.y = length2 / getLength(startPoint, perpPoint);
-			
-			editPointList.add(editPoint);
-		}
-			
-		return editPointList;
+		return convertEditPointsToProportion(startPoint, endPoint, perpPoint, editPoints);
+		
+//		for(Point2D.Double point : editPoints){
+//			Point2D.Double editPoint = new Point2D.Double();
+//			double length1 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
+//			editPoint.x = length1 / getLength(startPoint, endPoint);
+//			
+//			double length2 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
+//			editPoint.y = length2 / getLength(startPoint, perpPoint);
+//			
+//			editPointList.add(editPoint);
+//		}
+//			
+//		return editPointList;
 	}
 	
 	/**
@@ -627,7 +613,6 @@ public class LayoutUtil {
 			vec1.setX(vector1.getX() - startPoint.getX());
 			vec1.setY(vector1.getY() - startPoint.getY());
 			
-
 			Point vec2 = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			vec2.setX(vector2.getX() - startPoint.getX());
 			vec2.setY(vector2.getY() - startPoint.getY());
@@ -651,6 +636,7 @@ public class LayoutUtil {
 			editPointList.add(editPoint);
 		}
 			
+
 		return editPointList;
 	}
 	

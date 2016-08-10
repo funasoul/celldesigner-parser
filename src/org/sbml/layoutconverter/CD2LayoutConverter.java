@@ -52,8 +52,10 @@ import org.sbml.wrapper.SpeciesReferenceWrapper;
 
 public class CD2LayoutConverter extends BaseLayoutConverter {
 
+	/** The convert 2 FBC. */
 	private boolean convert2FBC = true;
 	
+	/** The convert 2 multi. */
 	private boolean convert2Multi = true;
 	
 	/**
@@ -431,7 +433,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 					LinkTarget lt = rw.getLinkTargetByModifier(m);
 					Point startPoint = LayoutUtil.createAdjustedPoint(sg, lt.getLinkAnchor().getPosition());
 					List<LineSegment> lsList2 = LayoutUtil.createListOfLineSegment(startPoint, centerPoint,
-									modifierPoint, centerPoint, editPointList, rectangleIndex);
+									modifierPoint, centerPoint, editPointList);
 					Curve curve = srg.createCurve();
 					for (LineSegment ls : lsList2) {
 						curve.addCurveSegment(ls);

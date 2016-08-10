@@ -92,9 +92,9 @@ public class LayoutConverter {
 	 *
 	 * @param file the file
 	 * @param defaultCompartment the default compartment
-	 * @throws IOException 
-	 * @throws XMLStreamException 
-	 * @throws JAXBException 
+	 * @throws JAXBException the JAXB exception
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public LayoutConverter(File file, Boolean defaultCompartment) throws JAXBException, XMLStreamException, IOException {
 		this(file, defaultCompartment, SBMLUtil.isSetCellDesignerNameSpace(file), SBMLUtil.createOutputFileName(file));
@@ -106,9 +106,9 @@ public class LayoutConverter {
 	 * @param file the file
 	 * @param defaultCompartment the default compartment
 	 * @param outputpath the outputpath
-	 * @throws IOException 
-	 * @throws XMLStreamException 
-	 * @throws JAXBException 
+	 * @throws JAXBException the JAXB exception
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
 	 */
 	public LayoutConverter(File file, Boolean defaultCompartment, String outputpath) throws JAXBException, XMLStreamException, IOException {
 		this(file, defaultCompartment, SBMLUtil.isSetCellDesignerNameSpace(file), outputpath);

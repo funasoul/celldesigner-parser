@@ -214,6 +214,7 @@ public class ReactionWrapper extends Reaction{
 				line.setColor("ff000000");
 				m.setLine(line);
 				modificationList.add(m);
+				msrw.setModification(m);
 			}
 		}
 		
@@ -237,6 +238,12 @@ public class ReactionWrapper extends Reaction{
 		
 	}
 	
+	/**
+	 * Creates the edit point list.
+	 *
+	 * @param editPointList the edit point list
+	 * @return the list
+	 */
 	public List<String> createEditPointList(List<String> editPointList){
 		editPoints = new EditPoints();
 		setEditPoints(editPoints);
@@ -578,15 +585,39 @@ public class ReactionWrapper extends Reaction{
     	   return editPointList;
        }
 
+       /**
+        * Sets the num.
+        *
+        * @param num0 the num 0
+        * @param num1 the num 1
+        * @param num2 the num 2
+        */
        public void setNum(int num0, int num1, int num2){
     	   setNum(num0, num1, num2, 0);
        }
        
+       /**
+        * Sets the num.
+        *
+        * @param num0 the num 0
+        * @param num1 the num 1
+        * @param num2 the num 2
+        * @param tshapeIndex the tshape index
+        */
        public void setNum(int num0, int num1, int num2, int tshapeIndex){
     	   editPoints.setNum0((short)num0);
     	   editPoints.setNum1((short)num1);
     	   editPoints.setNum2((short)num2);
     	   editPoints.setTShapeIndex((short)tshapeIndex);
+       }
+       
+       /**
+        * Sets the t shape index.
+        *
+        * @param index the new t shape index
+        */
+       public void setTShapeIndex(int index){
+    	   editPoints.setTShapeIndex((short) index);
        }
        
        /**

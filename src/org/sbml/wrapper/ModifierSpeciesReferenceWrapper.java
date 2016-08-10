@@ -101,8 +101,9 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		this.alias = new String();
 		annotation.getExtension().setAlias(alias);
 		
-		setModification(new Modification());
-		setType(new String());
+		Modification modification = new Modification();
+		setModification(modification);
+		setType(new String());		
 	}
 	
 	/**
@@ -220,4 +221,15 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 	public List<Point2D.Double> getEditPoints(){
 		return editPointList;
 	}
+
+	/**
+	 * @param editPointListToStringList
+	 * void
+	 * TODO
+	 */
+	public void setEditPointList(List<String> editPointList) {
+		modification.getEditPoints().addAll(editPointList);
+		System.out.println(modification.getEditPoints());
+	}
+
 }

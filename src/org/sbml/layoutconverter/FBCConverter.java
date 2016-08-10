@@ -41,20 +41,32 @@ import org.sbml.jsbml.util.ModelBuilder;
 import org.sbml.wrapper.ModelWrapper;
 import org.sbml.wrapper.SpeciesWrapper;
 
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class FBCConverter.
  *
+ * @author Kaito Ii
+ * 
  * Date Created: Aug 6, 2016
  */
 
 public class FBCConverter {
 	
+	/** The model. */
 	private Model model;
 	
+	/** The m wrapper. */
 	private ModelWrapper mWrapper;
 	
+	/** The fbc plugin. */
 	private FBCModelPlugin fbcPlugin;
 	
+	/**
+	 * Instantiates a new FBC converter.
+	 *
+	 * @param model the model
+	 * @param mWrapper the m wrapper
+	 */
 	public FBCConverter(Model model, ModelWrapper mWrapper) {
 		this.model = model;
 		this.mWrapper = mWrapper;
@@ -62,17 +74,26 @@ public class FBCConverter {
 		model.getSBMLDocument().setPackageRequired("fbc", false);
 	}
 	
+	/**
+	 * Convert.
+	 */
 	public void convert(){
 		convertModel();
 		convertSpecies();
 		convertReactions();
 	}
 
+	/**
+	 * Convert model.
+	 */
 	public void convertModel(){
 		fbcPlugin = (FBCModelPlugin) model.getPlugin(FBCConstants.shortLabel);
 		fbcPlugin.setStrict(false);
 	}
 	
+	/**
+	 * Convert species.
+	 */
 	public void convertSpecies(){
 		List<SpeciesWrapper> swList = mWrapper.getListOfSpeciesWrapper();
 
@@ -94,6 +115,9 @@ public class FBCConverter {
 	}
 
 	
+	/**
+	 * Convert reactions.
+	 */
 	public void convertReactions(){
 		ListOf<Reaction> lor = model.getListOfReactions();
 		for(Reaction reaction : lor){

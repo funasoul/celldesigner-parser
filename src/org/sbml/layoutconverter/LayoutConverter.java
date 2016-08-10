@@ -150,7 +150,7 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "bbb.xml";
+		String filepath = "transcription_converted.xml";
 		String outputpath = "";
 		Boolean isCD2Layout = false;
 		Boolean defaultCompartment = false;

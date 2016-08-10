@@ -278,8 +278,10 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				if(ymax < position.getY() + dim.getHeight())
 					ymax = position.getY() + dim.getHeight();
 			}
-			
-			reactionBB.setDimensions(new Dimensions(xmax - xmin, ymax - ymin, 0d, SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION));
+			Dimensions dim = new Dimensions(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+			dim.setWidth(xmax - xmin);
+			dim.setHeight(ymax - ymin);
+			reactionBB.setDimensions(dim);
 			reactionBB.setPosition(new Point(xmin, ymin));		
 			
 			if (brsList.size() == 1 && prsList.size() == 1) {

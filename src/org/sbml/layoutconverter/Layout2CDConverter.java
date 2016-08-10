@@ -291,6 +291,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 
 					Modification modification = rw.getModificationByModifierId(sw.getId());
 					modification.setAliases(msrw.getAlias());
+					System.out.println(SBMLUtil.SBOTermToCDModifier(sbase.getSBOTerm()));
 					modification.setType(SBMLUtil.SBOTermToCDModifier(sbase.getSBOTerm()));
 				} else {
 					// undefined role
@@ -424,10 +425,12 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 
 		ListOf<CurveSegment> locs = modifier.getCurve().getListOfCurveSegments();
 		
-		for (int i = 0; i < locs.size() - 1; i++) {
+		for (int i = 0; i < locs.size() ; i++) {
 			CurveSegment cs = locs.get(i);
 			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
+		
+		pointList.remove(pointList.size() - 1);
 
 		return pointList;
 	}
@@ -445,18 +448,22 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 
 		ListOf<CurveSegment> locs = reactant.getCurve().getListOfCurveSegments();
 	
-		for (int i = 0; i < locs.size() - 1; i++) {
+		for (int i = 0; i < locs.size(); i++) {
 			CurveSegment cs = locs.get(i);
 			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
+		
+		pointList.remove(pointList.size() - 1);
 		
 		locs = product.getCurve().getListOfCurveSegments();	
 		
-		for (int i = 0; i < locs.size() - 1; i++) {
+		for (int i = 0; i < locs.size() ; i++) {
 			CurveSegment cs = locs.get(i);
 			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
-
+	
+		pointList.remove(pointList.size() - 1);
+		
 		return pointList;
 	}
 	
@@ -474,36 +481,33 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 
 		ListOf<CurveSegment> locs = reactant.getCurve().getListOfCurveSegments();
 	
-		for (int i = 0; i < locs.size() - 1; i++) {
+		for (int i = 0; i < locs.size(); i++) {
 			CurveSegment cs = locs.get(i);
 			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
 		
-		//add mid point
-		if(sboterm == SBMLUtil.intSBOTermForDISSOCIATION || sboterm == SBMLUtil.intSBOTermForTRUNCATED){
-			Point2D.Double midpoint = new Point2D.Double(locs.getLast().getEnd().getX(), locs.getLast().getEnd().getY());
-			pointList.add(midpoint);
+		if(sboterm == SBMLUtil.intSBOTermForHETERODIMER_ASSOCIATION){
+			pointList.remove(pointList.size() - 1);
 		}
 		
 		locs = reference.getCurve().getListOfCurveSegments();
 
-		for (int i = 0; i < locs.size() - 1; i++) {
+		for (int i = 0; i < locs.size() ; i++) {
 			CurveSegment cs = locs.get(i);
 			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
 
-		//add mid point
-		if(sboterm == SBMLUtil.intSBOTermForHETERODIMER_ASSOCIATION){
-			Point2D.Double midpoint = new Point2D.Double(locs.getLast().getEnd().getX(), locs.getLast().getEnd().getY());
-			pointList.add(midpoint);
+		if(sboterm == SBMLUtil.intSBOTermForDISSOCIATION || sboterm == SBMLUtil.intSBOTermForTRUNCATED){
+			pointList.remove(pointList.size() - 1);
 		}
 		
 		locs = product.getCurve().getListOfCurveSegments();
 
-		for (int i = 0; i < locs.size() - 1; i++) {
+		for (int i = 0; i < locs.size(); i++) {
 			CurveSegment cs = locs.get(i);
 			pointList.addAll(createPointListFromCurveSegment(cs));
 		}
+		pointList.remove(pointList.size() - 1);
 		
 		return pointList;
 	}

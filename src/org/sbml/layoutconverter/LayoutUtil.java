@@ -561,35 +561,7 @@ public class LayoutUtil {
 		
 		return point;
 	}
-	
-	/**
-	 * Convert edit points to proportion.
-	 *
-	 * @param startPoint the start point
-	 * @param endPoint the end point
-	 * @param editPoints the edit points
-	 * @return the list
-	 */
-	public static List<Point2D.Double> convertEditPointsToProportion(Point startPoint, Point endPoint, List<Point2D.Double> editPoints){
-		List<Point2D.Double> editPointList = new ArrayList<Point2D.Double>();
-		Point perpPoint = createPerpendicularPoint(startPoint, endPoint);
 		
-		
-		for(Point2D.Double point : editPoints){
-			Point2D.Double editPoint = new Point2D.Double();
-			double length1 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
-			editPoint.x = length1 / getLength(startPoint, endPoint);
-			
-			double length2 = getOrthogonalProjectionLengthFromEditPoint(startPoint, perpPoint, point);
-			editPoint.y = length2 / getLength(startPoint, perpPoint);
-			
-			editPointList.add(editPoint);
-		}
-			System.out.println(editPoints);
-			System.out.println(editPointList);
-			return editPointList;
-	}
-	
 	/**
 	 * Convert edit points to proportion.
 	 *
@@ -638,6 +610,31 @@ public class LayoutUtil {
 			
 
 		return editPointList;
+	}
+	
+	/**
+	 * Convert edit points to proportion.
+	 *
+	 * @param startPoint the start point
+	 * @param endPoint the end point
+	 * @param editPoints the edit points
+	 * @return the list
+	 */
+	public static List<Point2D.Double> convertEditPointsToProportion(Point startPoint, Point endPoint, List<Point2D.Double> editPoints){
+		List<Point2D.Double> editPointList = new ArrayList<Point2D.Double>();
+		Point perpPoint = createPerpendicularPoint(startPoint, endPoint);
+		
+		for(Point2D.Double point : editPoints){
+			Point2D.Double editPoint = new Point2D.Double();
+			double length1 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
+			editPoint.x = length1 / getLength(startPoint, endPoint);
+			
+			double length2 = getOrthogonalProjectionLengthFromEditPoint(startPoint, perpPoint, point);
+			editPoint.y = length2 / getLength(startPoint, perpPoint);
+			
+			editPointList.add(editPoint);
+		}
+			return editPointList;
 	}
 	
 	/**

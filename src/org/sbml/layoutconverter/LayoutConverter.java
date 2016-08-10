@@ -150,7 +150,7 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "dissociation_converted.xml";
+		String filepath = "bbb.xml";
 		String outputpath = "";
 		Boolean isCD2Layout = false;
 		Boolean defaultCompartment = false;

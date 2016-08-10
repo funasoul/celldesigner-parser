@@ -540,9 +540,15 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 * @return the list
 	 */
 	private ListOf<SpeciesReference> reorderSpeciesReferencesList(ListOf<SpeciesReference> srList){
+		SpeciesReference sr = srList.get(0);
+		SpeciesWrapper sw = mWrapper.getSpeciesWrapperById(sr.getSpecies());
+		if(sw.getClazz().equals("PROTEIN") || sw.getClazz().equals("GENE") || sw.getClazz().equals("RNA") || sw.getClazz().equals("ANTISENSE_RNA")){
+			return srList;
+		}
+		
 		for(int i = 1; i < srList.size(); i++){
-			SpeciesReference sr = srList.get(i);
-			SpeciesWrapper sw = mWrapper.getSpeciesWrapperById(sr.getSpecies());
+			sr = srList.get(i);
+			sw = mWrapper.getSpeciesWrapperById(sr.getSpecies());
 			if(sw.getClazz().equals("PROTEIN") || sw.getClazz().equals("GENE") || sw.getClazz().equals("RNA") || sw.getClazz().equals("ANTISENSE_RNA")){
 				Collections.swap(srList, 0, i);	
 			}

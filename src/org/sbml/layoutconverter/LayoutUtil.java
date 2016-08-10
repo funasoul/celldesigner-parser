@@ -574,20 +574,20 @@ public class LayoutUtil {
 		List<Point2D.Double> editPointList = new ArrayList<Point2D.Double>();
 		Point perpPoint = createPerpendicularPoint(startPoint, endPoint);
 		
-		return convertEditPointsToProportion(startPoint, endPoint, perpPoint, editPoints);
 		
-//		for(Point2D.Double point : editPoints){
-//			Point2D.Double editPoint = new Point2D.Double();
-//			double length1 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
-//			editPoint.x = length1 / getLength(startPoint, endPoint);
-//			
-//			double length2 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
-//			editPoint.y = length2 / getLength(startPoint, perpPoint);
-//			
-//			editPointList.add(editPoint);
-//		}
-//			
-//		return editPointList;
+		for(Point2D.Double point : editPoints){
+			Point2D.Double editPoint = new Point2D.Double();
+			double length1 = getOrthogonalProjectionLengthFromEditPoint(startPoint, endPoint, point);
+			editPoint.x = length1 / getLength(startPoint, endPoint);
+			
+			double length2 = getOrthogonalProjectionLengthFromEditPoint(startPoint, perpPoint, point);
+			editPoint.y = length2 / getLength(startPoint, perpPoint);
+			
+			editPointList.add(editPoint);
+		}
+			System.out.println(editPoints);
+			System.out.println(editPointList);
+			return editPointList;
 	}
 	
 	/**

@@ -760,7 +760,7 @@ public class ReactionWrapper extends Reaction{
         */
        public SpeciesReferenceWrapper getProductWrapperById(String id){
     	   for(SpeciesReferenceWrapper srw : productWrapperList)
-    		  if(srw.getSpecies().equals(id))
+    		   if(srw.getSpecies().equals(id))
     			  return srw;
     	   
     		   return null;

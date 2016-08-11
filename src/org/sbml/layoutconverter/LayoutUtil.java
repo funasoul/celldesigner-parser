@@ -15,6 +15,7 @@ import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.LineSegment;
 import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
+import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -35,11 +36,18 @@ public class LayoutUtil {
 	 * TODO
 	 */
 	public static Point getCenterOfGlyph(GraphicalObject go){
-		Dimensions dimension = go.getBoundingBox().getDimensions();
-		Point point = go.getBoundingBox().getPosition().clone();
-		point.setX(point.getX() + dimension.getWidth() / 2);
-		point.setY(point.getY() + dimension.getHeight() / 2);
-		
+		Point point;
+		if(go.isSetBoundingBox()){
+			Dimensions dimension = go.getBoundingBox().getDimensions();
+			point = go.getBoundingBox().getPosition().clone();
+			point.setX(point.getX() + dimension.getWidth() / 2);
+			point.setY(point.getY() + dimension.getHeight() / 2);
+		} else {
+			Dimensions dimension = ((SpeciesReferenceGlyph)go).getSpeciesGlyphInstance().getBoundingBox().getDimensions();
+			point = ((SpeciesReferenceGlyph)go).getSpeciesGlyphInstance().getBoundingBox().getPosition().clone();
+			point.setX(point.getX() + dimension.getWidth() / 2);
+			point.setY(point.getY() + dimension.getHeight() / 2);
+		}
 		return point;
 	}
 	
@@ -399,24 +407,6 @@ public class LayoutUtil {
 			ls.setEnd(endPoint2);
 			lineList.add(ls);
 		}
-		
-//		if(type.equals("DISSOCIATION") || type.equals("TRUNCATION")){
-//			LineSegment l1 = lineList.get(num0 - tshapeIndex);
-//			LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
-//			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
-//			l2.setEnd(l1.getEnd().clone());
-//			l1.setEnd(p.clone());
-//			l2.setStart(p.clone());
-//			lineList.add(num0 - tshapeIndex + 1, l2);
-//		} //else {
-//			LineSegment l1 = lineList.get(num0 + 1 + num1 + 1 + tshapeIndex);
-//			LineSegment l2 = new LineSegment(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
-//			Point p =  createCenterPoint(l1.getStart(), l1.getEnd());
-//			l2.setEnd(l1.getEnd().clone());
-//			l1.setEnd(p.clone());
-//			l2.setStart(p.clone());
-//			lineList.add(num0 + 1 + num1 + 1 + tshapeIndex + 1, l2);
-//		}
 		
 		return lineList;
 	}

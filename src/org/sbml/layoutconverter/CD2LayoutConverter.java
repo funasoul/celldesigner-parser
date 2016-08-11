@@ -304,12 +304,12 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 					curve.addCurveSegment(lsList.get(i));
 				}
 
+				centerPoint = curve.getCurveSegment(rectangleIndex).getStart().clone();
+				
 				curve = srg2.createCurve();
 				for (int i = rectangleIndex + 1; i < lsList.size(); i++) {
 					curve.addCurveSegment(lsList.get(i));
 				}
-
-				centerPoint = curve.getCurveSegment(rectangleIndex).getStart().clone();
 
 			} else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
 				BaseReactant br1 = brsList.get(0);
@@ -374,8 +374,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				Point startPoint = LayoutUtil.createAdjustedPoint(sg1, br1.getLinkAnchor().getPosition());
 
 				BaseProduct bp1 = prsList.get(0);
-				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_"
-								+ bp1.getAlias());
+				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + bp1.getAlias());
 				SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
 				Point endPoint1 = LayoutUtil.createAdjustedPoint(sg2, bp1
 						.getLinkAnchor().getPosition());
@@ -544,8 +543,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 		List<SpeciesReferenceWrapper> reactantList = rw.getListOfReactantWrapper();
 		for (SpeciesReferenceWrapper srw : reactantList) {
-			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_"
-							+ rg.getReaction() + "_" + srw.getAlias());
+			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + srw.getAlias());
 			srg.setSpeciesReference(srw.getSpecies());
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
@@ -567,8 +565,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		}
 
 		if (rw.isSetModifier()) {
-			List<ModifierSpeciesReferenceWrapper> modifierList = rw
-					.getListOfModifierWrapper();
+			List<ModifierSpeciesReferenceWrapper> modifierList = rw.getListOfModifierWrapper();
 			for (ModifierSpeciesReferenceWrapper msrw : modifierList) {
 				SpeciesReferenceGlyph srg = rg
 						.createSpeciesReferenceGlyph("ModifierSpeciesReferenceGlyph_"

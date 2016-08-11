@@ -81,6 +81,10 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		 this.alias = annotation.getExtension().getAlias();
 		 
 		 this.modification = reactionWrapper.getModificationByModifierId(species);
+		 
+		 if(modification == null)
+			 return ;
+		 
 		 this.type = modification.getType();	
 		 
 		 if(modification.getEditPoints() != null)

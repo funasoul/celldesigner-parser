@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.JAXBException;
@@ -22,6 +23,7 @@ import org.sbml.jsbml.SBMLDocument;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
 import org.sbml.jsbml.SBase;
+import org.sbml.jsbml.SimpleSpeciesReference;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
@@ -261,37 +263,57 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	public void convertReactionsToCD(List<ReactionGlyph> rgList) {
 		for(ReactionGlyph rg : rgList){
 			Reaction r = (Reaction) rg.getReactionInstance();
+		
 			ListOf<SpeciesReference> reactantList = r.getListOfReactants();
 			ListOf<SpeciesReference> productList = r.getListOfProducts();
 			ListOf<ModifierSpeciesReference> modifierList = r.getListOfModifiers();
 			ReactionWrapper rw = mWrapper.getReactionWrapperById(r.getId());
+			
+			// if the reaction has only reactant or product rw is null
+			if(rw == null){
+				continue;
+			}
+			
 			int sboterm = SBMLUtil.intSBOTermForDEFAULT_REACTION;
 			if (rg.isSetSBOTerm()){
 				sboterm = rg.getSBOTerm();
 			} else if(r.isSetSBOTerm()){
 				sboterm = r.getSBOTerm();
 			}
-			rw.setReactionType(SBMLUtil.SBOTermToCDReaction(sboterm));
 			
+			rw.setReactionType(SBMLUtil.SBOTermToCDReaction(sboterm));
 			for(SpeciesReferenceGlyph srg : rg.getListOfSpeciesReferenceGlyphs()){
 				NamedSBase sbase = srg.getReferenceInstance();
-				Point point = srg.getBoundingBox().getPosition();
+				String id;
+				
+				if(sbase instanceof SimpleSpeciesReference){
+					id = ((SimpleSpeciesReference)sbase).getSpecies();
+				} else {
+					id = sbase.getId();
+				}
+				
+				Point point;
+				
+				if(srg.isSetBoundingBox())
+					point = srg.getBoundingBox().getPosition();
+				else
+					point = srg.getSpeciesGlyphInstance().getBoundingBox().getPosition();
+					
 				SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperByPosition(point.getX(), point.getY());
 				if(srg.getSpeciesReferenceRole() == SpeciesReferenceRole.SUBSTRATE || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.SIDESUBSTRATE ){
-					SpeciesReferenceWrapper srw = rw.getReactantWrapperById(sbase.getId());
+					SpeciesReferenceWrapper srw = rw.getReactantWrapperById(id);
 					srw.setAlias(saw.getId());
 				} else if(srg.getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.SIDEPRODUCT ){
-					SpeciesReferenceWrapper srw = rw.getProductWrapperById(sbase.getId());
+					SpeciesReferenceWrapper srw = rw.getProductWrapperById(id);
 					srw.setAlias(saw.getId());
 				} else if(srg.getSpeciesReferenceRole() == SpeciesReferenceRole.ACTIVATOR || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.INHIBITOR || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.MODIFIER ){
-					ModifierSpeciesReferenceWrapper msrw = rw.getModifierWrapperById(sbase.getId());
+					ModifierSpeciesReferenceWrapper msrw = rw.getModifierWrapperById(id);
 					msrw.setAlias(saw.getId());
 					SpeciesWrapper sw = saw.getSpeciesWrapperAliased();
 					sw.createCatalyzedReaction(rg.getReference());
 
 					Modification modification = rw.getModificationByModifierId(sw.getId());
 					modification.setAliases(msrw.getAlias());
-					System.out.println(SBMLUtil.SBOTermToCDModifier(sbase.getSBOTerm()));
 					modification.setType(SBMLUtil.SBOTermToCDModifier(sbase.getSBOTerm()));
 				} else {
 					// undefined role
@@ -371,7 +393,6 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		
 				SpeciesReferenceGlyph reactantGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), basereactant.getSpecies());
 				SpeciesReferenceGlyph productGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), baseproduct.getSpecies());
-			
 				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph);
 				
 				if(!editPointVertices.isEmpty()){				
@@ -572,7 +593,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		ReactionGlyph rg = layout.getReactionGlyph(rgid);
 		
 		for(SpeciesReferenceGlyph sg : rg.getListOfSpeciesReferenceGlyphs()){
-			if(sg.getReference().equals(id))
+			if(sg.getReference().equals(id) || sg.getSpeciesGlyphInstance().getReference().equals(id))
 				return sg;
 		}
 

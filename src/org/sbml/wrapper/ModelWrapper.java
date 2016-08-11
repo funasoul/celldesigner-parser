@@ -6,7 +6,9 @@ package org.sbml.wrapper;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.sbml._2001.ns.celldesigner.AntisenseRNA;
 import org.sbml._2001.ns.celldesigner.BlockDiagram;
@@ -400,9 +402,19 @@ public class ModelWrapper extends Model {
 	 */
 	public List<ReactionWrapper> createReactionWrapperList(List<Reaction> rList){
 		List<ReactionWrapper> rwList = new ArrayList<ReactionWrapper>(rList.size());
-		for(Reaction r : rList)
-			rwList.add(new ReactionWrapper(r, this));
-
+		Set<Reaction> removingReaction = new HashSet<Reaction>();
+		for(Reaction r : rList) {
+			if(r.getListOfProducts() != null && r.getListOfReactants() != null)
+				rwList.add(new ReactionWrapper(r, this));
+			else
+				removingReaction.add(r);
+		}
+		
+		// remove reaction with only reactant/product
+		for(Reaction r : removingReaction){
+			rList.remove(r);
+		}
+		
 		return rwList;
 	}
 

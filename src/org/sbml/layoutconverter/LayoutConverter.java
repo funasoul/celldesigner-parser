@@ -150,7 +150,8 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "transcription_converted.xml";
+		String filepath = "EcoliCore.sbml.xml";
+		
 		String outputpath = "";
 		Boolean isCD2Layout = false;
 		Boolean defaultCompartment = false;
@@ -194,7 +195,7 @@ public class LayoutConverter {
 
 		converter.convert();
 		converter.save();
-		converter.print();
-		converter.validate();
+//		converter.print();
+//		converter.validate();
 	}
 }

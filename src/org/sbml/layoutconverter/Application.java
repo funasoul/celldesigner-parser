@@ -6,6 +6,11 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
+import org.kohsuke.args4j.Argument;
+import org.kohsuke.args4j.CmdLineException;
+import org.kohsuke.args4j.CmdLineParser;
+import org.kohsuke.args4j.Option;
+
 // TODO: Auto-generated Javadoc
 /**
  * The Class Application.
@@ -17,34 +22,36 @@ import javax.xml.stream.XMLStreamException;
 
 public class Application {
 
+	LayoutConverter converter;
+	
 	/**
 	 * Instantiates a new application.
 	 *
 	 * @param args the args
 	 */
 	public Application(String[] args){
-		LayoutConverter converter;
-		String filepath = "";
-		String outputpath = "";
-		Boolean isCD2Layout = null;
-		Boolean defaultCompartment = false;
+		ApplicationOption option = new ApplicationOption();
+		CmdLineParser parser = new CmdLineParser(option);
 		
-		for(int i = 0 ; i < args.length; i++){
-			if(filepath.isEmpty() && args[i].endsWith(".xml")){
-				filepath = args[i];
-			} else if(outputpath.isEmpty()  && args[i].endsWith(".xml")){
-				outputpath = args[i];
-			} else if(args[i].contains("CD2Layout")){
-				isCD2Layout = true;
-			} else if(args[i].contains("Layout2CD")){
-				isCD2Layout = false;
-			} else if(args[i].contains("defaultCompartment")){
-				defaultCompartment = true;
-			} else {
-				Application.printUsage();
-				return ;
-			}
+		try {
+			parser.parseArgument(args);
+		} catch (CmdLineException e1) {
+			System.out.println(e1.getMessage());
+			parser.printUsage(System.err);
+			System.exit(1);
 		}
+		
+		String filepath = option.getInput();
+		String outputpath = option.getOutput();
+		Boolean defaultCompartment = option.isDefaultCompartment();
+		Boolean isCD2Layout;
+		if(option.issetCD2Layout()) 
+			isCD2Layout = option.isCD2Layout();
+		else if (option.issetLayout2CD()) 
+			isCD2Layout =  !option.isLayout2CD();
+		else 
+			isCD2Layout = null;
+
 		System.out.println(filepath);
 		System.out.println(outputpath);
 		try {
@@ -59,28 +66,17 @@ public class Application {
 
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
-			e.printStackTrace();
 			return;
 		} catch (XMLStreamException | IOException e) {
 			System.err.println("Error reading SBML model");
-			e.printStackTrace();
 			return;
-		}
-
+		} 
+		
 		converter.convert();
 		converter.save();
 		converter.print();
 		converter.validate();
 	}
-	
-	/**
-	 * Prints the usage.
-	 */
-	public static void printUsage(){
-		System.err.println("Illegal option");
-		System.err.println("");
-	}
-	
 	
 	/**
 	 * The main method.

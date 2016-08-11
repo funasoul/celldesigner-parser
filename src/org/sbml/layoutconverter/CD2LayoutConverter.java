@@ -375,6 +375,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 				BaseProduct bp1 = prsList.get(0);
 				SpeciesReferenceGlyph srg2 = srgList.get("SpeciesReferenceGlyph_" + rg.getReaction() + "_" + bp1.getAlias());
+				System.out.println(bp1.getAlias());
 				SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
 				Point endPoint1 = LayoutUtil.createAdjustedPoint(sg2, bp1
 						.getLinkAnchor().getPosition());

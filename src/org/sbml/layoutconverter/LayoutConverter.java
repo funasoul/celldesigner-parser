@@ -150,10 +150,10 @@ public class LayoutConverter {
 	 */
 	public static void main(String[] args) {
 		LayoutConverter converter;
-		String filepath = "EcoliCore.sbml.xml";
-		
+		//String filepath = "EcoliCore.sbml.xml";
+		String filepath = "1752-0509-7-97-S4.xml";
 		String outputpath = "";
-		Boolean isCD2Layout = false;
+		Boolean isCD2Layout = true;
 		Boolean defaultCompartment = false;
 		
 		for(int i = 0 ; i < args.length; i++){
@@ -168,7 +168,7 @@ public class LayoutConverter {
 			} else if(args[i].contains("defaultCompartment")){
 				defaultCompartment = true;
 			} else {
-				Application.printUsage();
+			//	Application.printUsage();
 				return ;
 			}
 		}
@@ -195,7 +195,7 @@ public class LayoutConverter {
 
 		converter.convert();
 		converter.save();
-//		converter.print();
-//		converter.validate();
+		//converter.print();
+		//converter.validate();
 	}
 }

@@ -6,10 +6,8 @@ import java.io.IOException;
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
 
-import org.kohsuke.args4j.Argument;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
-import org.kohsuke.args4j.Option;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -37,6 +35,11 @@ public class Application {
 			parser.parseArgument(args);
 		} catch (CmdLineException e1) {
 			System.out.println(e1.getMessage());
+			parser.printUsage(System.err);
+			System.exit(1);
+		}
+		
+		if(option.isHelp()){
 			parser.printUsage(System.err);
 			System.exit(1);
 		}
@@ -69,6 +72,7 @@ public class Application {
 			return;
 		} catch (XMLStreamException | IOException e) {
 			System.err.println("Error reading SBML model");
+			System.err.println(e.getLocalizedMessage());
 			return;
 		} 
 		

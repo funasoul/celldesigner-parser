@@ -11,6 +11,7 @@ package org.sbml.sbml.level2.version4;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+
 import org.sbml._2001.ns.celldesigner.SpeciesReferenceAnnotationType;
 
 

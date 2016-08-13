@@ -14,6 +14,9 @@ import org.kohsuke.args4j.Option;
 
 public class ApplicationOption {
 	
+	@Option(name = "-h", aliases= {"--help"}, required = false, usage = "help")
+	private boolean help = false;
+	
 	/** The CD 2 layout. */
 	@Option(name = "-c", aliases= {"--CD2Layout"}, required = false, usage = "convert CD to layout")
 	private Boolean CD2Layout;
@@ -34,6 +37,13 @@ public class ApplicationOption {
 	@Argument(index = 1, metaVar = "output files", required = false, usage = "output file")
     private String output;
 
+	/**
+	 * @return the help
+	 */
+	public boolean isHelp() {
+		return help;
+	}
+	
 	/**
 	 * Checks if is CD 2 layout.
 	 *

@@ -127,7 +127,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		if (!SBMLUtil.isSetCellDesignerNameSpace(document))
 			throw new IOException("Missing CellDesigner Namespace");
 		if(!SBMLUtil.isLevelAndVersionMatchWithCD(file))
-			throw new IOException("Level and Version does not match the CellDesigner defaults");
+			throw new IOException("Level and Version does not match the CellDesigner defaults Level "  + SBMLUtil.DEFAULT_CELLDESIGNER_SBML_LEVEL + " Version " + SBMLUtil.DEFAULT_CELLDESIGNER_SBML_VERSION);
 		
 		document = SBMLLevelandVersionHandler.upgrade(document);
 

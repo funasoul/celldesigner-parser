@@ -3,13 +3,7 @@
  */
 package org.sbml.layoutconverter;
 
-import java.io.File;
-import java.io.IOException;
-
-import javax.xml.stream.XMLStreamException;
-
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLReader;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -38,8 +32,8 @@ public class SBMLLevelandVersionHandler {
 			System.out.println("SBML Model converted to Level " + SBMLUtil.DEFAULT_SBML_LEVEL + " Version " + SBMLUtil.DEFAULT_SBML_VERSION);
 		}
 			
-		if(!SBMLUtil.isSetSBOTerm(document))
-			System.err.println("Missing sboterms");
+		//if(!SBMLUtil.isSetSBOTerm(document))
+		//System.err.println("Missing sboterms");
 		
 		document = SBMLModelCompleter.autoCompleteRequiredAttributes(document);
 		

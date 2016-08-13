@@ -89,7 +89,6 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
 
 		this.nameX = compartmentAlias.getNamePoint().getX().doubleValue();
 		this.nameY = compartmentAlias.getNamePoint().getY().doubleValue();
-
 	}
 
 	/**

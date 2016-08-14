@@ -84,7 +84,8 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
 		this.structuralState = speciesAlias.getStructuralState();
 		this.usualView = speciesAlias.getUsualView();
 		this.compartmentAlias = modelWrapper.getCompartmentAliasById(speciesAlias.getCompartmentAlias());
-		this.complexSpeciesAlias = modelWrapper.getComplexSpeciesAliasById(speciesAlias.getComplexSpeciesAlias());
+		if(speciesAlias.getComplexSpeciesAlias() != null)
+			this.complexSpeciesAlias = modelWrapper.getComplexSpeciesAliasById(speciesAlias.getComplexSpeciesAlias());
 		this.speciesWrapper = modelWrapper.getSpeciesWrapperById(speciesAlias.getSpecies());
 		this.view = speciesAlias.getView();
 		this.species = speciesAlias.getSpecies();
@@ -366,8 +367,13 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
      */
     public void setComplexSpeciesAliased(ComplexSpeciesAlias value) {
         this.complexSpeciesAlias = value;
+        setComplexSpeciesAlias(value.getId());
     }
 
+    public boolean isComplexSpecies(){
+    	return isSetComplexSpeciesAlias();
+    }
+    
     /**
      * Checks if is sets the complex species alias.
      *
@@ -375,6 +381,7 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
      * TODO
      */
     public boolean isSetComplexSpeciesAlias(){
+    	System.out.println(complexSpeciesAlias);
     	if(complexSpeciesAlias == null)
     		return false;
     	else

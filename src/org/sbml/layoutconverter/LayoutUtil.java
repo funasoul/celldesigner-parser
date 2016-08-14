@@ -3,13 +3,16 @@
  */
 package org.sbml.layoutconverter;
 
+import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.CubicBezier;
+import org.sbml.jsbml.ext.layout.CurveSegment;
 import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.LineSegment;
@@ -264,41 +267,13 @@ public class LayoutUtil {
 	 * @return Point
 	 * TODO
 	 */
-	public static Point createAdjustedPoint(SpeciesGlyph sg, String direction){
-		Point p = sg.getBoundingBox().getPosition();
-		Dimensions d = sg.getBoundingBox().getDimensions();
+	public static Point createAdjustedPoint(GraphicalObject go, String direction){
+		Point p = go.getBoundingBox().getPosition();
+		Dimensions d = go.getBoundingBox().getDimensions();
 		
 		return createAdjustedPoint(p.getX(), p.getY(), d.getWidth(), d.getHeight(), direction);
 	}
 	
-	/**
-	 * Adjust point.
-	 *
-	 * @param point the point
-	 * @param direction the direction
-	 * @return Point
-	 * TODO
-	 */
-	public static Point adjustPoint(Point point, String direction){
-		if(direction.equals("INACTIVE")){
-			//point.setX(point.getX() + saw.getW() /2);
-		}
-		
-		if(direction.contains("W")){
-			point.setX(point.getX() - 10);
-		} else if(direction.contains("E")){
-			point.setX(point.getX() + 10);
-		}
-		
-		if(direction.contains("N")){
-			point.setY(point.getY() - 10);
-		} else if(direction.contains("S")){
-			point.setY(point.getY() + 10);
-		}
-		
-		return point;
-	}
-
 	/**
 	 * Creates the list of bezier.
 	 *
@@ -751,5 +726,44 @@ public class LayoutUtil {
  	   } else {
  		   return "";
  	   }	   
+    }
+
+    public static Point adjustOverlappingEndPoint(CurveSegment cs, GraphicalObject go){
+    	Line2D.Double reactionLine = new Line2D.Double(cs.getStart().getX(), cs.getStart().getY(), cs.getEnd().getX(), cs.getEnd().getY());
+    	Rectangle2D.Double glyph = new Rectangle2D.Double(go.getBoundingBox().getPosition().getX(), go.getBoundingBox().getPosition().getY(), go.getBoundingBox().getDimensions().getWidth(), go.getBoundingBox().getDimensions().getWidth());
+    	
+    	if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMinY(), glyph.getMaxX(), glyph.getMinY())){ //up
+    		System.out.println("up");
+    		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMaxX(), glyph.getMinY()));
+    	
+    	} else if(reactionLine.intersectsLine(glyph.getMaxX(), glyph.getMinY(), glyph.getMaxX(), glyph.getMaxY())){ //right
+    		System.out.println("right");
+    		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMaxX(), glyph.getMinY()), new Point( glyph.getMaxX(), glyph.getMaxY()));
+    	
+    	} else if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMaxY(), glyph.getMaxX(), glyph.getMaxY())){ //down
+    		System.out.println("down");
+    		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMaxY()), new Point(glyph.getMaxX(), glyph.getMaxY()));
+    	
+    	} else if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMinY(), glyph.getMinX(), glyph.getMaxY())){ //left
+    		System.out.println("left");
+    		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMinX(), glyph.getMaxY()));
+    	}
+    	
+    	return cs.getEnd();
+    }
+    
+    public static Point getIntersectingPoint(Point p1Start, Point p1End, Point p2Start, Point p2End){
+    	Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+    	double area1 = crossProduct(p2Start, p2Start, p2End, p1Start) / 2;
+    	double area2 = crossProduct(p2Start, p1End, p2End, p2Start) / 2;
+    	point.setX(p1Start.getX() + (p1End.getX() - p1Start.getX()) * area1 / (area1 + area2));
+    	point.setY(p1Start.getY() + (p1End.getY() - p1Start.getY()) * area1 / (area1 + area2));
+    	point.setZ(0d);
+    	
+    	return point;
+    }
+
+    public static double crossProduct(Point startPoint1, Point startPoint2, Point endPoint1, Point endPoint2){
+    	return  (endPoint1.getX() - startPoint1.getX())*(endPoint2.getY() - startPoint2.getY()) - (endPoint1.getY() - startPoint1.getY()) * (endPoint2.getX() - startPoint2.getX());
     }
 }

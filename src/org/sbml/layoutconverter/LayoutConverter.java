@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2016 Kaito Ii
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 /*
  * 
  */
@@ -151,9 +166,9 @@ public class LayoutConverter {
 	public static void main(String[] args) {
 		LayoutConverter converter;
 		//String filepath = "EcoliCore.sbml.xml";
-		String filepath = "1752-0509-7-97-S4.xml";
+		String filepath = "h.xml";
 		String outputpath = "";
-		Boolean isCD2Layout = true;
+		Boolean isCD2Layout = false;
 		Boolean defaultCompartment = false;
 		
 		for(int i = 0 ; i < args.length; i++){

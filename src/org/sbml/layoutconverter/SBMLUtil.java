@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2016 Kaito Ii
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package org.sbml.layoutconverter;
 
 import java.io.File;
@@ -31,6 +46,7 @@ import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.StoichiometryMath;
 import org.sbml.jsbml.Trigger;
+import org.sbml.jsbml.ext.fbc.FBCConstants;
 import org.sbml.jsbml.ext.layout.LayoutConstants;
 
 // TODO: Auto-generated Javadoc
@@ -42,6 +58,7 @@ import org.sbml.jsbml.ext.layout.LayoutConstants;
  * Date Created: Jun 24, 2016
  */
 
+@SuppressWarnings("deprecation")
 public class SBMLUtil {
 
 	/** The defaultsbmllevel. */
@@ -293,6 +310,29 @@ public class SBMLUtil {
 
 		return document;
 	}
+
+	/**
+	 * Adds the extension package fbc.
+	 *
+	 * @param document the document
+	 * @return the SBML document
+	 */
+	public static SBMLDocument addExtensionPackageFBC(SBMLDocument document){
+		document.enablePackage(FBCConstants.getNamespaceURI(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION), true);
+		document.setPackageRequired(FBCConstants.getNamespaceURI(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION), false);
+
+		return document;
+	}
+	
+	/**
+	 * Adds the extension package fbc.
+	 *
+	 * @param model the model
+	 * @return the SBML document
+	 */
+	public static Model addExtensionPackageFBC(Model model){
+		return addExtensionPackageFBC(model.getSBMLDocument()).getModel();
+	}
 	
 	/**
 	 * Checks if is level and version match with CD.
@@ -314,40 +354,6 @@ public class SBMLUtil {
 	 */
 	public static boolean isLevelAndVersionMatchWithCD(SBMLDocument document){
 		return (document.getLevel() == DEFAULT_CELLDESIGNER_SBML_LEVEL) && (document.getVersion() == DEFAULT_CELLDESIGNER_SBML_VERSION);
-	}
-	
-	/**
-	 * The main method.
-	 *
-	 * @param args the arguments
-	 */
-	public static void main(String[] args){
-		try {
-			SBMLDocument d = SBMLReader.read(new File("sample/layout_example1_L3.xml"));
-			Map<String, String> nsMap = d.getDeclaredNamespaces();
-			for(java.util.Map.Entry<String, String> e: nsMap.entrySet())
-				System.out.println(e.toString());
-			System.out.println(LayoutConstants.namespaceURI_L3V1V1);
-		} catch (XMLStreamException | IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Checks if is set SBO term.
-	 *
-	 * @param node the node
-	 */
-	public static void isSetSBOTerm(TreeNode node){		
-		for(int i = 0; i < node.getChildCount(); i++){
-			TreeNode n = node.getChildAt(i);
-			if(n instanceof SBase && !((SBase)n ).isSetSBOTerm()){
-				System.out.println(n.getClass());
-				SBMLLevelandVersionHandler.isSetSBOTerm = false;
-			}
-			isSetSBOTerm(n);	
-		}		
 	}
 	
 	/**
@@ -671,7 +677,6 @@ public class SBMLUtil {
 	 * @param d the d
 	 * @param math the math
 	 */
-	@SuppressWarnings("deprecation")
 	public static void setMathObject(SBMLDocument d, AbstractMathContainer math){
 		
 		if(math instanceof FunctionDefinition){

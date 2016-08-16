@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2016 Kaito Ii
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 package org.sbml.layoutconverter;
 
 import java.awt.geom.Point2D;
@@ -271,7 +286,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			
 			BoundingBox reactionBB = rg.createBoundingBox();
 			double xmin = Integer.MAX_VALUE, xmax = Integer.MIN_VALUE, ymin = Integer.MAX_VALUE, ymax = Integer.MIN_VALUE;
-		//	System.out.println(rw.getId());
+			System.out.println(rw.getId() + srgList.size());
 			for(SpeciesReferenceGlyph srg : srgList){
 				Point position = srg.getBoundingBox().getPosition();
 				Dimensions dim = srg.getBoundingBox().getDimensions();
@@ -287,7 +302,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				
 				if(ymax < position.getY() + dim.getHeight())
 					ymax = position.getY() + dim.getHeight();
-	//			System.out.println(srg + srg.getSpeciesGlyph());
+				System.out.println(srg + srg.getSpeciesGlyph());
 			}
 			Dimensions dim = new Dimensions(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			dim.setWidth(xmax - xmin);
@@ -298,14 +313,14 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			if (brsList.size() == 1 && prsList.size() == 1) {
 				BaseReactant br = brsList.get(0);
 				BaseProduct bp = prsList.get(0);
-//				System.out.println(br.getAlias() + " " + br.getSpecies());
-//				System.out.println(bp.getAlias() + " " + bp.getSpecies());
+				System.out.println(br.getAlias() + " " + br.getSpecies());
+				System.out.println(bp.getAlias() + " " + bp.getSpecies());
 				SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br.getSpecies());
 				//SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
 				SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp.getSpecies());
 				//SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
-//				System.out.println("srg1 " + srg1);
-//				System.out.println("srg2 " + srg2);
+				System.out.println("srg1 " + srg1);
+				System.out.println("srg2 " + srg2);
 				Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br.getLinkAnchor().getPosition());
 				Point endPoint = LayoutUtil.createAdjustedPoint(srg2, bp.getLinkAnchor().getPosition());
 				Point reactantPoint = LayoutUtil.createCenterPoint(srg1);
@@ -340,9 +355,9 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				SpeciesReferenceGlyph srg3 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
 				SpeciesGlyph sg3 = srg3.getSpeciesGlyphInstance();
 				Point endPoint2 = LayoutUtil.createAdjustedPoint(sg3, bp1.getLinkAnchor().getPosition());
-//				System.out.println("srg1 " + srg1);
-//				System.out.println("srg2 " + srg2);
-//				System.out.println("srg3 " + srg3);
+				System.out.println("srg1 " + srg1);
+				System.out.println("srg2 " + srg2);
+				System.out.println("srg3 " + srg3);
 
 				Point reactantPoint1 = LayoutUtil.createCenterPoint(sg1);
 				Point reactantPoint2 = LayoutUtil.createCenterPoint(sg2);
@@ -383,12 +398,12 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br1.getSpecies());
 				//SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
 				Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br1.getLinkAnchor().getPosition());
-//				System.out.println(br1.getAlias() + " " + br1.getSpecies());
-//				System.out.println( "srg1 " + srg1);
+				System.out.println(br1.getAlias() + " " + br1.getSpecies());
+				System.out.println( "srg1 " + srg1);
 				BaseProduct bp1 = prsList.get(0);
 				SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
-//				System.out.println(bp1.getAlias() + " " + bp1.getSpecies());
-//				System.out.println( "srg2 " + srg2);
+				System.out.println(bp1.getAlias() + " " + bp1.getSpecies());
+				System.out.println( "srg2 " + srg2);
 				//SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
 				Point endPoint1 = LayoutUtil.createAdjustedPoint(srg2, bp1.getLinkAnchor().getPosition());
 
@@ -397,7 +412,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				//SpeciesGlyph sg3 = layout.getSpeciesGlyph("SpeciesGlyph_" + bp2.getAlias());
 				Point endPoint2 = LayoutUtil.createAdjustedPoint(srg3, bp2.getLinkAnchor().getPosition());
 
-//				System.out.println("srg3 " + srg3);
+				System.out.println("srg3 " + srg3);
 
 				Point reactantPoint = LayoutUtil.createCenterPoint(srg1);
 				Point productPoint1 = LayoutUtil.createCenterPoint(srg2);

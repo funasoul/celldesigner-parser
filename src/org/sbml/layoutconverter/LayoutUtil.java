@@ -1,3 +1,18 @@
+/*******************************************************************************
+ * Copyright 2016 Kaito Ii
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *******************************************************************************/
 /*
  * 
  */
@@ -262,7 +277,7 @@ public class LayoutUtil {
 	/**
 	 * Creates the adjusted point.
 	 *
-	 * @param sg the sg
+	 * @param go the go
 	 * @param direction the direction
 	 * @return Point
 	 * TODO
@@ -728,30 +743,42 @@ public class LayoutUtil {
  	   }	   
     }
 
+    /**
+     * Adjust overlapping end point.
+     *
+     * @param cs the cs
+     * @param go the go
+     * @return the point
+     */
     public static Point adjustOverlappingEndPoint(CurveSegment cs, GraphicalObject go){
     	Line2D.Double reactionLine = new Line2D.Double(cs.getStart().getX(), cs.getStart().getY(), cs.getEnd().getX(), cs.getEnd().getY());
     	Rectangle2D.Double glyph = new Rectangle2D.Double(go.getBoundingBox().getPosition().getX(), go.getBoundingBox().getPosition().getY(), go.getBoundingBox().getDimensions().getWidth(), go.getBoundingBox().getDimensions().getWidth());
     	
     	if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMinY(), glyph.getMaxX(), glyph.getMinY())){ //up
-    		System.out.println("up");
     		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMaxX(), glyph.getMinY()));
     	
     	} else if(reactionLine.intersectsLine(glyph.getMaxX(), glyph.getMinY(), glyph.getMaxX(), glyph.getMaxY())){ //right
-    		System.out.println("right");
     		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMaxX(), glyph.getMinY()), new Point( glyph.getMaxX(), glyph.getMaxY()));
     	
     	} else if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMaxY(), glyph.getMaxX(), glyph.getMaxY())){ //down
-    		System.out.println("down");
     		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMaxY()), new Point(glyph.getMaxX(), glyph.getMaxY()));
     	
     	} else if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMinY(), glyph.getMinX(), glyph.getMaxY())){ //left
-    		System.out.println("left");
     		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMinX(), glyph.getMaxY()));
     	}
     	
     	return cs.getEnd();
     }
     
+    /**
+     * Gets the intersecting point.
+     *
+     * @param p1Start the p 1 start
+     * @param p1End the p 1 end
+     * @param p2Start the p 2 start
+     * @param p2End the p 2 end
+     * @return the intersecting point
+     */
     public static Point getIntersectingPoint(Point p1Start, Point p1End, Point p2Start, Point p2End){
     	Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
     	double area1 = crossProduct(p2Start, p2Start, p2End, p1Start) / 2;
@@ -763,6 +790,15 @@ public class LayoutUtil {
     	return point;
     }
 
+    /**
+     * Cross product.
+     *
+     * @param startPoint1 the start point 1
+     * @param startPoint2 the start point 2
+     * @param endPoint1 the end point 1
+     * @param endPoint2 the end point 2
+     * @return the double
+     */
     public static double crossProduct(Point startPoint1, Point startPoint2, Point endPoint1, Point endPoint2){
     	return  (endPoint1.getX() - startPoint1.getX())*(endPoint2.getY() - startPoint2.getY()) - (endPoint1.getY() - startPoint1.getY()) * (endPoint2.getX() - startPoint2.getX());
     }

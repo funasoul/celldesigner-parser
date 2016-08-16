@@ -18,16 +18,22 @@ package org.sbml.layoutconverter;
 import java.util.List;
 
 import org.sbml._2001.ns.celldesigner.Gene;
-import org.sbml.jsbml.ListOf;
+import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.Species;
+import org.sbml.jsbml.ext.fbc.And;
 import org.sbml.jsbml.ext.fbc.FBCConstants;
 import org.sbml.jsbml.ext.fbc.FBCModelPlugin;
 import org.sbml.jsbml.ext.fbc.FBCReactionPlugin;
 import org.sbml.jsbml.ext.fbc.FBCSpeciesPlugin;
 import org.sbml.jsbml.ext.fbc.GeneProduct;
+import org.sbml.jsbml.ext.fbc.GeneProductAssociation;
+import org.sbml.jsbml.ext.fbc.GeneProductRef;
+import org.sbml.jsbml.ext.fbc.LogicalOperator;
+import org.sbml.jsbml.ext.fbc.Or;
 import org.sbml.wrapper.ModelWrapper;
+import org.sbml.wrapper.ReactionWrapper;
 import org.sbml.wrapper.SpeciesWrapper;
 
 // TODO: Auto-generated Javadoc
@@ -83,33 +89,68 @@ public class FBCConverter {
 	 */
 	public void convertSpecies(){
 		List<SpeciesWrapper> swList = mWrapper.getListOfSpeciesWrapper();
-
 		for(SpeciesWrapper sw : swList){
 			if(sw.getCharge() != null){
 				Species s = model.getSpecies(sw.getId());
 				FBCSpeciesPlugin speciesPlugin = (FBCSpeciesPlugin) s.getPlugin(FBCConstants.shortLabel);
 				speciesPlugin.setCharge(sw.getCharge().intValue());
 			}
-	
-			if(sw.getClazz().equals("GENE")){
-				Gene gene = mWrapper.getGeneBySpeciesId(sw.getId());
-				GeneProduct geneProduct = fbcPlugin.createGeneProduct(gene.getId());
-				geneProduct.setLabel(gene.getType() + "_" + gene.getId());
-				geneProduct.setAssociatedSpecies(sw.getId());
-			}
 		}
 		
 	}
-
 	
 	/**
 	 * Convert reactions.
 	 */
 	public void convertReactions(){
-		ListOf<Reaction> lor = model.getListOfReactions();
-		for(Reaction reaction : lor){
-			FBCReactionPlugin reactionPlugin = (FBCReactionPlugin) reaction.getPlugin(FBCConstants.shortLabel);
+		List<ReactionWrapper> rwList = mWrapper.getListOfReactionWrapper();
+		for(ReactionWrapper rw : rwList){
+			List<Modification> mList = rw.getListOfModification();
+			for(Modification modification : mList){
+				if(modification.getType().contains("BOOLEAN_LOGIC_GATE")){
+					Reaction reaction = model.getReaction(rw.getId());
+					FBCReactionPlugin reactionPlugin = (FBCReactionPlugin) reaction.getPlugin(FBCConstants.shortLabel);
+					GeneProductAssociation  gpa;
+					if(reactionPlugin.isSetGeneProductAssociation())
+						gpa = reactionPlugin.getGeneProductAssociation();
+					else
+						gpa = reactionPlugin.createGeneProductAssociation("ga_" + rw.getId());
+					
+					String modifiers = modification.getModifiers();
+					String[] modifierList = modifiers.split(",");
+					for(String m : modifierList){
+						if(fbcPlugin.getListOfGeneProducts().get(m) == null){
+							GeneProduct geneProduct = fbcPlugin.createGeneProduct("gene_" + m);
+							geneProduct.setLabel(m);
+							geneProduct.setAssociatedSpecies(m);
+						}
+					}
+					
+					LogicalOperator lo;
+					if(modification.getType().contains("AND")){
+						lo = setAllProductRef(new And(), modifierList);
+					} else {
+						lo = setAllProductRef(new Or(), modifierList);
+					}
+					gpa.setAssociation(lo);		
+				}
+			}
 		}
 	}
 	
+	/**
+	 * Sets the all product ref.
+	 *
+	 * @param lo the lo
+	 * @param modifiers the modifiers
+	 * @return the logical operator
+	 */
+	public LogicalOperator setAllProductRef(LogicalOperator lo, String[] modifiers){
+		for(String modifier : modifiers){
+				GeneProductRef gpr = lo.createGeneProductRef("GeneProductRef_" + modifier);
+				gpr.setGeneProduct("gene_" + modifier);
+		}
+		
+		return lo;
+	}	
 }

@@ -105,7 +105,10 @@ public class FBCConverter {
 	public void convertReactions(){
 		List<ReactionWrapper> rwList = mWrapper.getListOfReactionWrapper();
 		for(ReactionWrapper rw : rwList){
+			
 			List<Modification> mList = rw.getListOfModification();
+			if(mList == null) 
+				continue;
 			for(Modification modification : mList){
 				if(modification.getType().contains("BOOLEAN_LOGIC_GATE")){
 					Reaction reaction = model.getReaction(rw.getId());

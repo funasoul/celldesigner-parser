@@ -752,7 +752,7 @@ public class LayoutUtil {
      */
     public static Point adjustOverlappingEndPoint(CurveSegment cs, GraphicalObject go){
     	Line2D.Double reactionLine = new Line2D.Double(cs.getStart().getX(), cs.getStart().getY(), cs.getEnd().getX(), cs.getEnd().getY());
-    	Rectangle2D.Double glyph = new Rectangle2D.Double(go.getBoundingBox().getPosition().getX(), go.getBoundingBox().getPosition().getY(), go.getBoundingBox().getDimensions().getWidth(), go.getBoundingBox().getDimensions().getWidth());
+    	Rectangle2D.Double glyph = new Rectangle2D.Double(go.getBoundingBox().getPosition().getX(), go.getBoundingBox().getPosition().getY(), go.getBoundingBox().getDimensions().getWidth(), go.getBoundingBox().getDimensions().getHeight());
     	
     	if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMinY(), glyph.getMaxX(), glyph.getMinY())){ //up
     		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMaxX(), glyph.getMinY()));
@@ -765,9 +765,10 @@ public class LayoutUtil {
     	
     	} else if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMinY(), glyph.getMinX(), glyph.getMaxY())){ //left
     		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMinX(), glyph.getMaxY()));
-    	}
     	
-    	return cs.getEnd();
+    	} else { // no intersection
+    		return cs.getEnd();
+    	}
     }
     
     /**

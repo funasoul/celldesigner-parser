@@ -241,10 +241,10 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					sw.getSpeciesIdentity().setName(sw.getId());
 				}
 				
-				CompartmentGlyph cg = getCompartmentGlyphByCompartmentId(s.getCompartment());
-				if(cg != null)
-					sw.setPositionToCompartment(LayoutUtil.getPositionToCompartment(sg, cg));
-				else 
+//				CompartmentGlyph cg = getCompartmentGlyphByCompartmentId(s.getCompartment());
+//				if(cg != null)
+//					sw.setPositionToCompartment(LayoutUtil.getPositionToCompartment(sg, cg));
+//				else 
 					sw.setPositionToCompartment("inside");
 				
 			} else {

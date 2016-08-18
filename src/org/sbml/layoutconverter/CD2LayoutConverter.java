@@ -286,6 +286,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			
 			BoundingBox reactionBB = rg.createBoundingBox();
 			double xmin = Integer.MAX_VALUE, xmax = Integer.MIN_VALUE, ymin = Integer.MAX_VALUE, ymax = Integer.MIN_VALUE;
+			
 			System.out.println(rw.getId() + srgList.size());
 			for(SpeciesReferenceGlyph srg : srgList){
 				Point position = srg.getBoundingBox().getPosition();
@@ -656,7 +657,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			BoundingBox bb2 = tg.createBoundingBox();
 			Dimensions dimension2 = bb2.createDimensions();
 			dimension2.setWidth(saw.getId().length() * 3);
-			dimension2.setHeight(10);
+			dimension2.setHeight(10d);
 			dimension.setDepth(1d);
 			Point point2 = bb2.createPosition();
 			point2.setX(saw.getX() + saw.getW() / 2 - dimension2.getWidth() / 2);

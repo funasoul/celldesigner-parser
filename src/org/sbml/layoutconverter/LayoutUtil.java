@@ -66,6 +66,7 @@ public class LayoutUtil {
 			point.setX(point.getX() + dimension.getWidth() / 2);
 			point.setY(point.getY() + dimension.getHeight() / 2);
 		}
+		
 		return point;
 	}
 	
@@ -579,10 +580,10 @@ public class LayoutUtil {
 			double slope2 = vec2.getY() / vec2.getX();
 			
 			Point intersect = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
-			intersect.setX((slope2 - b) / slope1);
+			intersect.setX(b / (slope2 - slope1));
 			intersect.setY(slope2 * intersect.getX());			
 	
-			editPoint.x = getLength(edit, intersect) / getLength(vec1, origin);
+			editPoint.x = getLength(edit, intersect) / getLength(origin, vec1);
 			editPoint.y = getLength(origin, intersect) / getLength(origin, vec2);
 			
 			editPointList.add(editPoint);

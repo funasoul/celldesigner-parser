@@ -166,9 +166,9 @@ public class LayoutConverter {
 	public static void main(String[] args) {
 		LayoutConverter converter;
 		//String filepath = "EcoliCore.sbml.xml";
-		String filepath = "h.xml";
+		String filepath = "heterodimer_converted_converted.xml";
 		String outputpath = "";
-		Boolean isCD2Layout = false;
+		Boolean isCD2Layout = true;
 		Boolean defaultCompartment = false;
 		
 		for(int i = 0 ; i < args.length; i++){

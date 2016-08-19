@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2016 Kaito Ii
+ * Copyright 2016 Kaito Ii, Akira Funahashi
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,13 @@ import org.sbml.wrapper.ObjectFactory;
 import org.sbml.wrapper.ReactionWrapper;
 
 
+// TODO: Auto-generated Javadoc
 /**
+ * The Class APITest.
+ *
  * @author Kaito Ii
  * @author Akira Funahashi
- *
+ * 
  * Date Created: May 20, 2016
  * Date Modified: May 30, 2016
  */
@@ -37,8 +40,9 @@ import org.sbml.wrapper.ReactionWrapper;
 public class APITest {
 
   /**
-   * 
-   * @param args
+   * The main method.
+   *
+   * @param args the arguments
    */
   public static void main(String[] args) {
     ModelWrapper model = null;

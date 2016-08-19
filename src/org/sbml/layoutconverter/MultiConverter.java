@@ -16,7 +16,6 @@
 package org.sbml.layoutconverter;
 
 import org.sbml.jsbml.Model;
-import org.sbml.jsbml.ext.multi.MultiConstants;
 import org.sbml.wrapper.ModelWrapper;
 
 // TODO: Auto-generated Javadoc
@@ -27,7 +26,7 @@ import org.sbml.wrapper.ModelWrapper;
  * 
  * Date Created: Aug 7, 2016
  */
-
+//TODO convert complex species and included species from CellDesigner Annootation to SBML Multi package
 public class MultiConverter {
 
 	/** The model. */

@@ -17,7 +17,6 @@ package org.sbml.layoutconverter;
 
 import java.util.List;
 
-import org.sbml._2001.ns.celldesigner.Gene;
 import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml.jsbml.Model;
 import org.sbml.jsbml.Reaction;

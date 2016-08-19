@@ -345,7 +345,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph);
 				
 				if(!editPointVertices.isEmpty()){				
-					editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterOfGlyph(reactantGlyph) , LayoutUtil.getCenterOfGlyph(productGlyph), editPointVertices);
+					editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterPositionOfGlyph(reactantGlyph) , LayoutUtil.getCenterPositionOfGlyph(productGlyph), editPointVertices);
 					rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
 					rw.setTShapeIndex(reactantGlyph.getCurve().getListOfCurveSegments().getChildCount() - 1);
 				}
@@ -363,7 +363,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				SpeciesReferenceGlyph productGlyph = getSpeciesReferenceGlyphByReferenceId(rg.getId(), product.getSpecies());
 				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph1, reactantGlyph2, productGlyph, r.getSBOTerm());
 
-				editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterOfGlyph(reactantGlyph1) , LayoutUtil.getCenterOfGlyph(reactantGlyph2), LayoutUtil.getCenterOfGlyph(productGlyph), editPointVertices);
+				editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterPositionOfGlyph(reactantGlyph1) , LayoutUtil.getCenterPositionOfGlyph(reactantGlyph2), LayoutUtil.getCenterPositionOfGlyph(productGlyph), editPointVertices);
 				rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
 			
 				int num0 = reactantGlyph1.getCurve().getListOfCurveSegments().getChildCount() - 1;
@@ -387,7 +387,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				SpeciesReferenceGlyph productGlyph2 = getSpeciesReferenceGlyphByReferenceId(rg.getId(), product2.getSpecies());
 				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph1, productGlyph2, r.getSBOTerm());
 
-				editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterOfGlyph(reactantGlyph) , LayoutUtil.getCenterOfGlyph(productGlyph1), LayoutUtil.getCenterOfGlyph(productGlyph2), editPointVertices);
+				editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterPositionOfGlyph(reactantGlyph) , LayoutUtil.getCenterPositionOfGlyph(productGlyph1), LayoutUtil.getCenterPositionOfGlyph(productGlyph2), editPointVertices);
 				rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
 			
 				int num0 = reactantGlyph.getCurve().getListOfCurveSegments().getChildCount() - 1;
@@ -410,7 +410,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				List<Point2D.Double> editPointVertices = convertSRGlyphToPointList(reactantGlyph, productGlyph);
 				
 				if(!editPointVertices.isEmpty()){				
-					editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterOfGlyph(reactantGlyph) , LayoutUtil.getCenterOfGlyph(productGlyph), editPointVertices);
+					editPointVertices = LayoutUtil.convertEditPointsToProportion(LayoutUtil.getCenterPositionOfGlyph(reactantGlyph) , LayoutUtil.getCenterPositionOfGlyph(productGlyph), editPointVertices);
 					rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
 					rw.setTShapeIndex(reactantGlyph.getCurve().getListOfCurveSegments().getChildCount() - 1);
 				}

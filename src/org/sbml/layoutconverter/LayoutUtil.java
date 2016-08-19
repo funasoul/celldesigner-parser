@@ -53,7 +53,7 @@ public class LayoutUtil {
 	 * @return Point
 	 * TODO
 	 */
-	public static Point getCenterOfGlyph(GraphicalObject go){
+	public static Point getCenterPositionOfGlyph(GraphicalObject go){
 		Point point;
 		if(go.isSetBoundingBox()){
 			Dimensions dimension = go.getBoundingBox().getDimensions();
@@ -81,9 +81,9 @@ public class LayoutUtil {
 	 * TODO
 	 */
 	public static Point getEditPointPosition(SpeciesGlyph origin, SpeciesGlyph axis1, SpeciesGlyph axis2, Point2D.Double editPoint){
-		Point pOrigin = getCenterOfGlyph(origin);
-		Point pA1 = getCenterOfGlyph(axis1);
-		Point pA2  = getCenterOfGlyph(axis2);
+		Point pOrigin = getCenterPositionOfGlyph(origin);
+		Point pA1 = getCenterPositionOfGlyph(axis1);
+		Point pA2  = getCenterPositionOfGlyph(axis2);
 		Point point = getEditPointPosition(pOrigin, pA1, pA2, editPoint);	
 		
 		return point;
@@ -112,24 +112,6 @@ public class LayoutUtil {
 		point.setZ(0);
 		return point;
 	}
-	
-	/**
-	 * Gets the distance from edit point.
-	 *
-	 * @param p1 the p 1
-	 * @param p2 the p 2
-	 * @param percentage the percentage
-	 * @return Point
-	 * TODO
-	 */
-	public static Point getDistanceFromEditPoint(Point p1, Point p2, double percentage){
-		Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
-		point.setX(getLength(p1, p2, percentage));
-		point.setY(getLength(p1, p2, percentage));
-		point.setZ(0);
-		
-		return point;
-	}
 
 	/**
 	 * Gets the length.
@@ -139,7 +121,7 @@ public class LayoutUtil {
 	 * @return the length
 	 */
 	public static double getLength(Point p1, Point p2){
-		return Math.hypot(p1.getX()-p2.getX(), p1.getY()-p2.getY());
+		return Math.hypot(p1.getX() - p2.getX(), p1.getY() - p2.getY());
 	}
 	
 	/**
@@ -152,7 +134,7 @@ public class LayoutUtil {
 	 * TODO
 	 */
 	public static double getLength(Point p1, Point p2, double proportion){
-		return Math.hypot(p1.getX()-p2.getX(), p1.getY()-p2.getY()) * proportion;
+		return getLength(p1, p2) * proportion;
 	}
 	
 	/**
@@ -164,11 +146,11 @@ public class LayoutUtil {
 	 * @return the double
 	 */
 	public static double dotProduct(Point startPoint, Point endPoint1, Point endPoint2){
-		Point vec1 = endPoint1.clone();
+		Point vec1 = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		vec1.setX(endPoint1.getX() - startPoint.getX());
 		vec1.setY(endPoint1.getY() - startPoint.getY());
 
-		Point vec2 = endPoint2.clone();
+		Point vec2 = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		vec2.setX(endPoint2.getX() - startPoint.getX());
 		vec2.setY(endPoint2.getY() - startPoint.getY());
 
@@ -199,9 +181,7 @@ public class LayoutUtil {
 	 * TODO
 	 */
 	public static Point createAdjustedPoint(double x, double y, double width, double height, String direction){
-		Point point = new Point();
-		point.setLevel(SBMLUtil.DEFAULT_SBML_LEVEL);
-		point.setVersion(SBMLUtil.DEFAULT_SBML_VERSION);
+		Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		point.setZ(0);
 		
 		if(direction.equals("NW")){
@@ -297,7 +277,7 @@ public class LayoutUtil {
 	 * @param endPoint the end point
 	 * @param basePoint the base point
 	 * @return List<LineSegment>
-	 * TODO
+	 * 
 	 */
 	public static List<LineSegment> createListOfBezier(Point startPoint, Point endPoint, Point basePoint){
 		List<LineSegment> lsList = new ArrayList<LineSegment>();
@@ -589,7 +569,6 @@ public class LayoutUtil {
 			editPointList.add(editPoint);
 		}
 			
-
 		return editPointList;
 	}
 	
@@ -718,15 +697,8 @@ public class LayoutUtil {
 	 */
 	//TODO determine the species position depending on how each glyphs are layed out
 	public static String getPositionToCompartment(SpeciesGlyph sg, CompartmentGlyph cg){
-//		Point sPoint = sg.getBoundingBox().getPosition();
-//		Dimensions sDim = sg.getBoundingBox().getDimensions();
-//
-//		Point cPoint = cg.getBoundingBox().getPosition();
-//		Dimensions cDim = cg.getBoundingBox().getDimensions();
-
 		return "inside";
 	}
-	
 	
     /**
      * Convert line type to CD string.
@@ -802,6 +774,6 @@ public class LayoutUtil {
      * @return the double
      */
     public static double crossProduct(Point startPoint1, Point startPoint2, Point endPoint1, Point endPoint2){
-    	return  (endPoint1.getX() - startPoint1.getX())*(endPoint2.getY() - startPoint2.getY()) - (endPoint1.getY() - startPoint1.getY()) * (endPoint2.getX() - startPoint2.getX());
+    	return  (endPoint1.getX() - startPoint1.getX()) * (endPoint2.getY() - startPoint2.getY()) - (endPoint1.getY() - startPoint1.getY()) * (endPoint2.getX() - startPoint2.getX());
     }
 }

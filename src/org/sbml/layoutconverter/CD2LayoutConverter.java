@@ -33,7 +33,6 @@ import org.sbml._2001.ns.celldesigner.ReactantLink;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
-import org.sbml.jsbml.Species;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Curve;
@@ -163,14 +162,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		convertCompartmentsToLayout(mWrapper.getListOfCompartmentAliasWrapper());
 		convertComplexAliasToLayout(mWrapper.getListOfComplexSpeciesAliasWrapper());
 		convertSpeciesAliasToLayout(mWrapper.getListOfSpeciesAliasWrapper());
-		for(SpeciesGlyph sg : layout.getListOfSpeciesGlyphs()){
-			System.out.println(sg);
-		}
-		System.out.println();
-		for(Species s : model.getListOfSpecies()){
-			System.out.println(s);
-		}
-		
 		convertReactionsToLayout(mWrapper.getListOfReactionWrapper());
 		
 		if(convert2FBC){

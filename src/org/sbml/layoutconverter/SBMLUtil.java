@@ -410,7 +410,6 @@ public class SBMLUtil {
 	 */
 	public static SBMLDocument addDefaultSBOTerm(SBMLDocument document){
 		TreeNode node = document.getRoot();
-		
 		addDefaultSBOTerm(node);
 		
 		return document;
@@ -680,7 +679,7 @@ public class SBMLUtil {
 	public static void setMathObject(SBMLDocument d, AbstractMathContainer math){
 		
 		if(math instanceof FunctionDefinition){
-			d.getModel().getListOfFunctionDefinitions().add((FunctionDefinition) math.clone());
+			d.getModel().addFunctionDefinition((FunctionDefinition) math.clone());
 		} else if(math instanceof KineticLaw){
 			KineticLaw kl = (KineticLaw) math;
 			d.getModel().getReaction(kl.getParent().getId()).setKineticLaw((KineticLaw) math.clone());
@@ -689,9 +688,9 @@ public class SBMLUtil {
 			Event e = (Event) ea.getParentSBMLObject();
 			d.getModel().getEvent(e.getId()).getListOfEventAssignments().append((EventAssignment) math.clone());
 		} else if(math instanceof InitialAssignment){
-			d.getModel().getListOfInitialAssignments().append((InitialAssignment) math.clone());
+			d.getModel().addInitialAssignment((InitialAssignment) math.clone());
 		} else if(math instanceof Rule){
-			d.getModel().getListOfRules().append((Rule) math.clone());
+			d.getModel().addRule((Rule) math.clone());
 		} else if(math instanceof Priority){
 			Priority p = (Priority) math;
 			Event e = p.getParent();
@@ -709,7 +708,7 @@ public class SBMLUtil {
 			Event e = delay.getParent();
 			d.getModel().getEvent(e.getId()).setDelay((Delay) math.clone());
 		} else {
-			System.err.println("Unknown class");
+			System.err.println("Unknown Math Class");
 		}
 	}
 

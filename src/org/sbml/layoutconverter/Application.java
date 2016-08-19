@@ -85,6 +85,7 @@ public class Application {
 
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
+			System.err.println(e.getLocalizedMessage());
 			return;
 		} catch (XMLStreamException | IOException e) {
 			System.err.println("Error reading SBML model");

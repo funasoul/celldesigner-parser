@@ -392,6 +392,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br1.getLinkAnchor().getPosition());
 				System.out.println(br1.getAlias() + " " + br1.getSpecies());
 				System.out.println( "srg1 " + srg1);
+				
 				BaseProduct bp1 = prsList.get(0);
 				SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
 				System.out.println(bp1.getAlias() + " " + bp1.getSpecies());
@@ -620,7 +621,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 */
 	public void convertSpeciesAliasToLayout(List<SpeciesAliasWrapper> saList) {
 		for (SpeciesAliasWrapper saw : saList) {
-			//SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + saw.getId());
 			//if(saw.isSetComplexSpeciesAlias())
 			//continue;
 			SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + saw.getId());

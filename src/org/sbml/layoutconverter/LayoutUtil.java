@@ -32,8 +32,10 @@ import org.sbml.jsbml.ext.layout.Dimensions;
 import org.sbml.jsbml.ext.layout.GraphicalObject;
 import org.sbml.jsbml.ext.layout.LineSegment;
 import org.sbml.jsbml.ext.layout.Point;
+import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
+import org.sbml.sbml.level2.version4.Reaction;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -68,6 +70,22 @@ public class LayoutUtil {
 		}
 		
 		return point;
+	}
+	
+	/**
+	 * Gets the point from glyph.
+	 *
+	 * @param go the go
+	 * @return the point from glyph
+	 */
+	public static Point getPointFromGlyph(GraphicalObject go){
+		if(go instanceof SpeciesGlyph || go instanceof CompartmentGlyph || go instanceof ReactionGlyph){
+			return go.getBoundingBox().getPosition();
+		}  else if(go instanceof SpeciesReferenceGlyph && go.isSetBoundingBox()){
+			return go.getBoundingBox().getPosition();
+		} else {
+			return ((SpeciesReferenceGlyph)go).getSpeciesGlyphInstance().getBoundingBox().getPosition();	
+		}
 	}
 	
 	/**

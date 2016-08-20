@@ -89,7 +89,7 @@ public class APITest {
 }
 ```
 
-### How to use CellDesigner-Parser
+### How to use LayoutConverter
 
 #### Create runnable
     mvn install
@@ -97,6 +97,27 @@ public class APITest {
 
 #### How to convert file
     java -jar layoutconverter-with-dependencies.jar /path/to/input.xml /path/to/output.xml
+##### Command Line Options
+**-h, --help**
+
+Display help message
+
+**-d, --defaultCompartment**
+
+Convert default compartment. By default, the conversion excludes the compartment named "default"
+
+**-c, --CD2Layout**
+
+Convert CellDesigner Annotation to SBML Layout package
+
+**-l, --Layout2CD**
+
+Convert SBML Layout package to CellDesigner Annotation
 
 ## So, what's next?
-- Decide what to do with current implementation of [JSBML](https://github.com/sbmlteam/jsbml).
+- Alter schema to add editPoints into reactant links and product links
+- Convert complex species and included species to [SBML Multi package](http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/multi)
+
+## License
+This content is licensed under the [Apache License](http://www.apache.org/licenses/LICENSE-2.0) .
+

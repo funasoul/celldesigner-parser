@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
-package org.sbml.layoutconverter;
+package org.sbml.extconverter;
 
 import java.util.List;
 
@@ -44,13 +44,7 @@ import org.sbml.wrapper.SpeciesWrapper;
  * Date Created: Aug 6, 2016
  */
 
-public class FBCConverter {
-	
-	/** The model. */
-	private Model model;
-	
-	/** The m wrapper. */
-	private ModelWrapper mWrapper;
+public class FBCConverter extends EXTConverter{
 	
 	/** The fbc plugin. */
 	private FBCModelPlugin fbcPlugin;
@@ -62,8 +56,7 @@ public class FBCConverter {
 	 * @param mWrapper the m wrapper
 	 */
 	public FBCConverter(Model model, ModelWrapper mWrapper) {
-		this.model = model;
-		this.mWrapper = mWrapper;
+		super(model, mWrapper);
 	}
 	
 	/**

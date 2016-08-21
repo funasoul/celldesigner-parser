@@ -13,9 +13,36 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *******************************************************************************/
+package org.sbml.extconverter;
+
+import org.sbml.jsbml.Model;
+import org.sbml.wrapper.ModelWrapper;
+
+// TODO: Auto-generated Javadoc
 /**
- * @author Kaito Ii
+ * The Class MultiConverter.
  *
- * Date Created: Aug 16, 2016
+ * @author Kaito Ii
+ * 
+ * Date Created: Aug 7, 2016
  */
-package org.sbml.layoutconverter;
+//TODO convert complex species and included species from CellDesigner Annootation to SBML Multi package
+public class MultiConverter extends EXTConverter{
+	
+	/**
+	 * Instantiates a new multi converter.
+	 *
+	 * @param model the model
+	 * @param mWrapper the m wrapper
+	 */
+	public MultiConverter(Model model, ModelWrapper mWrapper){
+		super(model, mWrapper);
+	}
+	
+	/**
+	 * Convert.
+	 */
+	public void convert(){
+		
+	}
+}

@@ -30,6 +30,8 @@ import org.sbml._2001.ns.celldesigner.LinkTarget;
 import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml._2001.ns.celldesigner.ProductLink;
 import org.sbml._2001.ns.celldesigner.ReactantLink;
+import org.sbml.extconverter.FBCConverter;
+import org.sbml.extconverter.MultiConverter;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLException;
@@ -67,12 +69,6 @@ import org.sbml.wrapper.SpeciesAliasWrapper;
 
 public class CD2LayoutConverter extends BaseLayoutConverter {
 
-	/** The convert 2 FBC. */
-	private boolean convert2FBC = true;
-	
-	/** The convert 2 multi. */
-	private boolean convert2Multi = false;
-	
 	/**
 	 * Instantiates a new CD 2 layout converter.
 	 *
@@ -127,6 +123,19 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 */
 	public CD2LayoutConverter(File file, boolean defaultCompartment) throws XMLStreamException, IOException, JAXBException {
 		super(file, defaultCompartment);
+		init(file);
+	}
+
+	/**
+	 * @param file
+	 * @param options
+	 * @throws IOException 
+	 * @throws XMLStreamException 
+	 * @throws JAXBException 
+	 */
+	public CD2LayoutConverter(File file, ApplicationOption options) throws XMLStreamException, IOException, JAXBException {
+		super(file, options);
+		convert2FBC = options.isConvert2FBC();
 		init(file);
 	}
 

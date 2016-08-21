@@ -16,6 +16,6 @@
 /**
  * @author Kaito Ii
  *
- * Date Created: Aug 16, 2016
+ * Date Created: Aug 22, 2016
  */
-package org.sbml.layoutconverter;
+package org.sbml.extconverter;

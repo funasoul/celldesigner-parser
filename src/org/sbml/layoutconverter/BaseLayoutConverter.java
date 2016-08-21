@@ -69,6 +69,12 @@ public abstract class BaseLayoutConverter {
 	/** The Constant DEFAULT_SPECIES_DEPTH. */
 	protected static final double DEFAULT_SPECIES_DEPTH = 1.0;
 
+	/** The convert 2 FBC. */
+	protected boolean convert2FBC = false;
+	
+	/** The convert 2 multi. */
+	protected boolean convert2Multi = false;
+		
 	/**
 	 * Instantiates a new base layout converter.
 	 *
@@ -122,6 +128,20 @@ public abstract class BaseLayoutConverter {
 	}
 	
 	/**
+	 * Instantiates a new base layout converter.
+	 *
+	 * @param file the file
+	 * @param options the options
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
+	public BaseLayoutConverter(File file, ApplicationOption options) throws XMLStreamException, IOException{
+		this(file);
+		this.outputFileName = options.isSetOutput() ? options.getOutput() : SBMLUtil.createOutputFileName(file);
+		this.convertDefaultCompartment = options.isDefaultCompartment();
+	}
+	
+	/**
 	 * Gets the document.
 	 *
 	 * @return the document
@@ -166,9 +186,9 @@ public abstract class BaseLayoutConverter {
 	 * Save.
 	 */
 	public abstract void save();
-	
+
 	/**
-	 * void TODO.
+	 * Validate.
 	 */
 	public void validate() {
 		document.checkConsistency();
@@ -180,7 +200,7 @@ public abstract class BaseLayoutConverter {
 	}
 
 	/**
-	 * void TODO.
+	 * Print
 	 */
 	public void print() {
 		try {
@@ -191,6 +211,60 @@ public abstract class BaseLayoutConverter {
 		} catch (XMLStreamException e) {
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Checks if is convert default compartment.
+	 *
+	 * @return the convertDefaultCompartment
+	 */
+	public boolean isConvertDefaultCompartment() {
+		return convertDefaultCompartment;
+	}
+
+	/**
+	 * Sets the convert default compartment.
+	 *
+	 * @param convertDefaultCompartment the convertDefaultCompartment to set
+	 */
+	public void setConvertDefaultCompartment(boolean convertDefaultCompartment) {
+		this.convertDefaultCompartment = convertDefaultCompartment;
+	}
+
+	/**
+	 * Checks if is convert 2 FBC.
+	 *
+	 * @return the convert2FBC
+	 */
+	public boolean isConvert2FBC() {
+		return convert2FBC;
+	}
+
+	/**
+	 * Sets the convert 2 FBC.
+	 *
+	 * @param convert2fbc the convert2FBC to set
+	 */
+	public void setConvert2FBC(boolean convert2fbc) {
+		convert2FBC = convert2fbc;
+	}
+
+	/**
+	 * Checks if is convert 2 multi.
+	 *
+	 * @return the convert2Multi
+	 */
+	public boolean isConvert2Multi() {
+		return convert2Multi;
+	}
+
+	/**
+	 * Sets the convert 2 multi.
+	 *
+	 * @param convert2Multi the convert2Multi to set
+	 */
+	public void setConvert2Multi(boolean convert2Multi) {
+		this.convert2Multi = convert2Multi;
 	}
 		
 }

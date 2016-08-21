@@ -59,7 +59,6 @@ import org.sbml.wrapper.SpeciesAliasWrapper;
 import org.sbml.wrapper.SpeciesReferenceWrapper;
 import org.sbml.wrapper.SpeciesWrapper;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class Layout2CDConverter.
@@ -129,6 +128,19 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 */
 	public Layout2CDConverter(File file, boolean defaultCompartment) throws XMLStreamException, IOException, SBMLException, JAXBException {
 		super(file, defaultCompartment);
+		init();
+	}
+
+	/**
+	 * @param file
+	 * @param options
+	 * @throws IOException 
+	 * @throws XMLStreamException 
+	 * @throws JAXBException 
+	 * @throws SBMLException 
+	 */
+	public Layout2CDConverter(File file, ApplicationOption options) throws XMLStreamException, IOException, SBMLException, JAXBException {
+		super(file, options);
 		init();
 	}
 

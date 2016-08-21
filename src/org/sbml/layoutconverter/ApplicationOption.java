@@ -44,6 +44,10 @@ public class ApplicationOption {
 	/** The default compartment. */
 	@Option(name = "-d", aliases= {"--defaultCompartment"}, required = false, usage = "convert default compartment")
 	private Boolean defaultCompartment;
+
+	/** The convert 2 FBC. */
+	@Option(name = "-f", aliases= {"--fbc"}, required = false, usage = "add FBC packages")
+	private boolean convert2FBC;
 	
 	/** The input. */
 	@Argument(index = 0, metaVar = "input files", required = true, usage = "input file")
@@ -105,6 +109,31 @@ public class ApplicationOption {
 	}
 
 	/**
+	 * Checks if is sets the conversion direction.
+	 *
+	 * @return true, if is sets the conversion direction
+	 */
+	public boolean isSetConversionDirection(){
+		if(issetLayout2CD() || issetCD2Layout())
+			return false;
+		
+		return true;
+	}
+	
+	/**
+	 * Checks if is 2 CD 2 layout.
+	 *
+	 * @return true, if is 2 CD 2 layout
+	 */
+	public boolean is2CD2Layout(){
+		if(issetCD2Layout())
+			return CD2Layout;
+		
+		else
+			return Layout2CD;
+	}
+	
+	/**
 	 * Checks if is default compartment.
 	 *
 	 * @return the defaultCompartmen
@@ -126,6 +155,18 @@ public class ApplicationOption {
 	}
 
 	/**
+	 * Checks if is sets the output.
+	 *
+	 * @return true, if is sets the output
+	 */
+	public boolean isSetOutput(){
+		if(output == null)
+			return false;
+		
+		return true;
+	}
+	
+	/**
 	 * Gets the output.
 	 *
 	 * @return the output
@@ -137,4 +178,12 @@ public class ApplicationOption {
 		return output;
 	}
 
+	/**
+	 * Gets the convert 2 FBC.
+	 *
+	 * @return the convert 2 FBC
+	 */
+	public boolean isConvert2FBC() {
+		return convert2FBC;
+	}
 }

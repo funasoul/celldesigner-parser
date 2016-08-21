@@ -129,6 +129,13 @@ public class LayoutConverter {
 		this(file, defaultCompartment, SBMLUtil.isSetCellDesignerNameSpace(file), outputpath);
 	}
 
+	public LayoutConverter(File file, ApplicationOption options) throws XMLStreamException, IOException, JAXBException{
+		if((options.isSetConversionDirection() && options.isLayout2CD()) || (!options.isSetConversionDirection() && SBMLUtil.isSetCellDesignerNameSpace(file)))
+			converter = new CD2LayoutConverter(file, options);
+		else
+			converter = new Layout2CDConverter(file, options);
+	}
+	
 	/**
 	 * Convert.
 	 */

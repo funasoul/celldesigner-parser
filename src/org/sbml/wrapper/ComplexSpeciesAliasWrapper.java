@@ -225,5 +225,41 @@ public class ComplexSpeciesAliasWrapper extends ComplexSpeciesAlias {
     public ComplexSpeciesAlias getComplexSpeciesAliased() {
         return complexSpeciesAlias;
     }
+
+	/**
+	 * @return the speciesWrapper
+	 */
+	public SpeciesWrapper getSpeciesWrapper() {
+		return speciesWrapper;
+	}
+
+	/**
+	 * @param speciesWrapper the speciesWrapper to set
+	 */
+	public void setSpeciesWrapper(SpeciesWrapper speciesWrapper) {
+		this.speciesWrapper = speciesWrapper;
+	}
+
+	/**
+	 * @return the compartmentAliasWrapper
+	 */
+	public CompartmentAliasWrapper getCompartmentAliasWrapper() {
+		return compartmentAliasWrapper;
+	}
+
+	/**
+	 * @param compartmentAliasWrapper the compartmentAliasWrapper to set
+	 */
+	public void setCompartmentAliasWrapper(
+			CompartmentAliasWrapper compartmentAliasWrapper) {
+		this.compartmentAliasWrapper = compartmentAliasWrapper;
+	}
+
+	/**
+	 * @return the modelWrapper
+	 */
+	public ModelWrapper getModelWrapper() {
+		return modelWrapper;
+	}
 	
 }

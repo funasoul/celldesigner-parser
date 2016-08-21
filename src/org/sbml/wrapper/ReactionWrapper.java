@@ -934,4 +934,11 @@ public class ReactionWrapper extends Reaction{
 		baseProducts.add(bp);
 	}
 
+	/**
+	 * @return the modelWrapper
+	 */
+	public ModelWrapper getModelWrapper() {
+		return modelWrapper;
+	}
+
 }

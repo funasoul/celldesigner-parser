@@ -118,6 +118,7 @@ Convert SBML Layout package to CellDesigner Annotation
 ## So, what's next?
 - Alter schema to add editPoints into reactant links and product links
 - Convert complex species and included species to [SBML Multi package](http://sbml.org/Documents/Specifications/SBML_Level_3/Packages/multi)
+- Convert Layers in CellDesigner Annotation
 
 ## License
 This content is licensed under the [Apache License](http://www.apache.org/licenses/LICENSE-2.0) .

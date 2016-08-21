@@ -88,7 +88,6 @@ public class SpeciesWrapper extends Species{
 			setAnnotations();
 		else
 			initAnnotations();
-		
 	}
 
 	/**
@@ -316,6 +315,27 @@ public class SpeciesWrapper extends Species{
 		catalyzed.setReaction(reaction);
 
 		return catalyzed;
+	}
+
+	/**
+	 * @return the modelWrapper
+	 */
+	public ModelWrapper getModelWrapper() {
+		return modelWrapper;
+	}
+
+	/**
+	 * @return the compartmentWrapper
+	 */
+	public CompartmentWrapper getCompartmentWrapper() {
+		return compartmentWrapper;
+	}
+
+	/**
+	 * @param compartmentWrapper the compartmentWrapper to set
+	 */
+	public void setCompartmentWrapper(CompartmentWrapper compartmentWrapper) {
+		this.compartmentWrapper = compartmentWrapper;
 	}
 
 }

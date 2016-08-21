@@ -115,4 +115,11 @@ public class SpeciesReferenceWrapper extends SpeciesReference{
 		return modelWrapper.getSpeciesAliasWrapperById(getAlias());
 	}
 
+	/**
+	 * @return the modelWrapper
+	 */
+	public ModelWrapper getModelWrapper() {
+		return modelWrapper;
+	}
+
 }

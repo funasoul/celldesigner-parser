@@ -251,4 +251,11 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 		System.out.println(modification.getEditPoints());
 	}
 
+	/**
+	 * @return the modelWrapper
+	 */
+	public ModelWrapper getModelWrapper() {
+		return modelWrapper;
+	}
+
 }

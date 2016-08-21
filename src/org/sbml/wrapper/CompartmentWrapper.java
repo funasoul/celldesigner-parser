@@ -133,4 +133,11 @@ public class CompartmentWrapper extends Compartment {
 	public CompartmentAliasWrapper getAliasWrapper() {
 		return modelWrapper.getCompartmentAliasWrapperByCompartmentId(id);
 	}
+
+	/**
+	 * @return the modelWrapper
+	 */
+	public ModelWrapper getModelWrapper() {
+		return modelWrapper;
+	}
 }

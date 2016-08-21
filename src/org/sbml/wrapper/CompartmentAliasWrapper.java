@@ -303,4 +303,11 @@ public class CompartmentAliasWrapper extends CompartmentAlias {
     public CompartmentWrapper getCompartmentWrapperAliased(){
     	return compartmentWrapper;
     }
+
+	/**
+	 * @return the modelWrapper
+	 */
+	public ModelWrapper getModelWrapper() {
+		return modelWrapper;
+	}
 }

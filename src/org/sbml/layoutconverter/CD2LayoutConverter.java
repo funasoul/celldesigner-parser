@@ -31,6 +31,7 @@ import org.sbml._2001.ns.celldesigner.Modification;
 import org.sbml._2001.ns.celldesigner.ProductLink;
 import org.sbml._2001.ns.celldesigner.ReactantLink;
 import org.sbml.jsbml.ListOf;
+import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.ext.layout.BoundingBox;
@@ -51,11 +52,9 @@ import org.sbml.wrapper.CompartmentAliasWrapper;
 import org.sbml.wrapper.CompartmentWrapper;
 import org.sbml.wrapper.ComplexSpeciesAliasWrapper;
 import org.sbml.wrapper.ModelWrapper;
-import org.sbml.wrapper.ModifierSpeciesReferenceWrapper;
 import org.sbml.wrapper.ObjectFactory;
 import org.sbml.wrapper.ReactionWrapper;
 import org.sbml.wrapper.SpeciesAliasWrapper;
-import org.sbml.wrapper.SpeciesReferenceWrapper;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -72,7 +71,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	private boolean convert2FBC = true;
 	
 	/** The convert 2 multi. */
-	private boolean convert2Multi = true;
+	private boolean convert2Multi = false;
 	
 	/**
 	 * Instantiates a new CD 2 layout converter.
@@ -168,7 +167,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			FBCConverter fbcConverter = new FBCConverter(model, mWrapper);
 			fbcConverter.convert();
 		}
-			
+		
 		if(convert2Multi){
 			MultiConverter multiConverter = new MultiConverter(model, mWrapper);
 			multiConverter.convert();
@@ -278,7 +277,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			BoundingBox reactionBB = rg.createBoundingBox();
 			double xmin = Integer.MAX_VALUE, xmax = Integer.MIN_VALUE, ymin = Integer.MAX_VALUE, ymax = Integer.MIN_VALUE;
 			
-			System.out.println(rw.getId() + srgList.size());
 			for(SpeciesReferenceGlyph srg : srgList){
 				Point position = srg.getBoundingBox().getPosition();
 				Dimensions dim = srg.getBoundingBox().getDimensions();
@@ -294,7 +292,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				
 				if(ymax < position.getY() + dim.getHeight())
 					ymax = position.getY() + dim.getHeight();
-				System.out.println(srg + srg.getSpeciesGlyph());
 			}
 			Dimensions dim = new Dimensions(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 			dim.setWidth(xmax - xmin);
@@ -305,14 +302,9 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			if (brsList.size() == 1 && prsList.size() == 1) {
 				BaseReactant br = brsList.get(0);
 				BaseProduct bp = prsList.get(0);
-				System.out.println(br.getAlias() + " " + br.getSpecies());
-				System.out.println(bp.getAlias() + " " + bp.getSpecies());
 				SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br.getSpecies());
-				//SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
 				SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp.getSpecies());
-				//SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
-				System.out.println("srg1 " + srg1);
-				System.out.println("srg2 " + srg2);
+
 				Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br.getLinkAnchor().getPosition());
 				Point endPoint = LayoutUtil.createAdjustedPoint(srg2, bp.getLinkAnchor().getPosition());
 				Point reactantPoint = LayoutUtil.createCenterPoint(srg1);
@@ -347,9 +339,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				SpeciesReferenceGlyph srg3 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
 				SpeciesGlyph sg3 = srg3.getSpeciesGlyphInstance();
 				Point endPoint2 = LayoutUtil.createAdjustedPoint(sg3, bp1.getLinkAnchor().getPosition());
-				System.out.println("srg1 " + srg1);
-				System.out.println("srg2 " + srg2);
-				System.out.println("srg3 " + srg3);
 
 				Point reactantPoint1 = LayoutUtil.createCenterPoint(sg1);
 				Point reactantPoint2 = LayoutUtil.createCenterPoint(sg2);
@@ -384,28 +373,18 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				centerPoint = ls.getStart().clone();
 
 			} else if (rw.getReactionType().equals("DISSOCIATION")
-					|| rw.getReactionType().equals("TRUNCATION")) { // one to
-																	// two
+					|| rw.getReactionType().equals("TRUNCATION")) { 
 				BaseReactant br1 = brsList.get(0);
 				SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br1.getSpecies());
-				//SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
 				Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br1.getLinkAnchor().getPosition());
-				System.out.println(br1.getAlias() + " " + br1.getSpecies());
-				System.out.println( "srg1 " + srg1);
 				
 				BaseProduct bp1 = prsList.get(0);
 				SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
-				System.out.println(bp1.getAlias() + " " + bp1.getSpecies());
-				System.out.println( "srg2 " + srg2);
-				//SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
 				Point endPoint1 = LayoutUtil.createAdjustedPoint(srg2, bp1.getLinkAnchor().getPosition());
 
 				BaseProduct bp2 = prsList.get(1);
 				SpeciesReferenceGlyph srg3 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp2.getSpecies());
-				//SpeciesGlyph sg3 = layout.getSpeciesGlyph("SpeciesGlyph_" + bp2.getAlias());
 				Point endPoint2 = LayoutUtil.createAdjustedPoint(srg3, bp2.getLinkAnchor().getPosition());
-
-				System.out.println("srg3 " + srg3);
 
 				Point reactantPoint = LayoutUtil.createCenterPoint(srg1);
 				Point productPoint1 = LayoutUtil.createCenterPoint(srg2);
@@ -443,14 +422,14 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			}
 
 			if (rw.isSetModifier()) {
-				List<ModifierSpeciesReferenceWrapper> msrwList = rw.getListOfModifierWrapper();
-				for (ModifierSpeciesReferenceWrapper msrw : msrwList) {
-					Modification m = rw.getModificationByModifierId(msrw.getSpecies());
-					editPointList = msrw.getEditPoints();
-					SpeciesReferenceGlyph srg = rg.getSpeciesReferenceGlyph("srGlyphModifier_" + rg.getReaction() + "_" + msrw.getSpecies());
+				for (Modification m : rw.getListOfModification()) {
+					if(m.getType().contains("BOOLEAN"))
+						continue;
+					editPointList = LayoutUtil.createEditPointsAsList(m.getEditPoints());
+
+					SpeciesReferenceGlyph srg = rg.getSpeciesReferenceGlyph("srGlyphModifier_" + rg.getReaction() + "_" + m.getModifiers());
 					SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
 					Point modifierPoint = LayoutUtil.createCenterPoint(sg);
-
 					LinkTarget lt = rw.getLinkTargetByModifier(m);
 					Point startPoint = LayoutUtil.createAdjustedPoint(sg, lt.getLinkAnchor().getPosition());
 					List<LineSegment> lsList2 = LayoutUtil.createListOfLineSegment(startPoint, centerPoint,
@@ -546,7 +525,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			tg.setGraphicalObject(rg);
 			BoundingBox bb = tg.createBoundingBox(20, 10, 1d);
 			bb.setPosition(centerPoint);
-			System.out.println();
 		
 			for(SpeciesReferenceGlyph srg : srgList){
 				if(srg.getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT){
@@ -557,47 +535,60 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		}
 	}
 
-	/**
-	 * Creates the species reference glyph.
-	 *
-	 * @param rg
-	 *            the rg
-	 * @param rw
-	 *            the rw
-	 * @return ListOf<SpeciesReferenceGlyph> TODO
-	 */
 	public ListOf<SpeciesReferenceGlyph> createSpeciesReferenceGlyph(ReactionGlyph rg, ReactionWrapper rw) {
+		Reaction reaction = (Reaction) rg.getReactionInstance();
 		ListOf<SpeciesReferenceGlyph> srgList = rg.getListOfSpeciesReferenceGlyphs();
-
-		List<SpeciesReferenceWrapper> reactantList = rw.getListOfReactantWrapper();
-		for (SpeciesReferenceWrapper srw : reactantList) {
-			//SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphReactant_" + rg.getReaction() + "_" + srw.getAlias());
-			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphReactant_" + rg.getReaction() + "_" + srw.getSpecies());
-			srg.setSpeciesReference(srw.getSpecies());
+		List<BaseReactant> baseReactantList = rw.getBaseReactants();
+		List<BaseProduct> baseProductList = rw.getBaseProducts();
+		List<ReactantLink> reactantLinkList = rw.getListOfReactantLinks();
+		List<ProductLink> productLinkList = rw.getListOfProductLinks();
+		List<Modification> modificationList = rw.getListOfModification();
+		
+		for (BaseReactant br : baseReactantList) {
+			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphReactant_" + rg.getReaction() + "_" + br.getSpecies());
+			if(reaction.getListOfReactants().get(br.getSpecies()) != null)
+				srg.setSpeciesReference(br.getSpecies());
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
-			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
+			srg.setSpeciesGlyph("SpeciesGlyph_" + br.getAlias());
 			srg.setBoundingBox(srg.getSpeciesGlyphInstance().getBoundingBox().clone());
-			
 		}
 
-		List<SpeciesReferenceWrapper> productList = rw.getListOfProductWrapper();
-		for (SpeciesReferenceWrapper srw : productList) {
-			//SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphProduct_" + rg.getReaction() + "_" + srw.getAlias());
-			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphProduct_" + rg.getReaction() + "_" + srw.getSpecies());
-			srg.setSpeciesReference(srw.getSpecies());
+		for(ReactantLink link : reactantLinkList){
+			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphReactant_" + rg.getReaction() + "_" + link.getReactant());
+			if(reaction.getListOfReactants().get(link.getReactant()) != null)
+				srg.setSpeciesReference(link.getReactant());
+			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
+			srg.setSpeciesGlyph("SpeciesGlyph_" + link.getAlias());
+			srg.setBoundingBox(srg.getSpeciesGlyphInstance().getBoundingBox().clone());			
+		}
+		
+		for (BaseProduct bp : baseProductList) {
+			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphProduct_" + rg.getReaction() + "_" + bp.getSpecies());
+			if(reaction.getListOfReactants().get(bp.getSpecies()) != null)
+				srg.setSpeciesReference(bp.getSpecies());
 			srg.setRole(SpeciesReferenceRole.PRODUCT);
-			srg.setSpeciesGlyph("SpeciesGlyph_" + srw.getAlias());
+			srg.setSpeciesGlyph("SpeciesGlyph_" + bp.getAlias());
 			srg.setBoundingBox(srg.getSpeciesGlyphInstance().getBoundingBox().clone());
+		}
+
+		for(ProductLink link : productLinkList){
+			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphProduct_" + rg.getReaction() + "_" + link.getProduct());
+			if(reaction.getListOfReactants().get(link.getProduct()) != null)
+				srg.setSpeciesReference(link.getProduct());
+			srg.setRole(SpeciesReferenceRole.PRODUCT);
+			srg.setSpeciesGlyph("SpeciesGlyph_" + link.getAlias());
+			srg.setBoundingBox(srg.getSpeciesGlyphInstance().getBoundingBox().clone());			
 		}
 
 		if (rw.isSetModifier()) {
-			List<ModifierSpeciesReferenceWrapper> modifierList = rw.getListOfModifierWrapper();
-			for (ModifierSpeciesReferenceWrapper msrw : modifierList) {
-				SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphModifier_" + rg.getReaction() + "_" + msrw.getSpecies());
-				srg.setSpeciesReference(msrw.getSpecies());
-				srg.setSpeciesGlyph("SpeciesGlyph_" + msrw.getAlias());
+			for (Modification m : modificationList) {
+				if(m.getType().contains("BOOLEAN"))
+					continue;
+				SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphModifier_" + rg.getReaction() + "_" + m.getModifiers());
+				srg.setSpeciesReference(m.getModifiers());
+				srg.setSpeciesGlyph("SpeciesGlyph_" + m.getAliases());
 				srg.setBoundingBox(srg.getSpeciesGlyphInstance().getBoundingBox().clone());
-				String s = rw.getModifierTypeByModifierId(msrw.getSpecies());
+				String s = rw.getModifierTypeByModifierId(m.getModifiers());
 
 				if (s.equals("CATALYSIS") || s.equals("UNKNOWN_CATALYSIS")) {
 					srg.setRole(SpeciesReferenceRole.ACTIVATOR);
@@ -612,7 +603,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 		return srgList;
 	}
-
+	
 	/**
 	 * Convert species alias to layout.
 	 *
@@ -621,11 +612,10 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	 */
 	public void convertSpeciesAliasToLayout(List<SpeciesAliasWrapper> saList) {
 		for (SpeciesAliasWrapper saw : saList) {
-			//if(saw.isSetComplexSpeciesAlias())
-			//continue;
 			SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + saw.getId());
 			if (model.getSpecies(saw.getSpecies()) != null)
 				sg.setReference(saw.getSpecies());
+
 			BoundingBox bb = sg.createBoundingBox();
 			Dimensions dimension = bb.createDimensions();
 			dimension.setWidth(saw.getW());
@@ -670,7 +660,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 			SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + csaw.getId());
 			if (model.getSpecies(csaw.getSpecies()) != null)
 				sg.setReference(csaw.getSpecies());
-		
+			
 			BoundingBox bb = sg.createBoundingBox();
 			Dimensions dimension = bb.createDimensions();
 			dimension.setWidth(csaw.getW());

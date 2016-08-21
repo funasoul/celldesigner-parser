@@ -104,10 +104,10 @@ public class FBCConverter {
 	public void convertReactions(){
 		List<ReactionWrapper> rwList = mWrapper.getListOfReactionWrapper();
 		for(ReactionWrapper rw : rwList){
-			
 			List<Modification> mList = rw.getListOfModification();
 			if(mList == null) 
 				continue;
+			
 			for(Modification modification : mList){
 				if(modification.getType().contains("BOOLEAN_LOGIC_GATE")){
 					Reaction reaction = model.getReaction(rw.getId());
@@ -121,7 +121,7 @@ public class FBCConverter {
 					String modifiers = modification.getModifiers();
 					String[] modifierList = modifiers.split(",");
 					for(String m : modifierList){
-						if(fbcPlugin.getListOfGeneProducts().get(m) == null){
+						if(fbcPlugin.getListOfGeneProducts().get("gene_" + m) == null){
 							GeneProduct geneProduct = fbcPlugin.createGeneProduct("gene_" + m);
 							geneProduct.setLabel(m);
 							geneProduct.setAssociatedSpecies(m);
@@ -130,9 +130,9 @@ public class FBCConverter {
 					
 					LogicalOperator lo;
 					if(modification.getType().contains("AND")){
-						lo = setAllProductRef(new And(), modifierList);
+						lo = setAllProductRef(new And(), modifierList, rw.getId());
 					} else {
-						lo = setAllProductRef(new Or(), modifierList);
+						lo = setAllProductRef(new Or(), modifierList, rw.getId());
 					}
 					gpa.setAssociation(lo);		
 				}
@@ -147,9 +147,9 @@ public class FBCConverter {
 	 * @param modifiers the modifiers
 	 * @return the logical operator
 	 */
-	public LogicalOperator setAllProductRef(LogicalOperator lo, String[] modifiers){
+	public LogicalOperator setAllProductRef(LogicalOperator lo, String[] modifiers, String reactionId){
 		for(String modifier : modifiers){
-				GeneProductRef gpr = lo.createGeneProductRef("GeneProductRef_" + modifier);
+				GeneProductRef gpr = lo.createGeneProductRef("GeneProductRef_" + reactionId + "_" + modifier);
 				gpr.setGeneProduct("gene_" + modifier);
 		}
 		

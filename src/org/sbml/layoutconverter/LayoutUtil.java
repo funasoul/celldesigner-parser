@@ -35,7 +35,6 @@ import org.sbml.jsbml.ext.layout.Point;
 import org.sbml.jsbml.ext.layout.ReactionGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
-import org.sbml.sbml.level2.version4.Reaction;
 
 // TODO: Auto-generated Javadoc
 /**
@@ -749,7 +748,7 @@ public class LayoutUtil {
     		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMaxX(), glyph.getMinY()));
     	
     	} else if(reactionLine.intersectsLine(glyph.getMaxX(), glyph.getMinY(), glyph.getMaxX(), glyph.getMaxY())){ //right
-    		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMaxX(), glyph.getMinY()), new Point( glyph.getMaxX(), glyph.getMaxY()));
+    		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMaxX(), glyph.getMinY()), new Point(glyph.getMaxX(), glyph.getMaxY()));
     	
     	} else if(reactionLine.intersectsLine(glyph.getMinX(), glyph.getMaxY(), glyph.getMaxX(), glyph.getMaxY())){ //down
     		return getIntersectingPoint(cs.getStart(), cs.getEnd(), new Point(glyph.getMinX(), glyph.getMaxY()), new Point(glyph.getMaxX(), glyph.getMaxY()));
@@ -772,13 +771,16 @@ public class LayoutUtil {
      * @return the intersecting point
      */
     public static Point getIntersectingPoint(Point p1Start, Point p1End, Point p2Start, Point p2End){
+    	if((p1End.getX() == p2Start.getX() && p1End.getY() == p2Start.getY()) || (p1End.getX() == p2End.getX() && p1End.getY() == p2End.getY()))
+    		return p1End;
+    	
     	Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
     	double area1 = crossProduct(p2Start, p2Start, p2End, p1Start) / 2;
     	double area2 = crossProduct(p2Start, p1End, p2End, p2Start) / 2;
     	point.setX(p1Start.getX() + (p1End.getX() - p1Start.getX()) * area1 / (area1 + area2));
     	point.setY(p1Start.getY() + (p1End.getY() - p1Start.getY()) * area1 / (area1 + area2));
     	point.setZ(0d);
-    	
+    
     	return point;
     }
 

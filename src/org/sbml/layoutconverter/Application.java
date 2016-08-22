@@ -62,27 +62,11 @@ public class Application {
 		
 		String filepath = option.getInput();
 		String outputpath = option.getOutput();
-		Boolean defaultCompartment = option.isDefaultCompartment();
-		Boolean isCD2Layout;
-		if(option.issetCD2Layout()) 
-			isCD2Layout = option.isCD2Layout();
-		else if (option.issetLayout2CD()) 
-			isCD2Layout =  !option.isLayout2CD();
-		else 
-			isCD2Layout = null;
-
+		
 		System.out.println(filepath);
 		System.out.println(outputpath);
 		try {
-			if(!filepath.isEmpty() && !outputpath.isEmpty() && isCD2Layout != null)
-				converter = new LayoutConverter(new File(filepath), defaultCompartment, isCD2Layout, outputpath);
-			else if(!filepath.isEmpty() && !outputpath.isEmpty())
-				converter = new LayoutConverter(new File(filepath), defaultCompartment, outputpath);
-			else if(!filepath.isEmpty() && isCD2Layout != null)
-				converter = new LayoutConverter(new File(filepath), defaultCompartment, isCD2Layout);
-			else
-				converter = new LayoutConverter(new File(filepath), defaultCompartment);
-
+			converter = new LayoutConverter(new File(filepath), option);
 		} catch (JAXBException e) {
 			System.err.println("Error unmarshaling XML");
 			System.err.println(e.getLocalizedMessage());

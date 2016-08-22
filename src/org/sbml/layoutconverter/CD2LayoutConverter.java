@@ -463,6 +463,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 				
 				editPointList = new ArrayList<Point2D.Double>();
 				List<LineSegment> lsList2;
+				
 				if (lineType.equals("Curve")){
 					lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex).getStart());
 					

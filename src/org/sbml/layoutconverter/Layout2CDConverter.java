@@ -427,8 +427,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					for(int i = 1; i < reactantList.size(); i++){
 						SpeciesReferenceGlyph srg = getSpeciesReferenceGlyphByReferenceId(rg.getId(), reactantList.get(i).getSpecies());
 						Point point = LayoutUtil.getPointFromGlyph(srg);
-						rw.createReactantLink(mWrapper.getSpeciesAliasWrapperByPosition(point.getX(), point.getY()));
-						rw.setReactantLinkLineType(srg.getSpeciesReference(), srg.getCurve().getListOfCurveSegments().get(0).getType());
+						SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperByPosition(point.getX(), point.getY()); 
+						rw.createReactantLink(saw);
+						rw.setReactantLinkLineType(saw.getSpecies(), srg.getCurve().getListOfCurveSegments().getLast().getType());
 					}
 				}
 				
@@ -437,8 +438,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					for(int i = 1; i < productList.size(); i++){
 						SpeciesReferenceGlyph srg = getSpeciesReferenceGlyphByReferenceId(rg.getId(), productList.get(i).getSpecies());
 						Point point = LayoutUtil.getPointFromGlyph(srg);
-						rw.createProductLink(mWrapper.getSpeciesAliasWrapperByPosition(point.getX(), point.getY()));
-						rw.setProductLinkLineType(srg.getSpeciesReference(), srg.getCurve().getListOfCurveSegments().get(0).getType());
+						SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperByPosition(point.getX(), point.getY()); 
+						rw.createProductLink(saw);
+						rw.setProductLinkLineType(saw.getSpecies(), srg.getCurve().getListOfCurveSegments().get(0).getType());
 					}
 				}
 			}

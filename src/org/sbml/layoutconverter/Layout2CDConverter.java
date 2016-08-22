@@ -260,7 +260,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 					sw.setPositionToCompartment("inside");
 				
 			} else {
-				//
+				// species glyph with no reference
 			}
 		}
 	}
@@ -468,7 +468,6 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 	 */
 	private List<Point2D.Double> convertSRGlyphToPointList(SpeciesReferenceGlyph modifier){
 		List<Point2D.Double> pointList = new ArrayList<Point2D.Double>();
-
 		ListOf<CurveSegment> locs = modifier.getCurve().getListOfCurveSegments();
 		
 		for (int i = 0; i < locs.size() ; i++) {

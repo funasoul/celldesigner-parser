@@ -127,11 +127,13 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 	}
 
 	/**
-	 * @param file
-	 * @param options
-	 * @throws IOException 
-	 * @throws XMLStreamException 
-	 * @throws JAXBException 
+	 * Instantiates a new CD 2 layout converter.
+	 *
+	 * @param file the file
+	 * @param options the options
+	 * @throws XMLStreamException the XML stream exception
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 * @throws JAXBException the JAXB exception
 	 */
 	public CD2LayoutConverter(File file, ApplicationOption options) throws XMLStreamException, IOException, JAXBException {
 		super(file, options);
@@ -161,6 +163,9 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		layout = mplugin.createLayout();
 	}
 	
+	/**
+	 * Convert.
+	 */
 	/* (non-Javadoc)
 	 * @see org.sbml.layoutconverter.abstractLayoutConverter#convert()
 	 */
@@ -545,6 +550,13 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		}
 	}
 
+	/**
+	 * Creates the species reference glyph.
+	 *
+	 * @param rg the rg
+	 * @param rw the rw
+	 * @return the list of
+	 */
 	public ListOf<SpeciesReferenceGlyph> createSpeciesReferenceGlyph(ReactionGlyph rg, ReactionWrapper rw) {
 		Reaction reaction = (Reaction) rg.getReactionInstance();
 		ListOf<SpeciesReferenceGlyph> srgList = rg.getListOfSpeciesReferenceGlyphs();
@@ -556,7 +568,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		
 		for (BaseReactant br : baseReactantList) {
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphReactant_" + rg.getReaction() + "_" + br.getSpecies());
-			if(reaction.getListOfReactants().get(br.getSpecies()) != null)
+			if(SBMLUtil.containsReferencingSpecies(reaction.getListOfReactants(), br.getSpecies()))
 				srg.setSpeciesReference(br.getSpecies());
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + br.getAlias());
@@ -565,7 +577,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 		for(ReactantLink link : reactantLinkList){
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphReactant_" + rg.getReaction() + "_" + link.getReactant());
-			if(reaction.getListOfReactants().get(link.getReactant()) != null)
+			if(SBMLUtil.containsReferencingSpecies(reaction.getListOfReactants(), link.getReactant()))
 				srg.setSpeciesReference(link.getReactant());
 			srg.setRole(SpeciesReferenceRole.SUBSTRATE);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + link.getAlias());
@@ -574,7 +586,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		
 		for (BaseProduct bp : baseProductList) {
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphProduct_" + rg.getReaction() + "_" + bp.getSpecies());
-			if(reaction.getListOfReactants().get(bp.getSpecies()) != null)
+			if(SBMLUtil.containsReferencingSpecies(reaction.getListOfProducts(), bp.getSpecies()))
 				srg.setSpeciesReference(bp.getSpecies());
 			srg.setRole(SpeciesReferenceRole.PRODUCT);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + bp.getAlias());
@@ -583,7 +595,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 
 		for(ProductLink link : productLinkList){
 			SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph("srGlyphProduct_" + rg.getReaction() + "_" + link.getProduct());
-			if(reaction.getListOfReactants().get(link.getProduct()) != null)
+			if(SBMLUtil.containsReferencingSpecies(reaction.getListOfProducts(), link.getProduct()))
 				srg.setSpeciesReference(link.getProduct());
 			srg.setRole(SpeciesReferenceRole.PRODUCT);
 			srg.setSpeciesGlyph("SpeciesGlyph_" + link.getAlias());
@@ -699,6 +711,9 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		}
 	}
 	
+	/**
+	 * Save.
+	 */
 	/* (non-Javadoc)
 	 * @see org.sbml.layoutconverter.abstractLayoutConverter#save()
 	 */

@@ -139,9 +139,8 @@ public class LayoutConverter {
 	 * @throws JAXBException the JAXB exception
 	 */
 	public LayoutConverter(File file, ApplicationOption options) throws XMLStreamException, IOException, JAXBException{
-	
-		if((options.isSetConversionDirection() && options.issetCD2Layout() && 		options.isCD2Layout()) ||
-				(!options.isSetConversionDirection() && SBMLUtil.isSetCellDesignerNameSpace(file)))
+		if((options.isSetConversionDirection() && options.issetCD2Layout() && options.isCD2Layout()) ||
+				(!options.isSetConversionDirection() && SBMLUtil.isLevelAndVersionMatchWithCD(file)))
 			converter = new CD2LayoutConverter(file, options);
 		else
 			converter = new Layout2CDConverter(file, options);

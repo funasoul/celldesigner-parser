@@ -459,6 +459,21 @@ public class SBMLUtil {
 	}
 	
 	/**
+	 * Contains referencing species.
+	 *
+	 * @param list the list
+	 * @param id the id
+	 * @return true, if successful
+	 */
+	public static boolean containsReferencingSpecies(ListOf<SpeciesReference> list,String id){
+		for(SpeciesReference sr : list)
+			if(sr.getSpecies().equals(id))
+				return true;
+		
+		return false;
+	}
+	
+	/**
 	 * Creates the output file name.
 	 *
 	 * @param file the file

@@ -572,7 +572,7 @@ public class LayoutUtil {
 			edit.setY(point.y - startPoint.getY());
 
 			double slope1 = vec1.getY() / vec1.getX();
-			double b = edit.getY()- slope1 * edit.getX();
+			double b = edit.getY() - slope1 * edit.getX();
 			
 			double slope2 = vec2.getY() / vec2.getX();
 			
@@ -678,7 +678,7 @@ public class LayoutUtil {
 	 * @return the point
 	 */
 	public static Point createCenterPoint(GraphicalObject go) {
-		Point point = new Point();
+		Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
 		Point p = go.getBoundingBox().getPosition();
 		Dimensions d = go.getBoundingBox().getDimensions();
 		

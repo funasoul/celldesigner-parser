@@ -30,10 +30,7 @@ import org.sbml.jsbml.SBMLDocument;
  */
 
 public class SBMLLevelandVersionHandler {
-	
-	/** The is set SBO term. */
-	static boolean isSetSBOTerm = true;
-	
+
 	/**
 	 * Upgrade.
 	 *
@@ -42,10 +39,8 @@ public class SBMLLevelandVersionHandler {
 	 * TODO
 	 */
 	public static SBMLDocument upgrade(SBMLDocument document){
-		if(document.getLevel() != SBMLUtil.DEFAULT_SBML_LEVEL || document.getVersion() != SBMLUtil.DEFAULT_SBML_VERSION ){
+		if(document.getLevel() != SBMLUtil.DEFAULT_SBML_LEVEL || document.getVersion() != SBMLUtil.DEFAULT_SBML_VERSION )
 			document.setLevelAndVersion(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
-			System.out.println("SBML Model converted to Level " + SBMLUtil.DEFAULT_SBML_LEVEL + " Version " + SBMLUtil.DEFAULT_SBML_VERSION);
-		}
 		
 		document = SBMLModelCompleter.autoCompleteRequiredAttributes(document);
 		
@@ -62,6 +57,8 @@ public class SBMLLevelandVersionHandler {
 		if(document.getLevel() > SBMLUtil.DEFAULT_CELLDESIGNER_SBML_LEVEL || document.getVersion() != SBMLUtil.DEFAULT_CELLDESIGNER_SBML_VERSION)
 			document.setLevelAndVersion(SBMLUtil.DEFAULT_CELLDESIGNER_SBML_LEVEL, SBMLUtil.DEFAULT_CELLDESIGNER_SBML_VERSION);
 		
+		document = SBMLModelCompleter.autoCompleteRequiredAttributes(document);
+
 		return document;
 	}
 

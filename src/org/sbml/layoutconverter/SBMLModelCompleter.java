@@ -82,7 +82,7 @@ public class SBMLModelCompleter {
 	 */
 	public static ListOf<UnitDefinition> completeUnitDefinitions(ListOf<UnitDefinition> unitDefinitions){
 		for(UnitDefinition ud : unitDefinitions){
-				ListOf<Unit> units = ud.getListOfUnits();
+			ListOf<Unit> units = ud.getListOfUnits();
 			for(Unit u: units){
 				if(!u.isSetExponent())
 					u.setExponent(1.0);;
@@ -129,7 +129,7 @@ public class SBMLModelCompleter {
 		for(Species s: species){
 			if(!s.isSetId())
 				s.setId(s.getClass().getSimpleName() + i++);
-			if(!s.isSetCompartment()){}
+			if(!s.isSetCompartment())
 				s.setCompartment(model.getCompartment(0));
 			if(!s.isSetHasOnlySubstanceUnits())
 				s.setHasOnlySubstanceUnits(true);

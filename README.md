@@ -97,7 +97,7 @@ Interconvertable Layout Software for CellDesigner provides the way to convert fr
 
 
 ## How to convert file
-    java -jar layoutconverter-with-dependencies.jar /path/to/input.xml /path/to/output.xml
+    java -jar layoutconverter-1.0.0-with-dependencies.jar /path/to/input.xml /path/to/output.xml
 ### Command Line Options
 **-h, --help**
 

@@ -711,19 +711,4 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
 		}
 	}
 	
-	/**
-	 * Save.
-	 */
-	/* (non-Javadoc)
-	 * @see org.sbml.layoutconverter.abstractLayoutConverter#save()
-	 */
-	@Override
-	public void save() {
-		try {
-			SBMLWriter.write(document, new File(outputFileName), ' ', (short) 2);
-		} catch (SBMLException | XMLStreamException | IOException e) {
-			e.printStackTrace();
-		}
-	}
-
 }

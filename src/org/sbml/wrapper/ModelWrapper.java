@@ -55,6 +55,7 @@ import org.sbml.layoutconverter.SBMLUtil;
 import org.sbml.sbml.level2.version4.Compartment;
 import org.sbml.sbml.level2.version4.Model;
 import org.sbml.sbml.level2.version4.Reaction;
+import org.sbml.sbml.level2.version4.Sbml;
 import org.sbml.sbml.level2.version4.Species;
 
 // TODO: Auto-generated Javadoc
@@ -68,6 +69,9 @@ import org.sbml.sbml.level2.version4.Species;
 
 public class ModelWrapper extends Model {
 
+	/** The sbml. */
+	private Sbml sbml;
+	
   /** The model. */
   private Model model;
   
@@ -138,8 +142,10 @@ public class ModelWrapper extends Model {
 	 * Instantiates a new model wrapper.
 	 *
 	 * @param model the model
+	 * @param sbml the sbml
 	 */
-	public ModelWrapper(Model model){
+	public ModelWrapper(Model model, Sbml sbml){
+		this.sbml = sbml;
 		this.model = model;
 		this.id = model.getId();
 		this.name = model.getName();
@@ -272,25 +278,15 @@ public class ModelWrapper extends Model {
 		model.setListOfRules(null);		// add later
 		
 	}
-	
-//
-//	/**
-//	 * @param species
-//	 * @return
-//	 * List<Species>
-//	 * TODO
-//	 */
-//	private List<Species> createIncludedSpeciesList(List<org.sbml._2001.ns.celldesigner.Species> speciesList) {
-//		List<Species> includedSpeciesList = new ArrayList<Species>(speciesList.size());
-//
-//		for(org.sbml._2001.ns.celldesigner.Species s : speciesList){
-//			Species species = new Species();
-//
-//			//includedSpeciesList
-//		}
-//
-//		return includedSpeciesList;
-//	}
+
+	/**
+	 * Gets the sbml.
+	 *
+	 * @return the sbml
+	 */
+	public Sbml getSbml() {
+		return sbml;
+	}
 
 	/**
 	 * Gets the w.

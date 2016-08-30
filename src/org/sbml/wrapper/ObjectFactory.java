@@ -20,6 +20,7 @@ package org.sbml.wrapper;
 
 import java.io.File;
 import java.io.StringReader;
+import java.io.StringWriter;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -75,7 +76,7 @@ public class ObjectFactory {
 		sbml = getSbml(file);
 		
 		model = sbml.getModel();
-		modelWrapper = createModelWrapper(model);
+		modelWrapper = createModelWrapper(model, sbml);
 		
 		return modelWrapper;
 	}
@@ -91,7 +92,7 @@ public class ObjectFactory {
 		sbml = getSbml(xml);
 		
 		model = sbml.getModel();
-		modelWrapper = createModelWrapper(model);
+		modelWrapper = createModelWrapper(model, sbml);
 		
 		return modelWrapper;
 	}
@@ -133,10 +134,11 @@ public class ObjectFactory {
 	 * Creates a new Object object.
 	 *
 	 * @param model the model
+	 * @param sbml the sbml
 	 * @return the model wrapper
 	 */
-	public static ModelWrapper createModelWrapper(Model model){
-		return new ModelWrapper(model);	
+	public static ModelWrapper createModelWrapper(Model model, Sbml sbml){
+		return new ModelWrapper(model, sbml);	
 	}
 	
 	/**
@@ -147,13 +149,7 @@ public class ObjectFactory {
 	 * @throws JAXBException the JAXB exception
 	 */
 	public static File saveModel(ModelWrapper modelWrapper) throws JAXBException{
-		File file = new File(modelWrapper.getId() + ".xml");
-		Marshaller marshaller = context.createMarshaller();
-		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.marshal(sbml, file);
-
-		return file;
+		return saveModel(modelWrapper, modelWrapper.getId() + ".xml");
 	}
 	
 	/**
@@ -169,8 +165,24 @@ public class ObjectFactory {
 		Marshaller marshaller = context.createMarshaller();
 		marshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 		marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		marshaller.marshal(sbml, file);
+		marshaller.marshal(modelWrapper.getSbml(), file);
 
 		return file;
+	}
+	
+	/**
+	 * Generate XML string.
+	 *
+	 * @param modelWrapper the model wrapper
+	 * @return the string
+	 * @throws JAXBException the JAXB exception
+	 */
+	public static String generateXMLString(ModelWrapper modelWrapper) throws JAXBException{
+		StringWriter sw = new StringWriter();
+		context = JAXBContext.newInstance(Sbml.class);
+		Marshaller marshaller = context.createMarshaller();
+		marshaller.marshal(modelWrapper.getSbml(), sw);
+		
+		return sw.toString();
 	}
 }

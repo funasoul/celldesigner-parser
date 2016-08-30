@@ -174,6 +174,16 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 		convertSpeciesToCD(layout.getListOfSpeciesGlyphs());
 		convertReactionsToCD(layout.getListOfReactionGlyphs());
 		convertTextToCD(layout.getListOfTextGlyphs());
+		
+		try {
+			String s = ObjectFactory.generateXMLString(mWrapper);
+			document = SBMLReader.read(s);
+			document = SBMLUtil.setMaths(document, downgrade_document);
+		} catch (JAXBException e) {		
+			e.printStackTrace();
+		} catch (XMLStreamException e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -639,23 +649,6 @@ public class Layout2CDConverter extends BaseLayoutConverter {
 				caw.setNameX(namePoint.getX());
 				caw.setNameY(namePoint.getY());
 			}
-		}
-	}
-	
-	/* (non-Javadoc)
-	 * @see org.sbml.layoutconverter.abstractLayoutConverter#save()
-	 */
-	@Override
-	public void save() {
-		try {
-			File file = ObjectFactory.saveModel(mWrapper, outputFileName);
-			document = SBMLUtil.setMaths(SBMLReader.read(file), downgrade_document);
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (XMLStreamException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 	}
 

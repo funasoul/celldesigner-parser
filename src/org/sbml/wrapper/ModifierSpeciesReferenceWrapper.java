@@ -248,7 +248,6 @@ public class ModifierSpeciesReferenceWrapper extends ModifierSpeciesReference{
 	 */
 	public void setEditPointList(List<String> editPointList) {
 		modification.getEditPoints().addAll(editPointList);
-		System.out.println(modification.getEditPoints());
 	}
 
 	/**

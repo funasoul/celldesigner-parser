@@ -401,7 +401,6 @@ public class SpeciesAliasWrapper extends SpeciesAlias {
      * TODO
      */
     public boolean isSetComplexSpeciesAlias(){
-    	System.out.println(complexSpeciesAlias);
     	if(complexSpeciesAlias == null)
     		return false;
     	else

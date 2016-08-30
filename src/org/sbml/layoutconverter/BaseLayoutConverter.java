@@ -27,6 +27,7 @@ import org.sbml.jsbml.SBMLError;
 import org.sbml.jsbml.SBMLErrorLog;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
+import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.TidySBMLWriter;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.wrapper.ModelWrapper;
@@ -185,7 +186,13 @@ public abstract class BaseLayoutConverter {
 	/**
 	 * Save.
 	 */
-	public abstract void save();
+	public void save(){
+		try {
+			SBMLWriter.write(document, new File(outputFileName), ' ', (short) 2);
+		} catch (SBMLException | XMLStreamException | IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * Validate.

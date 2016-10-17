@@ -1,12 +1,9 @@
 /*******************************************************************************
  * Copyright 2016 Kaito Ii
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,66 +26,63 @@ import org.kohsuke.args4j.CmdLineParser;
  * The Class Application.
  *
  * @author Kaito Ii
- * 
- * Date Created: Jul 7, 2016
+ *         Date Created: Jul 7, 2016
  */
-
 public class Application {
 
-	/** The converter. */
-	private LayoutConverter converter;
-	
-	/**
-	 * Instantiates a new application.
-	 *
-	 * @param args the args
-	 */
-	public Application(String[] args){
-		ApplicationOption option = new ApplicationOption();
-		CmdLineParser parser = new CmdLineParser(option);
-		
-		try {
-			parser.parseArgument(args);
-		} catch (CmdLineException e1) {
-			System.out.println(e1.getMessage());
-			parser.printUsage(System.err);
-			System.exit(1);
-		}
-		
-		if(option.isHelp()){
-			parser.printUsage(System.err);
-			System.exit(1);
-		}
-		
-		String filepath = option.getInput();
-		String outputpath = option.getOutput();
-		
-		System.out.println(filepath);
-		System.out.println(outputpath);
-		try {
-			converter = new LayoutConverter(new File(filepath), option);
-		} catch (JAXBException e) {
-			System.err.println("Error unmarshaling XML");
-			System.err.println(e.getLocalizedMessage());
-			return;
-		} catch (XMLStreamException | IOException e) {
-			System.err.println("Error reading SBML model");
-			System.err.println(e.getLocalizedMessage());
-			return;
-		} 
-		
-		converter.convert();
-		converter.save();
-		converter.print();
-		converter.validate();
-	}
-	
-	/**
-	 * The main method.
-	 *
-	 * @param args the arguments
-	 */
-	public static void main(String[] args){
-		new Application(args);
-	}
+  /** The converter. */
+  private LayoutConverter converter;
+
+
+  /**
+   * Instantiates a new application.
+   *
+   * @param args
+   *        the args
+   */
+  public Application(String[] args) {
+    ApplicationOption option = new ApplicationOption();
+    CmdLineParser parser = new CmdLineParser(option);
+    try {
+      parser.parseArgument(args);
+    } catch (CmdLineException e1) {
+      System.out.println(e1.getMessage());
+      parser.printUsage(System.err);
+      System.exit(1);
+    }
+    if (option.isHelp()) {
+      parser.printUsage(System.err);
+      System.exit(1);
+    }
+    String filepath = option.getInput();
+    String outputpath = option.getOutput();
+    System.out.println(filepath);
+    System.out.println(outputpath);
+    try {
+      converter = new LayoutConverter(new File(filepath), option);
+    } catch (JAXBException e) {
+      System.err.println("Error unmarshaling XML");
+      System.err.println(e.getLocalizedMessage());
+      return;
+    } catch (XMLStreamException | IOException e) {
+      System.err.println("Error reading SBML model");
+      System.err.println(e.getLocalizedMessage());
+      return;
+    }
+    converter.convert();
+    converter.save();
+    converter.print();
+    converter.validate();
+  }
+
+
+  /**
+   * The main method.
+   *
+   * @param args
+   *        the arguments
+   */
+  public static void main(String[] args) {
+    new Application(args);
+  }
 }

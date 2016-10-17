@@ -1,12 +1,9 @@
 /*******************************************************************************
  * Copyright 2016 Kaito Ii, Akira Funahashi
- *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
+ * http://www.apache.org/licenses/LICENSE-2.0
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -25,24 +22,22 @@ import org.sbml.wrapper.ModelWrapper;
 import org.sbml.wrapper.ObjectFactory;
 import org.sbml.wrapper.ReactionWrapper;
 
-
 // TODO: Auto-generated Javadoc
 /**
  * The Class APITest.
  *
  * @author Kaito Ii
  * @author Akira Funahashi
- * 
- * Date Created: May 20, 2016
- * Date Modified: May 30, 2016
+ *         Date Created: May 20, 2016
+ *         Date Modified: May 30, 2016
  */
-
 public class APITest {
 
   /**
    * The main method.
    *
-   * @param args the arguments
+   * @param args
+   *        the arguments
    */
   public static void main(String[] args) {
     ModelWrapper model = null;
@@ -50,7 +45,7 @@ public class APITest {
       model = ObjectFactory.unmarshalSBML("sample/sample.xml");
     } catch (JAXBException e) {
       e.printStackTrace();
-    } 
+    }
     // ListOfSpeciesAlias
     List<SpeciesAlias> saList = model.getListOfSpeciesAliases();
     for (SpeciesAlias sa : saList) {
@@ -61,12 +56,10 @@ public class APITest {
     }
     // ListOfReactions
     List<ReactionWrapper> rList = model.getListOfReactionWrapper();
-    for(ReactionWrapper r : rList){
-    	System.out.println(r.getId() + ": " + r.getReactionType());
-    	ConnectScheme cs = r.getConnectScheme();
-    	System.out.println("connect policy: " + cs.getConnectPolicy());
+    for (ReactionWrapper r : rList) {
+      System.out.println(r.getId() + ": " + r.getReactionType());
+      ConnectScheme cs = r.getConnectScheme();
+      System.out.println("connect policy: " + cs.getConnectPolicy());
     }
-    
   }
-
 }

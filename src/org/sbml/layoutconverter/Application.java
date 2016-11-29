@@ -56,8 +56,8 @@ public class Application {
     }
     String filepath = option.getInput();
     String outputpath = option.getOutput();
-    System.out.println(filepath);
-    System.out.println(outputpath);
+    System.out.println("input " + filepath);
+    System.out.println("output " + outputpath);
     try {
       converter = new LayoutConverter(new File(filepath), option);
     } catch (JAXBException e) {

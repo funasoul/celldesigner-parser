@@ -34,7 +34,7 @@ public class ApplicationOption {
   @Option(name = "-l", aliases = {"--Layout2CD"}, required = false, usage = "convert layout to CD")
   private Boolean Layout2CD;
   /** The default compartment. */
-  @Option(name = "-d", aliases = {"--defaultCompartment"}, required = false, usage = "convert default compartment")
+  @Option(name = "-d", aliases = {"--withDefaultCompartment","--defaultCompartment"}, required = false, usage = "convert with default compartment")
   private Boolean defaultCompartment;
   /** The convert 2 FBC. */
   @Option(name = "-f", aliases = {"--fbc"}, required = false, usage = "add FBC packages")

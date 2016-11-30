@@ -209,7 +209,7 @@ public class SBMLModelCompleter {
           sr.setSpecies(s);
       }
       if (!sr.isSetConstant())
-        sr.setConstant(false);
+        sr.setConstant(true);
     }
     return speciesReference;
   }

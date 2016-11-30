@@ -14,6 +14,8 @@ package org.sbml.layoutconverter;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
+import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -29,35 +31,43 @@ import org.kohsuke.args4j.CmdLineParser;
  *         Date Created: Jul 7, 2016
  */
 public class Application {
+  
+  /**
+   * A {@link Logger} for this class.
+   */
+  private static final Logger logger = Logger.getLogger(Application.class.getName());
 
   /** The converter. */
   private LayoutConverter converter;
 
-
   /**
    * Instantiates a new application.
    *
-   * @param args
-   *        the args
+   * @param args the args
    */
   public Application(String[] args) {
     ApplicationOption option = new ApplicationOption();
     CmdLineParser parser = new CmdLineParser(option);
+
     try {
       parser.parseArgument(args);
     } catch (CmdLineException e1) {
-      System.out.println(e1.getMessage());
+      logger.severe(e1.getMessage());
       parser.printUsage(System.err);
       System.exit(1);
     }
+
     if (option.isHelp()) {
       parser.printUsage(System.err);
       System.exit(1);
     }
+
     String filepath = option.getInput();
     String outputpath = option.getOutput();
-    System.out.println("input " + filepath);
-    System.out.println("output " + outputpath);
+
+    System.out.println(filepath);
+    System.out.println(outputpath);
+    long time = System.currentTimeMillis();
     try {
       converter = new LayoutConverter(new File(filepath), option);
     } catch (JAXBException e) {
@@ -69,12 +79,16 @@ public class Application {
       System.err.println(e.getLocalizedMessage());
       return;
     }
+
     converter.convert();
+    logger.info(MessageFormat.format(
+      "Time lapsed for conversion: {0,number} s",
+      (System.currentTimeMillis() - time)/1e3d));
     converter.save();
-    converter.print();
+    // This causes problems for very large models:
+    //converter.print();
     converter.validate();
   }
-
 
   /**
    * The main method.
@@ -85,4 +99,5 @@ public class Application {
   public static void main(String[] args) {
     new Application(args);
   }
+  
 }

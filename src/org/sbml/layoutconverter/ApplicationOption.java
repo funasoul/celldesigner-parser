@@ -181,4 +181,30 @@ public class ApplicationOption {
   public boolean isConvert2FBC() {
     return convert2FBC;
   }
+  
+  /* (non-Javadoc)
+   * @see java.lang.Object#toString()
+   */
+  @Override
+  public String toString() {
+    StringBuilder builder = new StringBuilder();
+    builder.append(getClass().getSimpleName());
+    builder.append(" [help=");
+    builder.append(help);
+    builder.append(", CD2Layout=");
+    builder.append(CD2Layout);
+    builder.append(", Layout2CD=");
+    builder.append(Layout2CD);
+    builder.append(", defaultCompartment=");
+    builder.append(defaultCompartment);
+    builder.append(", convert2FBC=");
+    builder.append(convert2FBC);
+    builder.append(", input=");
+    builder.append(input);
+    builder.append(", output=");
+    builder.append(output);
+    builder.append("]");
+    return builder.toString();
+  }
+  
 }

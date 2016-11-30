@@ -15,8 +15,10 @@ package org.sbml.layoutconverter;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBException;
 import javax.xml.stream.XMLStreamException;
@@ -31,8 +33,7 @@ import org.sbml.extconverter.FBCConverter;
 import org.sbml.extconverter.MultiConverter;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Reaction;
-import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.SBMLWriter;
+import org.sbml.jsbml.SimpleSpeciesReference;
 import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.Curve;
@@ -64,7 +65,7 @@ import org.sbml.wrapper.SpeciesAliasWrapper;
  */
 public class CD2LayoutConverter extends BaseLayoutConverter {
 
-    /**
+  /**
    * A {@link Logger} for this class.
    */
   private static final transient Logger logger = Logger.getLogger(CD2LayoutConverter.class.getName());

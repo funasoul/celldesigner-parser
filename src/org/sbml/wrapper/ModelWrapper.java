@@ -46,6 +46,7 @@ import org.sbml._2001.ns.celldesigner.ModelDisplay;
 import org.sbml._2001.ns.celldesigner.Protein;
 import org.sbml._2001.ns.celldesigner.RNA;
 import org.sbml._2001.ns.celldesigner.SpeciesAlias;
+import org.sbml.jsbml.SBO;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.layoutconverter.SBMLUtil;
@@ -123,29 +124,33 @@ public class ModelWrapper extends Model {
   public ModelWrapper(Model model, Sbml sbml) {
     this.sbml = sbml;
     this.model = model;
-    this.id = model.getId();
-    this.name = model.getName();
-    this.notes = model.getNotes();
-    this.annotation = model.getAnnotation();
-    if (model.getListOfCompartments() != null)
-      this.cWrapperList = createCompartmentWrapperList(model.getListOfCompartments()
-                                                            .getCompartment());
-    else
-      this.cWrapperList = new ArrayList<CompartmentWrapper>();
-    if (model.getListOfSpecies() != null)
-      this.sWrapperList = createSpeciesWrapperList(model.getListOfSpecies()
-                                                        .getSpecies());
-    else
-      this.sWrapperList = new ArrayList<SpeciesWrapper>();
-    if (model.getListOfReactions() != null)
-      this.rWrapperList = createReactionWrapperList(model.getListOfReactions()
-                                                         .getReaction());
-    else
-      this.rWrapperList = new ArrayList<ReactionWrapper>();
-    if (annotation != null)
+    id = model.getId();
+    name = model.getName();
+    notes = model.getNotes();
+    annotation = model.getAnnotation();
+    if (model.getListOfCompartments() != null) {
+      cWrapperList = createCompartmentWrapperList(model.getListOfCompartments()
+        .getCompartment());
+    } else {
+      cWrapperList = new ArrayList<CompartmentWrapper>();
+    }
+    if (model.getListOfSpecies() != null) {
+      sWrapperList = createSpeciesWrapperList(model.getListOfSpecies()
+        .getSpecies());
+    } else {
+      sWrapperList = new ArrayList<SpeciesWrapper>();
+    }
+    if (model.getListOfReactions() != null) {
+      rWrapperList = createReactionWrapperList(model.getListOfReactions()
+        .getReaction());
+    } else {
+      rWrapperList = new ArrayList<ReactionWrapper>();
+    }
+    if (annotation != null) {
       setAnnotations();
-    else
+    } else {
       initAnnotations();
+    }
   }
 
 
@@ -153,48 +158,57 @@ public class ModelWrapper extends Model {
    * Sets the annotations.
    */
   void setAnnotations() {
-    if (annotation.getExtension().getListOfAntisenseRNAs() != null)
-      this.antiSenseRNAList = annotation.getExtension()
-                                        .getListOfAntisenseRNAs()
-                                        .getAntisenseRNA();
-    if (annotation.getExtension().getListOfBlockDiagrams() != null)
-      this.blockDiagramList = annotation.getExtension()
-                                        .getListOfBlockDiagrams()
-                                        .getBlockDiagram();
-    if (annotation.getExtension().getListOfCompartmentAliases() != null)
-      this.cAliasList = annotation.getExtension().getListOfCompartmentAliases()
-                                  .getCompartmentAlias();
-    if (annotation.getExtension().getListOfGenes() != null)
-      this.geneList = annotation.getExtension().getListOfGenes().getGene();
-    if (annotation.getExtension().getListOfGroups() != null)
-      this.groupList = annotation.getExtension().getListOfGroups().getGroup();
-    if (annotation.getExtension().getListOfLayers() != null)
-      this.layerList = annotation.getExtension().getListOfLayers().getLayer();
+    if (annotation.getExtension().getListOfAntisenseRNAs() != null) {
+      antiSenseRNAList = annotation.getExtension()
+          .getListOfAntisenseRNAs()
+          .getAntisenseRNA();
+    }
+    if (annotation.getExtension().getListOfBlockDiagrams() != null) {
+      blockDiagramList = annotation.getExtension()
+          .getListOfBlockDiagrams()
+          .getBlockDiagram();
+    }
+    if (annotation.getExtension().getListOfCompartmentAliases() != null) {
+      cAliasList = annotation.getExtension().getListOfCompartmentAliases()
+          .getCompartmentAlias();
+    }
+    if (annotation.getExtension().getListOfGenes() != null) {
+      geneList = annotation.getExtension().getListOfGenes().getGene();
+    }
+    if (annotation.getExtension().getListOfGroups() != null) {
+      groupList = annotation.getExtension().getListOfGroups().getGroup();
+    }
+    if (annotation.getExtension().getListOfLayers() != null) {
+      layerList = annotation.getExtension().getListOfLayers().getLayer();
+    }
     // if(annotation.getExtension().getListOfIncludedSpecies()!= null)
     // this.includedSpeciesList =
     // createIncludedSpeciesList(annotation.getExtension().getListOfIncludedSpecies().getSpecies());
-    if (annotation.getExtension().getListOfProteins() != null)
-      this.proteinList = annotation.getExtension().getListOfProteins()
-                                   .getProtein();
-    if (annotation.getExtension().getListOfRNAs() != null)
-      this.rnaList = annotation.getExtension().getListOfRNAs().getRNA();
-    if (annotation.getExtension().getListOfSpeciesAliases() != null)
-      this.sAliasList = annotation.getExtension().getListOfSpeciesAliases()
-                                  .getSpeciesAlias();
-    this.cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension()
-                                                                         .getListOfCompartmentAliases()
-                                                                         .getCompartmentAlias());
-    if (annotation.getExtension().getListOfComplexSpeciesAliases() != null) {
-      this.complexSpeciesAliasList = annotation.getExtension()
-                                               .getListOfComplexSpeciesAliases()
-                                               .getComplexSpeciesAlias();
-      this.complexWrapperList = createComplexWrapperList(complexSpeciesAliasList);
+    if (annotation.getExtension().getListOfProteins() != null) {
+      proteinList = annotation.getExtension().getListOfProteins()
+          .getProtein();
     }
-    this.sAliasWrapperList = createSpeciesAliasWrapperList(sAliasList);
+    if (annotation.getExtension().getListOfRNAs() != null) {
+      rnaList = annotation.getExtension().getListOfRNAs().getRNA();
+    }
+    if (annotation.getExtension().getListOfSpeciesAliases() != null) {
+      sAliasList = annotation.getExtension().getListOfSpeciesAliases()
+          .getSpeciesAlias();
+    }
+    cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension()
+      .getListOfCompartmentAliases()
+      .getCompartmentAlias());
+    if (annotation.getExtension().getListOfComplexSpeciesAliases() != null) {
+      complexSpeciesAliasList = annotation.getExtension()
+          .getListOfComplexSpeciesAliases()
+          .getComplexSpeciesAlias();
+      complexWrapperList = createComplexWrapperList(complexSpeciesAliasList);
+    }
+    sAliasWrapperList = createSpeciesAliasWrapperList(sAliasList);
     modelDisplay = annotation.getExtension().getModelDisplay();
     version = annotation.getExtension().getModelVersion().intValue();
-    this.width = modelDisplay.getSizeX();
-    this.height = modelDisplay.getSizeY();
+    width = modelDisplay.getSizeX();
+    height = modelDisplay.getSizeY();
   }
 
 
@@ -206,42 +220,42 @@ public class ModelWrapper extends Model {
     model.setAnnotation(annotation);
     annotation.setExtension(new Extension());
     setListOfAntisenseRNAs(new ListOfAntisenseRNAs());
-    this.antiSenseRNAList = annotation.getExtension().getListOfAntisenseRNAs()
-                                      .getAntisenseRNA();
+    antiSenseRNAList = annotation.getExtension().getListOfAntisenseRNAs()
+        .getAntisenseRNA();
     setListOfBlockDiagrams(new ListOfBlockDiagrams());
-    this.blockDiagramList = annotation.getExtension().getListOfBlockDiagrams()
-                                      .getBlockDiagram();
+    blockDiagramList = annotation.getExtension().getListOfBlockDiagrams()
+        .getBlockDiagram();
     setListOfCompartmentAliases(new ListOfCompartmentAliases());
-    this.cAliasList = annotation.getExtension().getListOfCompartmentAliases()
-                                .getCompartmentAlias();
+    cAliasList = annotation.getExtension().getListOfCompartmentAliases()
+        .getCompartmentAlias();
     setListOfGenes(new ListOfGenes());
-    this.geneList = annotation.getExtension().getListOfGenes().getGene();
+    geneList = annotation.getExtension().getListOfGenes().getGene();
     setListOfGroups(new ListOfGroups());
-    this.groupList = annotation.getExtension().getListOfGroups().getGroup();
+    groupList = annotation.getExtension().getListOfGroups().getGroup();
     setListOfLayers(new ListOfLayers());
-    this.layerList = annotation.getExtension().getListOfLayers().getLayer();
+    layerList = annotation.getExtension().getListOfLayers().getLayer();
     setListOfIncludedSpecies(new ListOfIncludedSpecies());
-    this.includedSpeciesList = annotation.getExtension()
-                                         .getListOfIncludedSpecies()
-                                         .getSpecies();
+    includedSpeciesList = annotation.getExtension()
+        .getListOfIncludedSpecies()
+        .getSpecies();
     setListOfProteins(new ListOfProteins());
-    this.proteinList = annotation.getExtension().getListOfProteins()
-                                 .getProtein();
+    proteinList = annotation.getExtension().getListOfProteins()
+        .getProtein();
     setListOfRNAs(new ListOfRNAs());
-    this.rnaList = annotation.getExtension().getListOfRNAs().getRNA();
+    rnaList = annotation.getExtension().getListOfRNAs().getRNA();
     setListOfSpeciesAliases(new ListOfSpeciesAliases());
-    this.sAliasList = annotation.getExtension().getListOfSpeciesAliases()
-                                .getSpeciesAlias();
-    this.sAliasWrapperList = createSpeciesAliasWrapperList(sAliasList);
+    sAliasList = annotation.getExtension().getListOfSpeciesAliases()
+        .getSpeciesAlias();
+    sAliasWrapperList = createSpeciesAliasWrapperList(sAliasList);
     setListOfCompartmentAliases(new ListOfCompartmentAliases());
-    this.cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension()
-                                                                         .getListOfCompartmentAliases()
-                                                                         .getCompartmentAlias());
+    cAliasWrapperList = createCompartmentAliasWrapperList(annotation.getExtension()
+      .getListOfCompartmentAliases()
+      .getCompartmentAlias());
     setListOfComplexSpeciesAliases(new ListOfComplexSpeciesAliases());
-    this.complexSpeciesAliasList = annotation.getExtension()
-                                             .getListOfComplexSpeciesAliases()
-                                             .getComplexSpeciesAlias();
-    this.complexWrapperList = createComplexWrapperList(complexSpeciesAliasList);
+    complexSpeciesAliasList = annotation.getExtension()
+        .getListOfComplexSpeciesAliases()
+        .getComplexSpeciesAlias();
+    complexWrapperList = createComplexWrapperList(complexSpeciesAliasList);
     modelDisplay = new ModelDisplay();
     setModelDisplay(modelDisplay);
     model.setListOfFunctionDefinitions(null); // add later
@@ -277,7 +291,7 @@ public class ModelWrapper extends Model {
    *        the new w
    */
   public void setW(double w) {
-    this.width = w;
+    width = w;
     annotation.getExtension().getModelDisplay().setSizeX((short) width);
   }
 
@@ -300,7 +314,7 @@ public class ModelWrapper extends Model {
    *        the new h
    */
   public void setH(double h) {
-    this.height = h;
+    height = h;
     annotation.getExtension().getModelDisplay().setSizeY((short) height);
   }
 
@@ -330,9 +344,10 @@ public class ModelWrapper extends Model {
   public List<CompartmentAliasWrapper> createCompartmentAliasWrapperList(
     List<CompartmentAlias> caList) {
     List<CompartmentAliasWrapper> cawList = new ArrayList<CompartmentAliasWrapper>(
-      caList.size());
-    for (CompartmentAlias ca : caList)
+        caList.size());
+    for (CompartmentAlias ca : caList) {
       cawList.add(new CompartmentAliasWrapper(ca, this));
+    }
     return cawList;
   }
 
@@ -359,9 +374,10 @@ public class ModelWrapper extends Model {
   public List<CompartmentWrapper> createCompartmentWrapperList(
     List<Compartment> cList) {
     List<CompartmentWrapper> cwList = new ArrayList<CompartmentWrapper>(
-      cList.size());
-    for (Compartment c : cList)
+        cList.size());
+    for (Compartment c : cList) {
       cwList.add(new CompartmentWrapper(c, this));
+    }
     return cwList;
   }
 
@@ -386,9 +402,11 @@ public class ModelWrapper extends Model {
    *         TODO
    */
   public CompartmentWrapper getCompartmentWrapperById(String id) {
-    for (CompartmentWrapper cw : cWrapperList)
-      if (cw.getId().equals(id))
+    for (CompartmentWrapper cw : cWrapperList) {
+      if (cw.getId().equals(id)) {
         return cw;
+      }
+    }
     return null;
   }
 
@@ -405,10 +423,11 @@ public class ModelWrapper extends Model {
     List<ReactionWrapper> rwList = new ArrayList<ReactionWrapper>(rList.size());
     Set<Reaction> removingReaction = new HashSet<Reaction>();
     for (Reaction r : rList) {
-      if (r.getListOfProducts() != null && r.getListOfReactants() != null)
+      if (r.getListOfProducts() != null && r.getListOfReactants() != null) {
         rwList.add(new ReactionWrapper(r, this));
-      else
+      } else {
         removingReaction.add(r);
+      }
     }
     // remove reaction with only reactant/product
     for (Reaction r : removingReaction) {
@@ -438,9 +457,11 @@ public class ModelWrapper extends Model {
    *         TODO
    */
   public ReactionWrapper getReactionWrapperById(String id) {
-    for (ReactionWrapper rw : rWrapperList)
-      if (rw.getId().equals(id))
+    for (ReactionWrapper rw : rWrapperList) {
+      if (rw.getId().equals(id)) {
         return rw;
+      }
+    }
     return null;
   }
 
@@ -455,8 +476,9 @@ public class ModelWrapper extends Model {
    */
   public List<SpeciesWrapper> createSpeciesWrapperList(List<Species> sList) {
     List<SpeciesWrapper> swList = new ArrayList<SpeciesWrapper>(sList.size());
-    for (Species s : sList)
+    for (Species s : sList) {
       swList.add(new SpeciesWrapper(s, this));
+    }
     return swList;
   }
 
@@ -481,9 +503,11 @@ public class ModelWrapper extends Model {
    *         TODO
    */
   public SpeciesWrapper getSpeciesWrapperById(String id) {
-    for (SpeciesWrapper sw : sWrapperList)
-      if (sw.getId().equals(id))
+    for (SpeciesWrapper sw : sWrapperList) {
+      if (sw.getId().equals(id)) {
         return sw;
+      }
+    }
     return null;
   }
 
@@ -499,9 +523,10 @@ public class ModelWrapper extends Model {
   public List<SpeciesAliasWrapper> createSpeciesAliasWrapperList(
     List<SpeciesAlias> saList) {
     List<SpeciesAliasWrapper> sawList = new ArrayList<SpeciesAliasWrapper>(
-      saList.size());
-    for (SpeciesAlias sa : saList)
+        saList.size());
+    for (SpeciesAlias sa : saList) {
       sawList.add(new SpeciesAliasWrapper(sa, this));
+    }
     return sawList;
   }
 
@@ -526,9 +551,11 @@ public class ModelWrapper extends Model {
    *         TODO
    */
   public SpeciesAliasWrapper getSpeciesAliasWrapperById(String id) {
-    for (SpeciesAliasWrapper saw : sAliasWrapperList)
-      if (saw.getId().equals(id))
+    for (SpeciesAliasWrapper saw : sAliasWrapperList) {
+      if (saw.getId().equals(id)) {
         return saw;
+      }
+    }
     return null;
   }
 
@@ -541,9 +568,11 @@ public class ModelWrapper extends Model {
    * @return the species alias wrapper by species id
    */
   public SpeciesAliasWrapper getSpeciesAliasWrapperBySpeciesId(String id) {
-    for (SpeciesAliasWrapper saw : sAliasWrapperList)
-      if (saw.getSpecies().equals(id))
+    for (SpeciesAliasWrapper saw : sAliasWrapperList) {
+      if (saw.getSpecies().equals(id)) {
         return saw;
+      }
+    }
     return null;
   }
 
@@ -573,9 +602,10 @@ public class ModelWrapper extends Model {
   public List<ComplexSpeciesAliasWrapper> createComplexWrapperList(
     List<ComplexSpeciesAlias> complexSpeciesAliasList) {
     List<ComplexSpeciesAliasWrapper> csawList = new ArrayList<ComplexSpeciesAliasWrapper>(
-      complexSpeciesAliasList.size());
-    for (ComplexSpeciesAlias csa : complexSpeciesAliasList)
+        complexSpeciesAliasList.size());
+    for (ComplexSpeciesAlias csa : complexSpeciesAliasList) {
       csawList.add(new ComplexSpeciesAliasWrapper(csa, this));
+    }
     return csawList;
   }
 
@@ -605,9 +635,11 @@ public class ModelWrapper extends Model {
    *         TODO
    */
   public ComplexSpeciesAliasWrapper getComplexAliasWrapperById(String id) {
-    for (ComplexSpeciesAliasWrapper csaw : complexWrapperList)
-      if (csaw.getId().equals(id))
+    for (ComplexSpeciesAliasWrapper csaw : complexWrapperList) {
+      if (csaw.getId().equals(id)) {
         return csaw;
+      }
+    }
     return null;
   }
 
@@ -621,9 +653,11 @@ public class ModelWrapper extends Model {
    *         TODO
    */
   public CompartmentAlias getCompartmentAliasById(String id) {
-    for (CompartmentAlias ca : cAliasList)
-      if (ca.getId().equals(id))
+    for (CompartmentAlias ca : cAliasList) {
+      if (ca.getId().equals(id)) {
         return ca;
+      }
+    }
     return null;
   }
 
@@ -652,9 +686,11 @@ public class ModelWrapper extends Model {
    *         TODO
    */
   public ComplexSpeciesAlias getComplexSpeciesAliasById(String id) {
-    for (ComplexSpeciesAlias csa : complexSpeciesAliasList)
-      if (csa.getId().equals(id))
+    for (ComplexSpeciesAlias csa : complexSpeciesAliasList) {
+      if (csa.getId().equals(id)) {
         return csa;
+      }
+    }
     return null;
   }
 
@@ -703,7 +739,7 @@ public class ModelWrapper extends Model {
    */
   public void setModelDisplay(ModelDisplay display) {
     annotation.getExtension().setModelDisplay(display);
-    this.modelDisplay = display;
+    modelDisplay = display;
   }
 
 
@@ -802,9 +838,11 @@ public class ModelWrapper extends Model {
    */
   public void removeCompartmentAlias(CompartmentAlias compartmentAlias) {
     cAliasList.remove(compartmentAlias);
-    for (CompartmentAliasWrapper caw : cAliasWrapperList)
-      if (caw.getCompartment().equals(compartmentAlias.getCompartment()))
+    for (CompartmentAliasWrapper caw : cAliasWrapperList) {
+      if (caw.getCompartment().equals(compartmentAlias.getCompartment())) {
         cAliasWrapperList.remove(caw);
+      }
+    }
   }
 
 
@@ -819,8 +857,9 @@ public class ModelWrapper extends Model {
   public CompartmentAliasWrapper getCompartmentAliasWrapperByCompartmentId(
     String id) {
     for (CompartmentAliasWrapper caw : cAliasWrapperList) {
-      if (caw.getCompartment().equals(id))
+      if (caw.getCompartment().equals(id)) {
         return caw;
+      }
     }
     return null;
   }
@@ -1336,7 +1375,7 @@ public class ModelWrapper extends Model {
       CompartmentAliasWrapper c = cawList.get(i);
       if (c.getCompartmentWrapperAliased().isSetOutside()) {
         CompartmentWrapper cw = c.getCompartmentWrapperAliased()
-                                 .getOutsideInstance();
+            .getOutsideInstance();
         CompartmentAliasWrapper outside = cw.getAliasWrapper();
         int outIndex = cawList.indexOf(outside);
         if (outIndex > i) {
@@ -1364,35 +1403,28 @@ public class ModelWrapper extends Model {
   //
   // return ;
   // }
-  public void createSpeciesObjectFromSBOTerm(SpeciesGlyph sg, int sboterm) {
-    switch (sboterm) {
-    case SBMLUtil.intSBOTermForCOMPLEX:
-      break;
-    case SBMLUtil.intSBOTermForANTISENSE_RNA:
-      createAntisenseRNA((org.sbml.jsbml.Species) sg.getSpeciesInstance());
-      break;
-    case SBMLUtil.intSBOTermForDEGRADED:
-    case SBMLUtil.intSBOTermForDRUG:
-    case SBMLUtil.intSBOTermForSIMPLE_MOLECULE:
-    case SBMLUtil.intSBOTermForUNKNOWN:
-    case SBMLUtil.intSBOTermForION:
-    case SBMLUtil.intSBOTermForPHENOTYPE:
+  public void createSpeciesObjectFromSBOTerm(SpeciesGlyph sg, int sboTerm) {
+    if (SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForCOMPLEX) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForDEGRADED) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForDEGRADED) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForDRUG) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForSIMPLE_MOLECULE) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForUNKNOWN) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForION) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForPHENOTYPE)) {
       // nothing to do
-      break;
-    case SBMLUtil.intSBOTermForGENE:
+    } else if (SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForANTISENSE_RNA)) {
+      createAntisenseRNA((org.sbml.jsbml.Species) sg.getSpeciesInstance());
+    } else if (SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForGENE)) {
       createGene((org.sbml.jsbml.Species) sg.getSpeciesInstance());
-      break;
-    case SBMLUtil.intSBOTermForRNA:
+    } else if (SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForRNA)) {
       createRNA((org.sbml.jsbml.Species) sg.getSpeciesInstance());
-      break;
-    case SBMLUtil.intSBOTermForPROTEIN:
-    case SBMLUtil.intSBOTermForGENERIC:
-    case SBMLUtil.intSBOTermForRECEPTOR:
-    case SBMLUtil.intSBOTermForION_CHANNEL:
-    case SBMLUtil.intSBOTermForTRUNCATED:
-    default:
+    } else /*if (SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForPROTEIN) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForGENERIC) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForRECEPTOR) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForION_CHANNEL) ||
+        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForTRUNCATED))*/ {
       createProtein((org.sbml.jsbml.Species) sg.getSpeciesInstance());
-      break;
     }
   }
 
@@ -1406,9 +1438,11 @@ public class ModelWrapper extends Model {
    * @return the protein by species id
    */
   public Protein getProteinBySpeciesId(String id) {
-    for (Protein p : proteinList)
-      if (p.getName().equals(id))
+    for (Protein p : proteinList) {
+      if (p.getName().equals(id)) {
         return p;
+      }
+    }
     return null;
   }
 
@@ -1422,9 +1456,11 @@ public class ModelWrapper extends Model {
    * @return the gene by species id
    */
   public Gene getGeneBySpeciesId(String id) {
-    for (Gene g : geneList)
-      if (g.getName().equals(id))
+    for (Gene g : geneList) {
+      if (g.getName().equals(id)) {
         return g;
+      }
+    }
     return null;
   }
 
@@ -1438,9 +1474,11 @@ public class ModelWrapper extends Model {
    * @return the RNA by species id
    */
   public RNA getRNABySpeciesId(String id) {
-    for (RNA rna : rnaList)
-      if (rna.getName().equals(id))
+    for (RNA rna : rnaList) {
+      if (rna.getName().equals(id)) {
         return rna;
+      }
+    }
     return null;
   }
 
@@ -1454,9 +1492,11 @@ public class ModelWrapper extends Model {
    * @return the antisense RNA by species id
    */
   public AntisenseRNA getAntisenseRNABySpeciesId(String id) {
-    for (AntisenseRNA asrna : antiSenseRNAList)
-      if (asrna.getName().equals(id))
+    for (AntisenseRNA asrna : antiSenseRNAList) {
+      if (asrna.getName().equals(id)) {
         return asrna;
+      }
+    }
     return null;
   }
 
@@ -1472,9 +1512,11 @@ public class ModelWrapper extends Model {
    *         TODO
    */
   public SpeciesAliasWrapper getSpeciesAliasWrapperByPosition(double x, double y) {
-    for (SpeciesAliasWrapper saw : sAliasWrapperList)
-      if ((int) saw.getX() == (int) x && (int) saw.getY() == (int) y)
+    for (SpeciesAliasWrapper saw : sAliasWrapperList) {
+      if ((int) saw.getX() == (int) x && (int) saw.getY() == (int) y) {
         return saw;
+      }
+    }
     return null;
   }
 }

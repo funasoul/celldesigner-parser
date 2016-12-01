@@ -84,14 +84,18 @@ public class SBMLModelCompleter {
     for (UnitDefinition ud : unitDefinitions) {
       ListOf<Unit> units = ud.getListOfUnits();
       for (Unit u : units) {
-        if (!u.isSetExponent())
+        if (!u.isSetExponent()) {
           u.setExponent(1.0);
-        if (!u.isSetMultiplier())
+        }
+        if (!u.isSetMultiplier()) {
           u.setMultiplier(1.0);
-        if (!u.isSetKind())
+        }
+        if (!u.isSetKind()) {
           u.setKind(Kind.INVALID);
-        if (!u.isSetScale())
+        }
+        if (!u.isSetScale()) {
           u.setScale(0);
+        }
       }
     }
     return unitDefinitions;
@@ -110,10 +114,12 @@ public class SBMLModelCompleter {
     ListOf<Compartment> compartments) {
     int i = 0;
     for (Compartment c : compartments) {
-      if (!c.isSetId())
+      if (!c.isSetId()) {
         c.setId(c.getClass().getSimpleName() + i++);
-      if (!c.isSetConstant())
+      }
+      if (!c.isSetConstant()) {
         c.setConstant(true);
+      }
     }
     return compartments;
   }
@@ -130,16 +136,21 @@ public class SBMLModelCompleter {
   public static ListOf<Species> completeSpecies(ListOf<Species> species) {
     int i = 0;
     for (Species s : species) {
-      if (!s.isSetId())
+      if (!s.isSetId()) {
         s.setId(s.getClass().getSimpleName() + i++);
-      if (!s.isSetCompartment())
+      }
+      if (!s.isSetCompartment()) {
         s.setCompartment(model.getCompartment(0));
-      if (!s.isSetHasOnlySubstanceUnits())
+      }
+      if (!s.isSetHasOnlySubstanceUnits()) {
         s.setHasOnlySubstanceUnits(true);
-      if (!s.isSetBoundaryCondition())
+      }
+      if (!s.isSetBoundaryCondition()) {
         s.setBoundaryCondition(true);
-      if (!s.isSetConstant())
+      }
+      if (!s.isSetConstant()) {
         s.setConstant(true);
+      }
     }
     return species;
   }
@@ -156,10 +167,12 @@ public class SBMLModelCompleter {
   public static ListOf<Parameter> completeParameter(ListOf<Parameter> parameters) {
     int i = 0;
     for (Parameter p : parameters) {
-      if (!p.isSetId())
+      if (!p.isSetId()) {
         p.setId(p.getClass().getSimpleName() + i++);
-      if (!p.isSetConstant())
+      }
+      if (!p.isSetConstant()) {
         p.setConstant(true);
+      }
     }
     return parameters;
   }
@@ -176,12 +189,15 @@ public class SBMLModelCompleter {
   public static ListOf<Reaction> completeReactions(ListOf<Reaction> reactions) {
     int i = 0;
     for (Reaction r : reactions) {
-      if (!r.isSetId())
+      if (!r.isSetId()) {
         r.setId(r.getClass().getSimpleName() + i++);
-      if (!r.isSetFast())
+      }
+      if (!r.isSetFast()) {
         r.setFast(true);
-      if (!r.isSetReversible())
+      }
+      if (!r.isSetReversible()) {
         r.setReversible(true);
+      }
       completeSpeciesReference(r.getListOfReactants());
       completeSpeciesReference(r.getListOfProducts());
       completeModifierSpeciesReference(r.getListOfModifiers());
@@ -203,13 +219,18 @@ public class SBMLModelCompleter {
     for (SpeciesReference sr : speciesReference) {
       if (!sr.isSetSpecies()){
         Species s = model.getSpecies(sr.getId());
-        if(s == null)
+        if(s == null) {
           sr.setSpecies(model.getSpecies(0));
-        else
+        } else {
           sr.setSpecies(s);
+        }
       }
-      if (!sr.isSetConstant())
+      if (!sr.isSetStoichiometry()) {
+        sr.setStoichiometry(1d);
+      }
+      if (!sr.isSetConstant()) {
         sr.setConstant(true);
+      }
     }
     return speciesReference;
   }
@@ -228,10 +249,11 @@ public class SBMLModelCompleter {
     for (ModifierSpeciesReference sr : modifierSpeciesReference) {
       if (!sr.isSetSpecies()){
         Species s = model.getSpecies(sr.getId());
-        if(s == null)
+        if(s == null) {
           sr.setSpecies(model.getSpecies(0));
-        else
+        } else {
           sr.setSpecies(s);
+        }
       }
     }
     return modifierSpeciesReference;

@@ -24,7 +24,6 @@ import org.sbml.jsbml.SBMLError;
 import org.sbml.jsbml.SBMLErrorLog;
 import org.sbml.jsbml.SBMLException;
 import org.sbml.jsbml.SBMLReader;
-import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.TidySBMLWriter;
 import org.sbml.jsbml.ext.layout.Layout;
 import org.sbml.wrapper.ModelWrapper;
@@ -73,8 +72,8 @@ public abstract class BaseLayoutConverter {
    *         Signals that an I/O exception has occurred.
    */
   public BaseLayoutConverter(File file) throws XMLStreamException, IOException {
-    this.document = SBMLReader.read(file);
-    this.outputFileName = SBMLUtil.createOutputFileName(file);
+    document = SBMLReader.read(file);
+    outputFileName = SBMLUtil.createOutputFileName(file);
   }
 
 
@@ -91,7 +90,7 @@ public abstract class BaseLayoutConverter {
    *         Signals that an I/O exception has occurred.
    */
   public BaseLayoutConverter(File file, String outputFileName)
-    throws XMLStreamException, IOException {
+      throws XMLStreamException, IOException {
     this(file);
     this.outputFileName = outputFileName;
   }
@@ -110,9 +109,9 @@ public abstract class BaseLayoutConverter {
    *         Signals that an I/O exception has occurred.
    */
   public BaseLayoutConverter(File file, boolean defaultCompartment)
-    throws XMLStreamException, IOException {
+      throws XMLStreamException, IOException {
     this(file);
-    this.convertDefaultCompartment = defaultCompartment;
+    convertDefaultCompartment = defaultCompartment;
   }
 
 
@@ -133,7 +132,7 @@ public abstract class BaseLayoutConverter {
   public BaseLayoutConverter(File file, boolean defaultCompartment,
     String outputFileName) throws XMLStreamException, IOException {
     this(file, outputFileName);
-    this.convertDefaultCompartment = defaultCompartment;
+    convertDefaultCompartment = defaultCompartment;
   }
 
 
@@ -150,11 +149,11 @@ public abstract class BaseLayoutConverter {
    *         Signals that an I/O exception has occurred.
    */
   public BaseLayoutConverter(File file, ApplicationOption options)
-    throws XMLStreamException, IOException {
+      throws XMLStreamException, IOException {
     this(file);
-    this.outputFileName = options.isSetOutput() ? options.getOutput()
+    outputFileName = options.isSetOutput() ? options.getOutput()
       : SBMLUtil.createOutputFileName(file);
-    this.convertDefaultCompartment = options.isDefaultCompartment();
+    convertDefaultCompartment = options.isDefaultCompartment();
   }
 
 
@@ -211,7 +210,7 @@ public abstract class BaseLayoutConverter {
    */
   public void save() {
     try {
-      SBMLWriter.write(document, new File(outputFileName), ' ', (short) 2);
+      TidySBMLWriter.write(document, new File(outputFileName), ' ', (short) 2);
     } catch (SBMLException | XMLStreamException | IOException e) {
       e.printStackTrace();
     }

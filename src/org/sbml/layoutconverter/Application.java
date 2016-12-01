@@ -31,7 +31,7 @@ import org.kohsuke.args4j.CmdLineParser;
  *         Date Created: Jul 7, 2016
  */
 public class Application {
-  
+
   /**
    * A {@link Logger} for this class.
    */
@@ -99,5 +99,5 @@ public class Application {
   public static void main(String[] args) {
     new Application(args);
   }
-  
+
 }

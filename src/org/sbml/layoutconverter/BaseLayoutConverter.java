@@ -221,7 +221,7 @@ public abstract class BaseLayoutConverter {
    * Validate.
    */
   public void validate() {
-    document.checkConsistency();
+    document.checkConsistencyOffline();
     SBMLErrorLog errorLog = document.getListOfErrors();
     List<SBMLError> errorList = errorLog.getValidationErrors();
     for (SBMLError e : errorList) {

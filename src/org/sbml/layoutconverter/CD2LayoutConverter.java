@@ -12,12 +12,15 @@
  *******************************************************************************/
 package org.sbml.layoutconverter;
 
+import java.awt.Color;
 import java.awt.geom.Point2D;
 import java.io.File;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import javax.xml.bind.JAXBException;
@@ -48,6 +51,15 @@ import org.sbml.jsbml.ext.layout.SpeciesGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceGlyph;
 import org.sbml.jsbml.ext.layout.SpeciesReferenceRole;
 import org.sbml.jsbml.ext.layout.TextGlyph;
+import org.sbml.jsbml.ext.render.ColorDefinition;
+import org.sbml.jsbml.ext.render.ListOfLocalRenderInformation;
+import org.sbml.jsbml.ext.render.LocalRenderInformation;
+import org.sbml.jsbml.ext.render.LocalStyle;
+import org.sbml.jsbml.ext.render.RenderConstants;
+import org.sbml.jsbml.ext.render.RenderGraphicalObjectPlugin;
+import org.sbml.jsbml.ext.render.RenderGroup;
+import org.sbml.jsbml.ext.render.RenderLayoutPlugin;
+import org.sbml.jsbml.util.StringTools;
 import org.sbml.wrapper.CompartmentAliasWrapper;
 import org.sbml.wrapper.CompartmentWrapper;
 import org.sbml.wrapper.ComplexSpeciesAliasWrapper;
@@ -203,6 +215,15 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
   public void convertModelToLayout(ModelWrapper mWrapper) {
     layout.setId("Layout_" + model.getId());
     layout.createDimensions(mWrapper.getW(), mWrapper.getH(), 1d);
+
+    RenderLayoutPlugin lrp = (RenderLayoutPlugin) layout.getPlugin(RenderConstants.shortLabel);
+    ListOfLocalRenderInformation llri = lrp.getListOfLocalRenderInformation();
+    llri.setVersionMajor(1);
+    llri.setVersionMinor(0);
+    LocalRenderInformation lri = lrp.createLocalRenderInformation("celldesigner");
+    lri.setProgramName("CellDesigner");
+    lri.setProgramVersion(StringTools.toString(mWrapper.getModelVersion()));
+    //lri.setNamespace(RenderConstants.namespaceURI);
   }
 
   /**
@@ -669,11 +690,56 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
    *            void TODO
    */
   public void convertSpeciesAliasToLayout(List<SpeciesAliasWrapper> saList) {
+
+    RenderLayoutPlugin lrp = (RenderLayoutPlugin) layout.getPlugin(RenderConstants.shortLabel);
+    LocalRenderInformation lri = lrp.getLocalRenderInformation(0);
+    Map<String, ColorDefinition> colorMap = new HashMap<>();
+
     for (SpeciesAliasWrapper saw : saList) {
       SpeciesGlyph sg = layout.createSpeciesGlyph("SpeciesGlyph_" + saw.getId());
       if (model.getSpecies(saw.getSpecies()) != null) {
         sg.setReference(saw.getSpecies());
       }
+
+      // Render stuff
+      String color = saw.getUsualView().getPaint().getColor();
+      if (color != null) {
+        color = color.substring(2);
+        ColorDefinition cd;
+        if (!colorMap.containsKey(color)) {
+          cd = new ColorDefinition(layout.getLevel(), layout.getVersion());
+          cd.setId("color_" + (lri.getListOfColorDefinitions().size() + 1));
+          cd.setValue(Color.decode('#' + color));
+          lri.addColorDefinition(cd);
+          colorMap.put(color, cd);
+        } else {
+          cd = colorMap.get(color);
+        }
+
+        String id = "fill" + cd.getId();
+        LocalStyle ls = lri.getListOfLocalStyles().get(id);
+        if (ls == null) {
+          RenderGroup g = new RenderGroup(layout.getLevel(), layout.getVersion());
+          //          g.setNamespace(RenderConstants.namespaceURI);
+          ls = new LocalStyle(id, layout.getLevel(), layout.getVersion(), g);
+          lri.addLocalStyle(ls);
+          g.setFill(cd.getId());
+        }
+        /*
+         *  A link from the style to the element that is to be rendered can lead
+         *  to extremely long list of ids and is therefore not the preferred way.
+         *  Instead, we define a role id and refer from the rendered element to
+         *  that style.
+         */
+        //ls.getIDList().add(sg.getId());
+        id = "style_" + id;
+        if (!ls.getRoleList().contains(id)) {
+          ls.getRoleList().add(id);
+        }
+        RenderGraphicalObjectPlugin rgop = (RenderGraphicalObjectPlugin) sg.getPlugin(RenderConstants.shortLabel);
+        rgop.setObjectRole(id);
+      }
+      // End render
 
       BoundingBox bb = sg.createBoundingBox();
       Dimensions dimension = bb.createDimensions();

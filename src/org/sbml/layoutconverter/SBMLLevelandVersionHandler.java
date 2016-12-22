@@ -36,9 +36,10 @@ public class SBMLLevelandVersionHandler {
    */
   public static SBMLDocument upgrade(SBMLDocument document) {
     if (document.getLevel() != SBMLUtil.DEFAULT_SBML_LEVEL
-      || document.getVersion() != SBMLUtil.DEFAULT_SBML_VERSION)
+        || document.getVersion() != SBMLUtil.DEFAULT_SBML_VERSION) {
       document.setLevelAndVersion(SBMLUtil.DEFAULT_SBML_LEVEL,
         SBMLUtil.DEFAULT_SBML_VERSION);
+    }
     document = SBMLModelCompleter.autoCompleteRequiredAttributes(document);
     return document;
   }
@@ -53,9 +54,10 @@ public class SBMLLevelandVersionHandler {
    */
   public static SBMLDocument downgrade(SBMLDocument document) {
     if (document.getLevel() > SBMLUtil.DEFAULT_CELLDESIGNER_SBML_LEVEL
-      || document.getVersion() != SBMLUtil.DEFAULT_CELLDESIGNER_SBML_VERSION)
+        || document.getVersion() != SBMLUtil.DEFAULT_CELLDESIGNER_SBML_VERSION) {
       document.setLevelAndVersion(SBMLUtil.DEFAULT_CELLDESIGNER_SBML_LEVEL,
         SBMLUtil.DEFAULT_CELLDESIGNER_SBML_VERSION);
+    }
     document = SBMLModelCompleter.autoCompleteRequiredAttributes(document);
     return document;
   }

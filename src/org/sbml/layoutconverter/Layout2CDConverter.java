@@ -82,7 +82,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
    *         the JAXB exception
    */
   public Layout2CDConverter(File file) throws XMLStreamException, IOException,
-    JAXBException {
+  JAXBException {
     super(file);
     init();
   }
@@ -103,7 +103,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
    *         the JAXB exception
    */
   public Layout2CDConverter(File file, String outputFileName)
-    throws XMLStreamException, IOException, JAXBException {
+      throws XMLStreamException, IOException, JAXBException {
     super(file, outputFileName);
     init();
   }
@@ -129,7 +129,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
    */
   public Layout2CDConverter(File file, boolean defaultCompartment,
     String outputFileName) throws XMLStreamException, IOException,
-    SBMLException, JAXBException {
+  SBMLException, JAXBException {
     super(file, defaultCompartment, outputFileName);
     init();
   }
@@ -152,7 +152,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
    *         the JAXB exception
    */
   public Layout2CDConverter(File file, boolean defaultCompartment)
-    throws XMLStreamException, IOException, SBMLException, JAXBException {
+      throws XMLStreamException, IOException, SBMLException, JAXBException {
     super(file, defaultCompartment);
     init();
   }
@@ -167,7 +167,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
    * @throws SBMLException
    */
   public Layout2CDConverter(File file, ApplicationOption options)
-    throws XMLStreamException, IOException, SBMLException, JAXBException {
+      throws XMLStreamException, IOException, SBMLException, JAXBException {
     super(file, options);
     init();
   }
@@ -186,9 +186,10 @@ public class Layout2CDConverter extends BaseLayoutConverter {
    *         the XML stream exception
    */
   public void init() throws IOException, SBMLException, JAXBException,
-    XMLStreamException {
-    if (!SBMLUtil.isSetLayoutNameSpace(document))
+  XMLStreamException {
+    if (!SBMLUtil.isSetLayoutNameSpace(document)) {
       throw new IOException("Missing Layout Namespace");
+    }
     downgrade_document = SBMLLevelandVersionHandler.downgrade(document.clone());
     mWrapper = ObjectFactory.unmarshalSBMLFromString(JSBML.writeSBMLToString(downgrade_document));
     model = document.getModel();
@@ -202,6 +203,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
   @Override
   public void convert() {
     LayoutModelPlugin mplugin = (LayoutModelPlugin) (model.getPlugin("layout"));
+
     layout = mplugin.getLayout(0);
     convertModelToCD(layout);
     convertCompartmentsToCD(layout.getListOfCompartmentGlyphs());
@@ -243,8 +245,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
     for (CompartmentGlyph cg : cgList) {
       Compartment c = (Compartment) cg.getCompartmentInstance();
       if (!c.getId().equals("default")
-        || (c.getId().equals("default") && convertDefaultCompartment))
+          || (c.getId().equals("default") && convertDefaultCompartment)) {
         mWrapper.createCompartmentAliasWrapper(cg);
+      }
     }
   }
 
@@ -264,7 +267,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
         String cid = s.getCompartment();
         String sid = s.getId() + "alias";
         if (hashSpeciesCounter.isEmpty()
-          || !hashSpeciesCounter.containsKey(sid)) {
+            || !hashSpeciesCounter.containsKey(sid)) {
           hashSpeciesCounter.put(sid, 1);
         } else {
           hashSpeciesCounter.put(sid, hashSpeciesCounter.get(sid) + 1);
@@ -323,8 +326,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
    */
   public CompartmentGlyph getCompartmentGlyphByCompartmentId(String id) {
     for (CompartmentGlyph cg : layout.getListOfCompartmentGlyphs()) {
-      if (cg.getCompartmentInstance().getId().equals(id))
+      if (cg.getCompartmentInstance().getId().equals(id)) {
         return cg;
+      }
     }
     return null;
   }
@@ -366,16 +370,16 @@ public class Layout2CDConverter extends BaseLayoutConverter {
         SpeciesAliasWrapper saw = mWrapper.getSpeciesAliasWrapperByPosition(
           point.getX(), point.getY());
         if (srg.getSpeciesReferenceRole() == SpeciesReferenceRole.SUBSTRATE
-          || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.SIDESUBSTRATE) {
+            || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.SIDESUBSTRATE) {
           SpeciesReferenceWrapper srw = rw.getReactantWrapperById(id);
           srw.setAlias(saw.getId());
         } else if (srg.getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT
-          || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.SIDEPRODUCT) {
+            || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.SIDEPRODUCT) {
           SpeciesReferenceWrapper srw = rw.getProductWrapperById(id);
           srw.setAlias(saw.getId());
         } else if (srg.getSpeciesReferenceRole() == SpeciesReferenceRole.ACTIVATOR
-          || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.INHIBITOR
-          || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.MODIFIER) {
+            || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.INHIBITOR
+            || srg.getSpeciesReferenceRole() == SpeciesReferenceRole.MODIFIER) {
           ModifierSpeciesReferenceWrapper msrw = rw.getModifierWrapperById(id);
           msrw.setAlias(saw.getId());
           SpeciesWrapper sw = saw.getSpeciesWrapperAliased();
@@ -405,10 +409,10 @@ public class Layout2CDConverter extends BaseLayoutConverter {
             editPointVertices);
           rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
           rw.setTShapeIndex(reactantGlyph.getCurve().getListOfCurveSegments()
-                                         .getChildCount() - 1);
+            .getChildCount() - 1);
         }
       } else if (reactantList.size() == 2 && productList.size() == 1
-        && sboterm == SBMLUtil.intSBOTermForHETERODIMER_ASSOCIATION) {
+          && sboterm == SBMLUtil.intSBOTermForHETERODIMER_ASSOCIATION) {
         SpeciesReference reactant1 = reactantList.get(0);
         SpeciesReference reactant2 = reactantList.get(1);
         SpeciesReference product = productList.get(0);
@@ -429,16 +433,16 @@ public class Layout2CDConverter extends BaseLayoutConverter {
           LayoutUtil.getCenterPositionOfGlyph(productGlyph), editPointVertices);
         rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
         int num0 = reactantGlyph1.getCurve().getListOfCurveSegments()
-                                 .getChildCount() - 1;
+            .getChildCount() - 1;
         int num1 = reactantGlyph2.getCurve().getListOfCurveSegments()
-                                 .getChildCount() - 1;
+            .getChildCount() - 1;
         int num2 = productGlyph.getCurve().getListOfCurveSegments()
-                               .getChildCount() - 1;
+            .getChildCount() - 1;
         int tshapeindex = num0 + num1;
         rw.setNum(num0, num1, num2, tshapeindex);
       } else if (reactantList.size() == 1
-        && productList.size() == 2
-        && (sboterm == SBMLUtil.intSBOTermForDISSOCIATION || sboterm == SBMLUtil.intSBOTermForTRUNCATION)) {
+          && productList.size() == 2
+          && (sboterm == SBMLUtil.intSBOTermForDISSOCIATION || sboterm == SBMLUtil.intSBOTermForTRUNCATION)) {
         SpeciesReference reactant = reactantList.get(0);
         SpeciesReference product1 = productList.get(0);
         SpeciesReference product2 = productList.get(1);
@@ -459,11 +463,11 @@ public class Layout2CDConverter extends BaseLayoutConverter {
           LayoutUtil.getCenterPositionOfGlyph(productGlyph2), editPointVertices);
         rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
         int num0 = reactantGlyph.getCurve().getListOfCurveSegments()
-                                .getChildCount() - 1;
+            .getChildCount() - 1;
         int num1 = productGlyph1.getCurve().getListOfCurveSegments()
-                                .getChildCount() - 1;
+            .getChildCount() - 1;
         int num2 = productGlyph2.getCurve().getListOfCurveSegments()
-                                .getChildCount() - 1;
+            .getChildCount() - 1;
         int tshapeindex = num0;
         rw.setNum(num0, num1, num2, tshapeindex);
       } else {
@@ -486,7 +490,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
             editPointVertices);
           rw.createEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
           rw.setTShapeIndex(reactantGlyph.getCurve().getListOfCurveSegments()
-                                         .getChildCount() - 1);
+            .getChildCount() - 1);
         }
         if (reactantList.size() > 1) {
           rw.createReactantLinks();
@@ -526,7 +530,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
           editPointVertices = LayoutUtil.convertEditPointsToProportion(
             modifierGlyph.getCurve().getListOfCurveSegments().get(0).getStart(),
             reactantGlyph.getCurve().getListOfCurveSegments().getLast()
-                         .getEnd(), editPointVertices);
+            .getEnd(), editPointVertices);
           ModifierSpeciesReferenceWrapper mw = rw.getModifierWrapperById(msr.getSpecies());
           mw.setEditPointList(LayoutUtil.editPointListToStringList(editPointVertices));
         }
@@ -614,7 +618,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
       pointList.addAll(createPointListFromCurveSegment(cs));
     }
     if (sboterm == SBMLUtil.intSBOTermForDISSOCIATION
-      || sboterm == SBMLUtil.intSBOTermForTRUNCATED) {
+        || sboterm == SBMLUtil.intSBOTermForTRUNCATED) {
       pointList.remove(pointList.size() - 1);
     }
     locs = product.getCurve().getListOfCurveSegments();
@@ -639,18 +643,18 @@ public class Layout2CDConverter extends BaseLayoutConverter {
     if (cs.isCubicBezier()) {
       CubicBezier bezier = (CubicBezier) cs;
       Point2D.Double basePoint = new Point2D.Double(bezier.getBasePoint1()
-                                                          .getX(),
+        .getX(),
         bezier.getBasePoint1().getY());
       pointList.add(basePoint);
       if (bezier.getBasePoint1().getX() != bezier.getBasePoint2().getX()
-        || bezier.getBasePoint1().getY() != bezier.getBasePoint2().getY()) {
+          || bezier.getBasePoint1().getY() != bezier.getBasePoint2().getY()) {
         basePoint = new Point2D.Double(bezier.getBasePoint2().getX(),
           bezier.getBasePoint2().getY());
         pointList.add(basePoint);
       }
     }
     Point2D.Double point = new Point2D.Double(cs.getEnd().getX(), cs.getEnd()
-                                                                    .getY());
+      .getY());
     pointList.add(point);
     return pointList;
   }
@@ -668,14 +672,14 @@ public class Layout2CDConverter extends BaseLayoutConverter {
     SpeciesReference sr = srList.get(0);
     SpeciesWrapper sw = mWrapper.getSpeciesWrapperById(sr.getSpecies());
     if (sw.getClazz().equals("PROTEIN") || sw.getClazz().equals("GENE")
-      || sw.getClazz().equals("RNA") || sw.getClazz().equals("ANTISENSE_RNA")) {
+        || sw.getClazz().equals("RNA") || sw.getClazz().equals("ANTISENSE_RNA")) {
       return srList;
     }
     for (int i = 1; i < srList.size(); i++) {
       sr = srList.get(i);
       sw = mWrapper.getSpeciesWrapperById(sr.getSpecies());
       if (sw.getClazz().equals("PROTEIN") || sw.getClazz().equals("GENE")
-        || sw.getClazz().equals("RNA") || sw.getClazz().equals("ANTISENSE_RNA")) {
+          || sw.getClazz().equals("RNA") || sw.getClazz().equals("ANTISENSE_RNA")) {
         Collections.swap(srList, 0, i);
       }
     }
@@ -697,8 +701,9 @@ public class Layout2CDConverter extends BaseLayoutConverter {
     ReactionGlyph rg = layout.getReactionGlyph(rgid);
     for (SpeciesReferenceGlyph sg : rg.getListOfSpeciesReferenceGlyphs()) {
       if (sg.getReference().equals(id)
-        || sg.getSpeciesGlyphInstance().getReference().equals(id))
+          || sg.getSpeciesGlyphInstance().getReference().equals(id)) {
         return sg;
+      }
     }
     return null;
   }

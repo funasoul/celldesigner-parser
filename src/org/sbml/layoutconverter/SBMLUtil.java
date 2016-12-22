@@ -14,8 +14,10 @@ package org.sbml.layoutconverter;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import javax.swing.tree.TreeNode;
 import javax.xml.stream.XMLStreamException;
@@ -59,7 +61,12 @@ import org.sbml.jsbml.util.filters.SpeciesReferenceFilter;
 @SuppressWarnings("deprecation")
 public class SBMLUtil {
 
-    /** The defaultsbmllevel. */
+  /**
+   * A {@link Logger} for this class.
+   */
+  private static final Logger logger = Logger.getLogger(SBMLUtil.class.getName());
+
+  /** The defaultsbmllevel. */
   public static final int DEFAULT_SBML_LEVEL = 3;
 
   /** The defaultsbmlversion. */
@@ -754,6 +761,26 @@ public class SBMLUtil {
       d.getModel().getEvent(e.getId()).setDelay((Delay) math.clone());
     } else {
       System.err.println("Unknown Math Class");
+    }
+  }
+
+  /**
+   * This method ensures the integrity of the SBML data structure by removing
+   * empty instances of {@link ListOf}.
+   * 
+   * @param sbase
+   */
+  public static void removeEmptyLists(SBase sbase) {
+    if ((sbase instanceof ListOf<?>) && ((ListOf<?>) sbase).isEmpty()) {
+      logger.info(MessageFormat.format("Removing empty {0} from SBML document.", sbase.getElementName()));
+      sbase.removeFromParent();
+    } else {
+      for (int i = 0; i < sbase.getChildCount(); i++) {
+        TreeNode node = sbase.getChildAt(i);
+        if (node instanceof SBase) {
+          removeEmptyLists((SBase) node);
+        }
+      }
     }
   }
 

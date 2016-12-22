@@ -204,6 +204,8 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
       MultiConverter multiConverter = new MultiConverter(model, mWrapper);
       multiConverter.convert();
     }
+
+    SBMLUtil.removeEmptyLists(document);
   }
 
   /**
@@ -216,6 +218,7 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
     layout.setId("Layout_" + model.getId());
     layout.createDimensions(mWrapper.getW(), mWrapper.getH(), 1d);
 
+    // Render information
     RenderLayoutPlugin lrp = (RenderLayoutPlugin) layout.getPlugin(RenderConstants.shortLabel);
     ListOfLocalRenderInformation llri = lrp.getListOfLocalRenderInformation();
     llri.setVersionMajor(1);
@@ -805,8 +808,8 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
       tg.setGraphicalObject(sg);
       BoundingBox bb2 = tg.createBoundingBox();
       Dimensions dimension2 = bb2.createDimensions();
-      dimension2.setWidth(csaw.getId().length() * 3);
-      dimension2.setHeight(10);
+      dimension2.setWidth(csaw.getId().length() * 3d);
+      dimension2.setHeight(10d);
       dimension.setDepth(1d);
       Point point2 = bb2.createPosition();
       point2.setX(csaw.getX() + csaw.getW() / 2d - dimension2.getWidth() / 2d);

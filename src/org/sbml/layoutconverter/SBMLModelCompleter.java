@@ -61,12 +61,51 @@ public class SBMLModelCompleter {
    */
   public static SBMLDocument autoCompleteRequiredAttributes(SBMLDocument doc) {
     document = doc;
+
+    // Namespace correction in the document: remove references to the previous
+    // Level and Version combination:
+    document.getDeclaredNamespaces().remove("xmlns");
+    document.addDeclaredNamespace("xmlns",
+      String.format("http://www.sbml.org/sbml/level%d/version%d/core",
+        SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION));
+
+    // Now proceed with the model:
     model = document.getModel();
-    completeUnitDefinitions(model.getListOfUnitDefinitions());
-    completeCompartments(model.getListOfCompartments());
-    completeReactions(model.getListOfReactions());
-    completeSpecies(model.getListOfSpecies());
-    completeParameter(model.getListOfParameters());
+    if (model.isSetListOfUnitDefinitions()) {
+      completeUnitDefinitions(model.getListOfUnitDefinitions());
+    }
+    if (model.isSetListOfCompartments()) {
+      completeCompartments(model.getListOfCompartments());
+    }
+    if (model.isSetListOfReactions()) {
+      completeReactions(model.getListOfReactions());
+    }
+    if (model.isSetListOfSpecies()) {
+      completeSpecies(model.getListOfSpecies());
+    }
+    if (model.isSetListOfParameters()) {
+      completeParameter(model.getListOfParameters());
+    }
+
+    // This saves us the effort of explicitly defining the units of individual
+    // model components:
+    if (model.findUnitDefinition(UnitDefinition.SUBSTANCE) != null) {
+      model.setSubstanceUnits(UnitDefinition.SUBSTANCE);
+      model.setExtentUnits(model.getSubstanceUnits());
+    }
+    if (model.findUnitDefinition(UnitDefinition.AREA) != null) {
+      model.setAreaUnits(UnitDefinition.AREA);
+    }
+    if (model.findUnitDefinition(UnitDefinition.VOLUME) != null) {
+      model.setVolumeUnits(UnitDefinition.VOLUME);
+    }
+    if (model.findUnitDefinition(UnitDefinition.LENGTH) != null) {
+      model.setLengthUnits(UnitDefinition.LENGTH);
+    }
+    if (model.findUnitDefinition(UnitDefinition.TIME) != null) {
+      model.setTimeUnits(UnitDefinition.TIME);
+    }
+
     return document;
   }
 
@@ -85,10 +124,10 @@ public class SBMLModelCompleter {
       ListOf<Unit> units = ud.getListOfUnits();
       for (Unit u : units) {
         if (!u.isSetExponent()) {
-          u.setExponent(1.0);
+          u.setExponent(1d);
         }
         if (!u.isSetMultiplier()) {
-          u.setMultiplier(1.0);
+          u.setMultiplier(1d);
         }
         if (!u.isSetKind()) {
           u.setKind(Kind.INVALID);

@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.sbml.jsbml.ext.layout.BoundingBox;
 import org.sbml.jsbml.ext.layout.CompartmentGlyph;
 import org.sbml.jsbml.ext.layout.CubicBezier;
 import org.sbml.jsbml.ext.layout.CurveSegment;
@@ -59,11 +60,11 @@ public class LayoutUtil {
       point.setY(point.getY() + dimension.getHeight() / 2);
     } else {
       Dimensions dimension = ((SpeciesReferenceGlyph) go).getSpeciesGlyphInstance()
-                                                         .getBoundingBox()
-                                                         .getDimensions();
+          .getBoundingBox()
+          .getDimensions();
       point = ((SpeciesReferenceGlyph) go).getSpeciesGlyphInstance()
-                                          .getBoundingBox().getPosition()
-                                          .clone();
+          .getBoundingBox().getPosition()
+          .clone();
       point.setX(point.getX() + dimension.getWidth() / 2);
       point.setY(point.getY() + dimension.getHeight() / 2);
     }
@@ -80,13 +81,13 @@ public class LayoutUtil {
    */
   public static Point getPointFromGlyph(GraphicalObject go) {
     if (go instanceof SpeciesGlyph || go instanceof CompartmentGlyph
-      || go instanceof ReactionGlyph) {
+        || go instanceof ReactionGlyph) {
       return go.getBoundingBox().getPosition();
     } else if (go instanceof SpeciesReferenceGlyph && go.isSetBoundingBox()) {
       return go.getBoundingBox().getPosition();
     } else {
       return ((SpeciesReferenceGlyph) go).getSpeciesGlyphInstance()
-                                         .getBoundingBox().getPosition();
+          .getBoundingBox().getPosition();
     }
   }
 
@@ -402,7 +403,7 @@ public class LayoutUtil {
     if (num0 > 0) {
       List<Point2D.Double> subList = editPointList.subList(0, num0);
       Collections.reverse(subList); // since editpoint lists the coordinates
-                                    // starting from the editpoint
+      // starting from the editpoint
       List<LineSegment> subLineList = createListOfLineSegment(startPoint,
         editPoint, editPoint, startPoint, subList);
       lineList.addAll(lineList.size(), subLineList);
@@ -576,8 +577,9 @@ public class LayoutUtil {
   public static List<Point2D.Double> createEditPointsAsList(
     List<String> editPoints) {
     List<Point2D.Double> list = new ArrayList<Point2D.Double>();
-    if (editPoints == null)
+    if (editPoints == null) {
       return list;
+    }
     for (String s : editPoints) {
       String[] points = s.split(",", 0);
       Point2D.Double point = new Point2D.Double();
@@ -764,8 +766,7 @@ public class LayoutUtil {
     Point endPoint2) {
     double length1 = getLength(startPoint, endPoint1);
     double length2 = getLength(startPoint, endPoint2);
-    double cos = dotProduct(startPoint, endPoint1, endPoint2)
-      / (length1 * length2);
+    double cos = dotProduct(startPoint, endPoint1, endPoint2) / (length1 * length2);
     return Math.acos(cos);
   }
 
@@ -872,35 +873,36 @@ public class LayoutUtil {
    */
   public static Point adjustOverlappingEndPoint(CurveSegment cs,
     GraphicalObject go) {
-    Line2D.Double reactionLine = new Line2D.Double(cs.getStart().getX(),
-      cs.getStart().getY(), cs.getEnd().getX(), cs.getEnd().getY());
-    Rectangle2D.Double glyph = new Rectangle2D.Double(go.getBoundingBox()
-                                                        .getPosition().getX(),
-      go.getBoundingBox().getPosition().getY(), go.getBoundingBox()
-                                                  .getDimensions().getWidth(),
-      go.getBoundingBox().getDimensions().getHeight());
+    Point start = cs.getStart();
+    Point end = cs.getEnd();
+    BoundingBox bbox = go.getBoundingBox();
+    Point pos = bbox.getPosition();
+    Dimensions dim = bbox.getDimensions();
+
+    Rectangle2D.Double glyph = new Rectangle2D.Double(pos.x(), pos.y(), dim.getWidth(), dim.getHeight());
+    Line2D.Double reactionLine = new Line2D.Double(start.x(), start.y(), end.x(), end.y());
     if (reactionLine.intersectsLine(glyph.getMinX(), glyph.getMinY(),
       glyph.getMaxX(), glyph.getMinY())) { // up
-      return getIntersectingPoint(cs.getStart(), cs.getEnd(),
-        new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMaxX(),
-          glyph.getMinY()));
+      return getIntersectingPoint(start, end,
+        new Point(glyph.getMinX(), glyph.getMinY()),
+        new Point(glyph.getMaxX(), glyph.getMinY()));
     } else if (reactionLine.intersectsLine(glyph.getMaxX(), glyph.getMinY(),
       glyph.getMaxX(), glyph.getMaxY())) { // right
-      return getIntersectingPoint(cs.getStart(), cs.getEnd(),
-        new Point(glyph.getMaxX(), glyph.getMinY()), new Point(glyph.getMaxX(),
-          glyph.getMaxY()));
+      return getIntersectingPoint(start, end,
+        new Point(glyph.getMaxX(), glyph.getMinY()),
+        new Point(glyph.getMaxX(), glyph.getMaxY()));
     } else if (reactionLine.intersectsLine(glyph.getMinX(), glyph.getMaxY(),
       glyph.getMaxX(), glyph.getMaxY())) { // down
-      return getIntersectingPoint(cs.getStart(), cs.getEnd(),
-        new Point(glyph.getMinX(), glyph.getMaxY()), new Point(glyph.getMaxX(),
-          glyph.getMaxY()));
+      return getIntersectingPoint(start, end,
+        new Point(glyph.getMinX(), glyph.getMaxY()),
+        new Point(glyph.getMaxX(), glyph.getMaxY()));
     } else if (reactionLine.intersectsLine(glyph.getMinX(), glyph.getMinY(),
       glyph.getMinX(), glyph.getMaxY())) { // left
-      return getIntersectingPoint(cs.getStart(), cs.getEnd(),
-        new Point(glyph.getMinX(), glyph.getMinY()), new Point(glyph.getMinX(),
-          glyph.getMaxY()));
+      return getIntersectingPoint(start, end,
+        new Point(glyph.getMinX(), glyph.getMinY()),
+        new Point(glyph.getMinX(), glyph.getMaxY()));
     } else { // no intersection
-      return cs.getEnd();
+      return end;
     }
   }
 
@@ -920,17 +922,22 @@ public class LayoutUtil {
    */
   public static Point getIntersectingPoint(Point p1Start, Point p1End,
     Point p2Start, Point p2End) {
-    if ((p1End.getX() == p2Start.getX() && p1End.getY() == p2Start.getY())
-      || (p1End.getX() == p2End.getX() && p1End.getY() == p2End.getY()))
+    if (((p1End.getX() == p2Start.getX()) && (p1End.getY() == p2Start.getY()))
+        || ((p1End.getX() == p2End.getX()) && (p1End.getY() == p2End.getY()))) {
       return p1End;
-    Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL,
-      SBMLUtil.DEFAULT_SBML_VERSION);
-    double area1 = crossProduct(p2Start, p2Start, p2End, p1Start) / 2;
-    double area2 = crossProduct(p2Start, p1End, p2End, p2Start) / 2;
-    point.setX(p1Start.getX() + (p1End.getX() - p1Start.getX()) * area1
-      / (area1 + area2));
-    point.setY(p1Start.getY() + (p1End.getY() - p1Start.getY()) * area1
-      / (area1 + area2));
+    }
+    Point point = new Point(SBMLUtil.DEFAULT_SBML_LEVEL, SBMLUtil.DEFAULT_SBML_VERSION);
+    double area1 = crossProduct(p2Start, p2Start, p2End, p1Start) / 2d;
+    double area2 = crossProduct(p2Start, p1End, p2End, p2Start) / 2d;
+    double factor = 1d;
+    if (area1 != 0d) {
+      // Avoid creating NaN values or numerical errors.
+      if ((area1 + area2 != 0) && !Double.isNaN(area1 / (area1 + area2))) {
+        factor = area1 / (area1 + area2);
+      }
+    }
+    point.setX(p1Start.getX() + (p1End.getX() - p1Start.getX()) * factor);
+    point.setY(p1Start.getY() + (p1End.getY() - p1Start.getY()) * factor);
     point.setZ(0d);
     return point;
   }
@@ -951,9 +958,7 @@ public class LayoutUtil {
    */
   public static double crossProduct(Point startPoint1, Point startPoint2,
     Point endPoint1, Point endPoint2) {
-    return (endPoint1.getX() - startPoint1.getX())
-      * (endPoint2.getY() - startPoint2.getY())
-      - (endPoint1.getY() - startPoint1.getY())
-      * (endPoint2.getX() - startPoint2.getX());
+    return (endPoint1.x() - startPoint1.x()) * (endPoint2.y() - startPoint2.y())
+        - (endPoint1.y() - startPoint1.y()) * (endPoint2.x() - startPoint2.x());
   }
 }

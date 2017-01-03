@@ -307,8 +307,7 @@ public class LayoutUtil {
   public static Point createAdjustedPoint(GraphicalObject go, String direction) {
     Point p = go.getBoundingBox().getPosition();
     Dimensions d = go.getBoundingBox().getDimensions();
-    return createAdjustedPoint(p.getX(), p.getY(), d.getWidth(), d.getHeight(),
-      direction);
+    return createAdjustedPoint(p.getX(), p.getY(), d.getWidth(), d.getHeight(), direction);
   }
 
 

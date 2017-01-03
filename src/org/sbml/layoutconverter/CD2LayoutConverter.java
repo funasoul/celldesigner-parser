@@ -226,7 +226,6 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
     LocalRenderInformation lri = lrp.createLocalRenderInformation("celldesigner");
     lri.setProgramName("CellDesigner");
     lri.setProgramVersion(StringTools.toString(mWrapper.getModelVersion()));
-    //lri.setNamespace(RenderConstants.namespaceURI);
   }
 
   /**
@@ -243,31 +242,42 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
     cawList = ModelWrapper.reorderCompartmentAccordingToPosition(cawList);
 
     for (CompartmentAliasWrapper caw : cawList) {
-      CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + caw.getId());
-      cg.setCompartment(caw.getCompartment());
-      BoundingBox bb = cg.createBoundingBox();
-      Dimensions dimension = bb.createDimensions();
-      dimension.setWidth(caw.getW());
-      dimension.setHeight(caw.getH());
-      dimension.setDepth(1d);
-      Point point = bb.createPosition();
-      point.setX(caw.getX());
-      point.setY(caw.getY());
-      point.setZ(0d);
-
-      TextGlyph tg = layout.createTextGlyph("TextGlyph_" + caw.getId());
-      tg.setOriginOfText(caw.getCompartment());
-      tg.setGraphicalObject(cg);
-      BoundingBox bb2 = tg.createBoundingBox();
-      Dimensions dimension2 = bb2.createDimensions();
-      dimension2.setWidth(caw.getId().length() * 3);
-      dimension2.setHeight(10);
-      dimension.setDepth(1d);
-      Point point2 = bb2.createPosition();
-      point2.setX(caw.getNameX());
-      point2.setY(caw.getNameY());
-      point2.setZ(0d);
+      configureCompartmentGlyph(
+        layout.createCompartmentGlyph("CompartmentGlyph_" + caw.getId()),
+        caw.getCompartment(), caw.getX(), caw.getY(), caw.getH(), caw.getW(),
+        caw.getId(), caw.getNameX(), caw.getNameY(), caw.getId().length() * 3d);
     }
+  }
+
+  /**
+   * 
+   * @param cg
+   * @param compartment
+   * @param x
+   * @param y
+   * @param h
+   * @param w
+   * @param labelId
+   * @param labelX
+   * @param labelY
+   * @param labelW
+   */
+  private void configureCompartmentGlyph(CompartmentGlyph cg,
+    String compartment, double x, double y, double h, double w, String labelId,
+    double labelX, double labelY, double labelW) {
+    cg.setCompartment(compartment);
+    BoundingBox bb = cg.createBoundingBox();
+    Dimensions dimension = bb.createDimensions();
+    dimension.setWidth(w);
+    dimension.setHeight(h);
+    dimension.setDepth(1d);
+    Point point = bb.createPosition();
+    point.setX(x);
+    point.setY(y);
+    point.setZ(0d);
+
+    configureTextGlyph(layout.createTextGlyph("TextGlyph_" + labelId),
+      compartment, cg.getId(), labelX, labelY, 10d, labelW);
   }
 
   /**
@@ -276,28 +286,15 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
   public void convertDefaultCompartment() {
     CompartmentWrapper cw = mWrapper.getCompartmentWrapperById("default");
     if (cw != null) {
-      CompartmentGlyph cg = layout.createCompartmentGlyph("CompartmentGlyph_" + cw.getId());
-      cg.setCompartment(cw.getId());
-      BoundingBox bb = cg.createBoundingBox();
-      Dimensions dimension = bb.createDimensions();
-      dimension.setWidth(mWrapper.getW());
-      dimension.setHeight(mWrapper.getH());
-      dimension.setDepth(1d);
-      bb.createPosition(0, 0, 0);
-
-      TextGlyph tg = layout.createTextGlyph("TextGlyph_" + cw.getId());
-      tg.setOriginOfText(cw.getId());
-      tg.setGraphicalObject(cg);
-      BoundingBox bb2 = tg.createBoundingBox();
-
-      Dimensions dimension2 = bb2.createDimensions();
-      dimension2.setWidth(cw.getId().length() * 3);
-      dimension2.setHeight(10);
-      dimension.setDepth(1d);
-      Point point2 = bb2.createPosition();
-      point2.setX(mWrapper.getW() / 2 - cw.getId().length() * 3 / 2);
-      point2.setY(mWrapper.getH() - 10);
-      point2.setZ(0d);
+      String text = cw.getName();
+      if ((text == null) || (text.length() == 0)) {
+        text = cw.getId();
+      }
+      configureCompartmentGlyph(
+        layout.createCompartmentGlyph("CompartmentGlyph_" + cw.getId()),
+        cw.getId(), 0, 0, mWrapper.getH(), mWrapper.getW(), cw.getId(),
+        mWrapper.getW() / 2d - text.length() * 3d / 2d,
+        mWrapper.getH() - 10d, text.length() * 3d);
     }
   }
 
@@ -309,266 +306,308 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
    */
   public void convertReactionsToLayout(List<ReactionWrapper> rList) {
     for (ReactionWrapper rw : rList) {
-      ReactionGlyph rg = layout.createReactionGlyph("ReactionGlyph_" + rw.getId());
-      rg.setReference(rw.getId());
-      ListOf<SpeciesReferenceGlyph> srgList = createSpeciesReferenceGlyph(rg, rw);
-      List<BaseReactant> brsList = rw.getBaseReactants();
-      List<BaseProduct> prsList = rw.getBaseProducts();
-      List<Point2D.Double> editPointList = rw.getEditPointsAsList();
-      int rectangleIndex = rw.getRectangleIndex();
-      List<LineSegment> lsList = null;
-      Point centerPoint = new Point();
+      convertReactionToLayout(rw);
+    }
+  }
 
-      if ((brsList.size() == 1) && (prsList.size() == 1)) {
-        BaseReactant br = brsList.get(0);
-        BaseProduct bp = prsList.get(0);
-        SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br.getSpecies());
-        SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp.getSpecies());
+  /**
+   * @param rw
+   */
+  private void convertReactionToLayout(ReactionWrapper rw) {
+    ReactionGlyph rg = layout.createReactionGlyph("ReactionGlyph_" + rw.getId());
+    rg.setReference(rw.getId());
+    ListOf<SpeciesReferenceGlyph> srgList = createSpeciesReferenceGlyph(rg, rw);
+    List<BaseReactant> brsList = rw.getBaseReactants();
+    List<BaseProduct> prsList = rw.getBaseProducts();
+    List<Point2D.Double> editPointList = rw.getEditPointsAsList();
+    int rectangleIndex = rw.getRectangleIndex();
+    List<LineSegment> lsList = null;
+    Point centerPoint = new Point();
 
-        Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br.getLinkAnchor().getPosition());
-        Point endPoint = LayoutUtil.createAdjustedPoint(srg2, bp.getLinkAnchor().getPosition());
-        Point reactantPoint = LayoutUtil.createCenterPoint(srg1);
-        Point productPoint = LayoutUtil.createCenterPoint(srg2);
-        lsList = LayoutUtil.createListOfLineSegment(startPoint,
-          endPoint, reactantPoint, productPoint, editPointList, rectangleIndex);
+    if ((brsList.size() == 1) && (prsList.size() == 1)) {
+      BaseReactant br = brsList.get(0);
+      BaseProduct bp = prsList.get(0);
+      SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br.getSpecies());
+      SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp.getSpecies());
 
-        Curve curve = srg1.createCurve();
-        for (int i = 0; i <= rectangleIndex; i++) {
-          curve.addCurveSegment(lsList.get(i));
+      Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br.getLinkAnchor().getPosition());
+      Point endPoint = LayoutUtil.createAdjustedPoint(srg2, bp.getLinkAnchor().getPosition());
+      Point reactantPoint = LayoutUtil.createCenterPoint(srg1);
+      Point productPoint = LayoutUtil.createCenterPoint(srg2);
+      lsList = LayoutUtil.createListOfLineSegment(startPoint,
+        endPoint, reactantPoint, productPoint, editPointList, rectangleIndex);
+
+      Curve curve = srg1.createCurve();
+      for (int i = 0; i <= rectangleIndex; i++) {
+        curve.addCurveSegment(lsList.get(i));
+      }
+
+      centerPoint = curve.getCurveSegment(rectangleIndex).getEnd().clone();
+
+      curve = srg2.createCurve();
+      for (int i = rectangleIndex + 1; i < lsList.size(); i++) {
+        curve.addCurveSegment(lsList.get(i));
+      }
+
+    } else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
+      BaseReactant br1 = brsList.get(0);
+      SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br1.getSpecies());
+      SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
+      Point startPoint = LayoutUtil.createAdjustedPoint(sg1, br1.getLinkAnchor().getPosition());
+
+      BaseReactant br2 = brsList.get(1);
+      SpeciesReferenceGlyph srg2 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br2.getSpecies());
+      SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
+      Point endPoint1 = LayoutUtil.createAdjustedPoint(sg2, br2.getLinkAnchor().getPosition());
+
+      BaseProduct bp1 = prsList.get(0);
+      SpeciesReferenceGlyph srg3 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
+      SpeciesGlyph sg3 = srg3.getSpeciesGlyphInstance();
+      Point endPoint2 = LayoutUtil.createAdjustedPoint(sg3, bp1.getLinkAnchor().getPosition());
+
+      Point reactantPoint1 = LayoutUtil.createCenterPoint(sg1);
+      Point reactantPoint2 = LayoutUtil.createCenterPoint(sg2);
+      Point productPoint1 = LayoutUtil.createCenterPoint(sg3);
+      int num0 = rw.getEditPoints().getNum0();
+      int num1 = rw.getEditPoints().getNum1();
+      int num2 = rw.getEditPoints().getNum2();
+
+      lsList = LayoutUtil.createListOfLineSegment(startPoint,
+        endPoint1, endPoint2, reactantPoint1, reactantPoint2,
+        productPoint1, editPointList, num0, num1, num2, rw.getReactionType(), rw.getEditPoints().getTShapeIndex());
+      int reactant1 = num0;
+      int reactant2 = num0 + num1 + 1;
+
+      Curve curve = srg1.createCurve();
+      for (int i = 0; i <= reactant1; i++) {
+        curve.addCurveSegment(lsList.get(i));
+      }
+
+      curve = srg2.createCurve();
+      for (int i = reactant1 + 1; i <= reactant2; i++) {
+        curve.addCurveSegment(lsList.get(i));
+      }
+
+      curve = srg3.createCurve();
+      for (int i = reactant2 + 1; i < lsList.size(); i++) {
+        curve.addCurveSegment(lsList.get(i));
+      }
+
+      int tshapeIndex = rw.getEditPoints().getTShapeIndex();
+      LineSegment ls = (LineSegment) curve.getCurveSegment(tshapeIndex);
+      centerPoint = ls.getStart().clone();
+
+    } else if (rw.getReactionType().equals("DISSOCIATION")
+        || rw.getReactionType().equals("TRUNCATION")) {
+      BaseReactant br1 = brsList.get(0);
+      SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br1.getSpecies());
+      Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br1.getLinkAnchor().getPosition());
+
+      BaseProduct bp1 = prsList.get(0);
+      SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
+      Point endPoint1 = LayoutUtil.createAdjustedPoint(srg2, bp1.getLinkAnchor().getPosition());
+
+      BaseProduct bp2 = prsList.get(1);
+      SpeciesReferenceGlyph srg3 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp2.getSpecies());
+      Point endPoint2 = LayoutUtil.createAdjustedPoint(srg3, bp2.getLinkAnchor().getPosition());
+
+      Point reactantPoint = LayoutUtil.createCenterPoint(srg1);
+      Point productPoint1 = LayoutUtil.createCenterPoint(srg2);
+      Point productPoint2 = LayoutUtil.createCenterPoint(srg3);
+
+      int num0 = rw.getEditPoints().getNum0();
+      int num1 = rw.getEditPoints().getNum1();
+      int num2 = rw.getEditPoints().getNum2();
+
+      lsList = LayoutUtil.createListOfLineSegment(startPoint,
+        endPoint1, endPoint2, reactantPoint, productPoint1,
+        productPoint2, editPointList, num0, num1, num2, rw.getReactionType(), rw.getEditPoints().getTShapeIndex());
+      int reactant1 = num0 ;
+      int reactant2 = num0 + num1 + 1;
+
+      Curve curve = srg1.createCurve();
+      for (int i = 0; i <= reactant1; i++) {
+        curve.addCurveSegment(lsList.get(i));
+      }
+
+      curve = srg2.createCurve();
+      for (int i = reactant1 + 1; i <= reactant2; i++) {
+        curve.addCurveSegment(lsList.get(i));
+      }
+
+      curve = srg3.createCurve();
+      for (int i = reactant2 + 1; i < lsList.size(); i++) {
+        curve.addCurveSegment(lsList.get(i));
+      }
+
+      curve = srg1.getCurve();
+      int tshapeIndex = rw.getEditPoints().getTShapeIndex();
+      LineSegment ls = (LineSegment) curve.getCurveSegment(curve.getCurveSegmentCount() - tshapeIndex - 1);
+      centerPoint = ls.getEnd().clone();
+    }
+
+    if (rw.isSetModifier()) {
+      for (Modification m : rw.getListOfModification()) {
+        if (m.getType().contains("BOOLEAN")) {
+          continue;
         }
+        editPointList = LayoutUtil.createEditPointsAsList(m.getEditPoints());
 
-        centerPoint = curve.getCurveSegment(rectangleIndex).getEnd().clone();
+        SpeciesReferenceGlyph srg = rg.getSpeciesReferenceGlyph("srGlyphModifier_" + rg.getReaction() + "_" + m.getModifiers());
+        SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
+        Point modifierPoint = LayoutUtil.createCenterPoint(sg);
+        LinkTarget lt = rw.getLinkTargetByModifier(m);
+        Point startPoint = LayoutUtil.createAdjustedPoint(sg, lt.getLinkAnchor().getPosition());
+        List<LineSegment> lsList2 = LayoutUtil.createListOfLineSegment(startPoint, centerPoint,
+          modifierPoint, centerPoint, editPointList);
+        createCurve(srg, lsList2);
+      }
+    }
 
-        curve = srg2.createCurve();
-        for (int i = rectangleIndex + 1; i < lsList.size(); i++) {
-          curve.addCurveSegment(lsList.get(i));
-        }
+    List<ReactantLink> rlList = rw.getListOfReactantLinks();
+    List<ProductLink> plList = rw.getListOfProductLinks();
+
+    for (ReactantLink link : rlList) {
+      String lineType = link.getLine().getType();
+      SpeciesReferenceGlyph srg = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + link.getReactant());
+      SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
+      String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
+      Point startPoint = LayoutUtil.createAdjustedPoint(sg, position);
+      Point endPoint = centerPoint;
+
+      editPointList = new ArrayList<Point2D.Double>();
+      List<LineSegment> lsList2;
+
+      if (lineType.equals("Curve")) {
+        lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex).getStart());
 
       } else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
-        BaseReactant br1 = brsList.get(0);
-        SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br1.getSpecies());
-        SpeciesGlyph sg1 = srg1.getSpeciesGlyphInstance();
-        Point startPoint = LayoutUtil.createAdjustedPoint(sg1, br1.getLinkAnchor().getPosition());
-
-        BaseReactant br2 = brsList.get(1);
-        SpeciesReferenceGlyph srg2 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br2.getSpecies());
-        SpeciesGlyph sg2 = srg2.getSpeciesGlyphInstance();
-        Point endPoint1 = LayoutUtil.createAdjustedPoint(sg2, br2.getLinkAnchor().getPosition());
-
-        BaseProduct bp1 = prsList.get(0);
-        SpeciesReferenceGlyph srg3 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
-        SpeciesGlyph sg3 = srg3.getSpeciesGlyphInstance();
-        Point endPoint2 = LayoutUtil.createAdjustedPoint(sg3, bp1.getLinkAnchor().getPosition());
-
-        Point reactantPoint1 = LayoutUtil.createCenterPoint(sg1);
-        Point reactantPoint2 = LayoutUtil.createCenterPoint(sg2);
-        Point productPoint1 = LayoutUtil.createCenterPoint(sg3);
         int num0 = rw.getEditPoints().getNum0();
         int num1 = rw.getEditPoints().getNum1();
-        int num2 = rw.getEditPoints().getNum2();
-
-        lsList = LayoutUtil.createListOfLineSegment(startPoint,
-          endPoint1, endPoint2, reactantPoint1, reactantPoint2,
-          productPoint1, editPointList, num0, num1, num2, rw.getReactionType(), rw.getEditPoints().getTShapeIndex());
-        int reactant1 = num0;
-        int reactant2 = num0 + num1 + 1;
-
-        Curve curve = srg1.createCurve();
-        for (int i = 0; i <= reactant1; i++) {
-          curve.addCurveSegment(lsList.get(i));
-        }
-
-        curve = srg2.createCurve();
-        for (int i = reactant1 + 1; i <= reactant2; i++) {
-          curve.addCurveSegment(lsList.get(i));
-        }
-
-        curve = srg3.createCurve();
-        for (int i = reactant2 + 1; i < lsList.size(); i++) {
-          curve.addCurveSegment(lsList.get(i));
-        }
-
         int tshapeIndex = rw.getEditPoints().getTShapeIndex();
-        LineSegment ls = (LineSegment) curve.getCurveSegment(tshapeIndex);
-        centerPoint = ls.getStart().clone();
 
-      } else if (rw.getReactionType().equals("DISSOCIATION")
-          || rw.getReactionType().equals("TRUNCATION")) {
-        BaseReactant br1 = brsList.get(0);
-        SpeciesReferenceGlyph srg1 = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + br1.getSpecies());
-        Point startPoint = LayoutUtil.createAdjustedPoint(srg1, br1.getLinkAnchor().getPosition());
+        Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 + 1 + num1 + 1 + tshapeIndex).getStart(), endPoint);
+        lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
 
-        BaseProduct bp1 = prsList.get(0);
-        SpeciesReferenceGlyph srg2 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp1.getSpecies());
-        Point endPoint1 = LayoutUtil.createAdjustedPoint(srg2, bp1.getLinkAnchor().getPosition());
+      } else if (rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")) {
+        int num0 = rw.getEditPoints().getNum0();
+        int tshapeIndex = rw.getEditPoints().getTShapeIndex();
+        Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 - tshapeIndex).getStart(), endPoint);
+        lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
 
-        BaseProduct bp2 = prsList.get(1);
-        SpeciesReferenceGlyph srg3 = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + bp2.getSpecies());
-        Point endPoint2 = LayoutUtil.createAdjustedPoint(srg3, bp2.getLinkAnchor().getPosition());
+      } else {
+        Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(rectangleIndex).getStart(), endPoint);
+        lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
+      }
+      createCurve(srg, lsList2);
+    }
 
-        Point reactantPoint = LayoutUtil.createCenterPoint(srg1);
-        Point productPoint1 = LayoutUtil.createCenterPoint(srg2);
-        Point productPoint2 = LayoutUtil.createCenterPoint(srg3);
+    for (ProductLink link : plList) {
+      String lineType = link.getLine().getType();
+      SpeciesReferenceGlyph srg = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + link.getProduct());
+      SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
+      String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
+      Point endPoint = LayoutUtil.createAdjustedPoint(sg, position);
+      Point startPoint = centerPoint;
+      editPointList = new ArrayList<Point2D.Double>();
+      List<LineSegment> lsList2;
 
+      if (lineType.equals("Curve")) {
+        lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex + 1).getEnd());
+
+      } else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
         int num0 = rw.getEditPoints().getNum0();
         int num1 = rw.getEditPoints().getNum1();
-        int num2 = rw.getEditPoints().getNum2();
-
-        lsList = LayoutUtil.createListOfLineSegment(startPoint,
-          endPoint1, endPoint2, reactantPoint, productPoint1,
-          productPoint2, editPointList, num0, num1, num2, rw.getReactionType(), rw.getEditPoints().getTShapeIndex());
-        int reactant1 = num0 ;
-        int reactant2 = num0 + num1 + 1;
-
-        Curve curve = srg1.createCurve();
-        for (int i = 0; i <= reactant1; i++) {
-          curve.addCurveSegment(lsList.get(i));
-        }
-
-        curve = srg2.createCurve();
-        for (int i = reactant1 + 1; i <= reactant2; i++) {
-          curve.addCurveSegment(lsList.get(i));
-        }
-
-        curve = srg3.createCurve();
-        for (int i = reactant2 + 1; i < lsList.size(); i++) {
-          curve.addCurveSegment(lsList.get(i));
-        }
-
-        curve = srg1.getCurve();
         int tshapeIndex = rw.getEditPoints().getTShapeIndex();
-        LineSegment ls = (LineSegment) curve.getCurveSegment(curve.getCurveSegmentCount() - tshapeIndex - 1);
-        centerPoint = ls.getEnd().clone();
+
+        Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 + 1 + num1 + 1 + tshapeIndex).getEnd(), startPoint);
+        lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
+
+      } else if (rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")) {
+        int num0 = rw.getEditPoints().getNum0();
+        int tshapeIndex = rw.getEditPoints().getTShapeIndex();
+
+        Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 - tshapeIndex).getEnd(), startPoint);
+        lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
+
+      } else {
+        Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(rectangleIndex + 1).getEnd(), startPoint);
+        lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
       }
 
-      if (rw.isSetModifier()) {
-        for (Modification m : rw.getListOfModification()) {
-          if (m.getType().contains("BOOLEAN")) {
-            continue;
-          }
-          editPointList = LayoutUtil.createEditPointsAsList(m.getEditPoints());
+      createCurve(srg, lsList2);
+    }
 
-          SpeciesReferenceGlyph srg = rg.getSpeciesReferenceGlyph("srGlyphModifier_" + rg.getReaction() + "_" + m.getModifiers());
-          SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
-          Point modifierPoint = LayoutUtil.createCenterPoint(sg);
-          LinkTarget lt = rw.getLinkTargetByModifier(m);
-          Point startPoint = LayoutUtil.createAdjustedPoint(sg, lt.getLinkAnchor().getPosition());
-          List<LineSegment> lsList2 = LayoutUtil.createListOfLineSegment(startPoint, centerPoint,
-            modifierPoint, centerPoint, editPointList);
-          createCurve(srg, lsList2);
-        }
-      }
+    configureTextGlyph(layout.createTextGlyph("TextGlyph_" + rw.getId()),
+      rw.getId(), rg.getId(), centerPoint.getX(), centerPoint.getY(), 10d,
+      (rg.isSetName() ? rg.getName().length() : rg.getId().length()) * 3d);
 
-      List<ReactantLink> rlList = rw.getListOfReactantLinks();
-      List<ProductLink> plList = rw.getListOfProductLinks();
+    BoundingBox bbox = rg.createBoundingBox();
+    // TODO: make the size of the reaction node somehow variable!
+    Dimensions dim = bbox.createDimensions(8d, 8d, 1d);
+    bbox.createPosition(
+      centerPoint.getX() - dim.getWidth() / 2d,
+      centerPoint.getY() - dim.getHeight() / 2d, 0d);
 
-      for (ReactantLink link : rlList) {
-        String lineType = link.getLine().getType();
-        SpeciesReferenceGlyph srg = srgList.get("srGlyphReactant_" + rg.getReaction() + "_" + link.getReactant());
-        SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
-        String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
-        Point startPoint = LayoutUtil.createAdjustedPoint(sg, position);
-        Point endPoint = centerPoint;
+    for (SpeciesReferenceGlyph srg : srgList) {
 
-        editPointList = new ArrayList<Point2D.Double>();
-        List<LineSegment> lsList2;
+      createSpeciesReferenceGlyphBbox(rg, srg);
 
-        if (lineType.equals("Curve")) {
-          lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex).getStart());
+      if (srg.isSetSpeciesReferenceRole()) {
 
-        } else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
-          int num0 = rw.getEditPoints().getNum0();
-          int num1 = rw.getEditPoints().getNum1();
-          int tshapeIndex = rw.getEditPoints().getTShapeIndex();
-
-          Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 + 1 + num1 + 1 + tshapeIndex).getStart(), endPoint);
-          lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
-
-        } else if (rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")) {
-          int num0 = rw.getEditPoints().getNum0();
-          int tshapeIndex = rw.getEditPoints().getTShapeIndex();
-          Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 - tshapeIndex).getStart(), endPoint);
-          lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
-
-        } else {
-          Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(rectangleIndex).getStart(), endPoint);
-          lsList2 = LayoutUtil.createListOfLineSegment(startPoint, linkPoint, editPointList);
-        }
-        createCurve(srg, lsList2);
-      }
-
-      for (ProductLink link : plList) {
-        String lineType = link.getLine().getType();
-        SpeciesReferenceGlyph srg = srgList.get("srGlyphProduct_" + rg.getReaction() + "_" + link.getProduct());
-        SpeciesGlyph sg = srg.getSpeciesGlyphInstance();
-        String position = link.getLinkAnchor() != null ? link.getLinkAnchor().getPosition() : "INACTIVE" ;
-        Point endPoint = LayoutUtil.createAdjustedPoint(sg, position);
-        Point startPoint = centerPoint;
-        editPointList = new ArrayList<Point2D.Double>();
-        List<LineSegment> lsList2;
-
-        if (lineType.equals("Curve")) {
-          lsList2 = LayoutUtil.createListOfBezier(startPoint, endPoint, lsList.get(rectangleIndex + 1).getEnd());
-
-        } else if (rw.getReactionType().equals("HETERODIMER_ASSOCIATION")) {
-          int num0 = rw.getEditPoints().getNum0();
-          int num1 = rw.getEditPoints().getNum1();
-          int tshapeIndex = rw.getEditPoints().getTShapeIndex();
-
-          Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 + 1 + num1 + 1 + tshapeIndex).getEnd(), startPoint);
-          lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
-
-        } else if (rw.getReactionType().equals("DISSOCIATION") || rw.getReactionType().equals("TRUNCATION")) {
-          int num0 = rw.getEditPoints().getNum0();
-          int tshapeIndex = rw.getEditPoints().getTShapeIndex();
-
-          Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(num0 - tshapeIndex).getEnd(), startPoint);
-          lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
-
-        } else {
-          Point linkPoint = LayoutUtil.createLinkPoint(lsList.get(rectangleIndex + 1).getEnd(), startPoint);
-          lsList2 = LayoutUtil.createListOfLineSegment(linkPoint, endPoint, editPointList);
-        }
-
-        createCurve(srg, lsList2);
-      }
-
-      TextGlyph tg = layout.createTextGlyph("TextGlyph_" + rw.getId());
-      tg.setOriginOfText(rw.getId());
-      tg.setGraphicalObject(rg);
-      BoundingBox bb = tg.createBoundingBox(20d, 10d, 1d);
-      bb.setPosition(centerPoint);
-
-      for (SpeciesReferenceGlyph srg : srgList) {
-        if (srg.isSetSpeciesReferenceRole()) {
-
-          if ((srg.getRole() == SpeciesReferenceRole.SIDEPRODUCT) || (srg.getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT)) {
-            if (srg.isSetCurve()) {
-              Curve curve = srg.getCurve();
-              if (curve.isSetListOfCurveSegments()) {
-                CurveSegment cs = curve.getListOfCurveSegments().getLast();
-                cs.setEnd(LayoutUtil.adjustOverlappingEndPoint(cs, srg));
-              } else {
-                logger.warning(MessageFormat.format(
-                  "No curveSegment defined for speciesReferenceGlyph ''{0}'', seems to be an error in the model.",
-                  srg.getId()));
-              }
+        if ((srg.getRole() == SpeciesReferenceRole.SIDEPRODUCT) || (srg.getSpeciesReferenceRole() == SpeciesReferenceRole.PRODUCT)) {
+          if (srg.isSetCurve()) {
+            Curve curve = srg.getCurve();
+            if (curve.isSetListOfCurveSegments()) {
+              CurveSegment cs = curve.getListOfCurveSegments().getLast();
+              cs.setEnd(LayoutUtil.adjustOverlappingEndPoint(cs, srg));
             } else {
-              logger.fine(MessageFormat.format(
-                "No curve defined for speciesReferenceGlyph ''{0}'', nothing to do.",
+              logger.warning(MessageFormat.format(
+                "No curveSegment defined for speciesReferenceGlyph ''{0}'', seems to be an error in the model.",
                 srg.getId()));
             }
+          } else {
+            logger.fine(MessageFormat.format(
+              "No curve defined for speciesReferenceGlyph ''{0}'', nothing to do.",
+              srg.getId()));
           }
         }
       }
-
-      BoundingBox bbox = rg.createBoundingBox();
-      // TODO: make the size of the reaction node somehow variable!
-      Dimensions dim = bbox.createDimensions(8d, 8d, 1d);
-      bbox.createPosition(
-        centerPoint.getX() - dim.getWidth() / 2d,
-        centerPoint.getY() - dim.getHeight() / 2d, 0d);
     }
+  }
+
+  /**
+   * The species reference glyph should not have the bbox of the speciesGlyph it
+   * references, but the box containing the arrow from/to the reaction glyph. We
+   * therefore will now find the bounding box between srg and rg.
+   * 
+   * @param rg
+   * @param srg
+   */
+  private void createSpeciesReferenceGlyphBbox(ReactionGlyph rg,
+    SpeciesReferenceGlyph srg) {
+    SpeciesGlyph sg = srg.getSpeciesGlyphInstance(); // cannot be null! (otherwise there is an error elsewhere during the conversion)
+    BoundingBox sgBbox = sg.getBoundingBox();
+
+    Point sgPos = sgBbox.getPosition();
+    Point rgPos = rg.getBoundingBox().getPosition();
+    Dimensions sgDim = sgBbox.getDimensions(), rgDim = rg.getBoundingBox().getDimensions();
+    double sgWhalf = sgDim.getWidth() / 2d;
+    double rgWhalf = rgDim.getWidth() / 2d;
+    double sgHhalf = sgDim.getHeight() / 2d;
+    double rgHhalf = rgDim.getHeight() / 2d;
+    double minX = Math.min(sgPos.x() + sgWhalf, rgPos.x() + rgWhalf);
+    double maxX = Math.max(sgPos.x() + sgWhalf, rgPos.x() + rgWhalf);
+    double minY = Math.min(sgPos.y() + sgHhalf, rgPos.y() + rgHhalf);
+    double maxY = Math.max(sgPos.x() + sgHhalf, rgPos.y() + rgHhalf);
+    // Now we get a bounding box with the upper left corner being the center of
+    // either the reaction glyph or the species glyph and then going to the
+    // center of the other node.
+    BoundingBox bbox = srg.getBoundingBox();
+    bbox.getPosition().setX(minX);
+    bbox.getPosition().setY(minY);
+    bbox.getDimensions().setWidth(maxX - minX);
+    bbox.getDimensions().setHeight(maxY - minY);
   }
 
   /**
@@ -672,18 +711,29 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
    * @param role
    *        the role that this species reference glyph plays within this
    *        reaction glyph.
+   * @return the newly creates {@link SpeciesReferenceGlyph}.
    */
-  public void createSpeciesReferenceGlyph(String id, ReactionGlyph rg, ListOf<? extends SimpleSpeciesReference> participants, String species, String prefix, String alias, SpeciesReferenceRole role) {
+  public SpeciesReferenceGlyph createSpeciesReferenceGlyph(String id, ReactionGlyph rg, ListOf<? extends SimpleSpeciesReference> participants, String species, String prefix, String alias, SpeciesReferenceRole role) {
     SpeciesReferenceGlyph srg = rg.createSpeciesReferenceGlyph(id);
     SimpleSpeciesReference ssr = SBMLUtil.findReferenceBySpeciesId(participants, species);
     if (ssr != null) {
+      if (!ssr.isSetId()) {
+        // set the id of each simple species reference when first needed.
+        Reaction parent = (Reaction) ssr.getParent().getParent();
+        String elementName = participants.getElementName();
+        String lType = elementName.substring(6, elementName.length() - 1);
+        ssr.setId(parent.getId() + "_" + lType + "_" + (participants.indexOf(ssr) + 1));
+      }
       srg.setSpeciesReference(ssr);
     }
     srg.setRole(role);
     srg.setSBOTerm(role.toSBOterm());
     srg.setSpeciesGlyph(prefix + '_' + alias);
-    // TODO: This is not a good idea, because the species reference glyph should not have the bbox of the speciesGlyph it references, but the box containing the arrow from/to the reaction glyph.
+
+    // This initial bounding box is needed for building up the curve, a more precise box will be created later on.
     srg.setBoundingBox(srg.getSpeciesGlyphInstance().getBoundingBox().clone());
+
+    return srg;
   }
 
   /**
@@ -757,23 +807,13 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
       bb.setPosition(point);
 
       TextGlyph tg = layout.createTextGlyph("TextGlyph_" + saw.getId());
-      if (model.getSpecies(saw.getSpecies()) != null) {
-        tg.setReference(saw.getSpecies());
-      } else {
-        tg.setText(saw.getSpecies());
-      }
-
-      tg.setGraphicalObject(sg);
-      BoundingBox bb2 = tg.createBoundingBox();
-      Dimensions dimension2 = bb2.createDimensions();
-      dimension2.setWidth(saw.getId().length() * 3);
-      dimension2.setHeight(10d);
-      dimension.setDepth(1d);
-      Point point2 = bb2.createPosition();
-      point2.setX(saw.getX() + saw.getW() / 2d - dimension2.getWidth() / 2d);
-      point2.setY(saw.getY() + saw.getH() / 2d - dimension2.getHeight() / 2d);
-      point2.setZ(0d);
-
+      configureTextGlyph(tg, saw.getSpecies(), sg.getId(),
+        saw.getX(),
+        saw.getY() + saw.getH() / 5d,
+        10d, saw.getId().length() * 3d,
+        model.getSpecies(saw.getSpecies()) == null);
+      // x = saw.getX() + saw.getW() / 2d - dimension2.getWidth() / 2d
+      // y = saw.getY() + saw.getH() / 2d - dimension2.getHeight() / 2d
     }
   }
 
@@ -803,19 +843,55 @@ public class CD2LayoutConverter extends BaseLayoutConverter {
       point.setZ(0d);
       bb.setPosition(point);
 
-      TextGlyph tg = layout.createTextGlyph("TextGlyph_" + csaw.getId());
-      tg.setOriginOfText(csaw.getSpecies());
-      tg.setGraphicalObject(sg);
-      BoundingBox bb2 = tg.createBoundingBox();
-      Dimensions dimension2 = bb2.createDimensions();
-      dimension2.setWidth(csaw.getId().length() * 3d);
-      dimension2.setHeight(10d);
-      dimension.setDepth(1d);
-      Point point2 = bb2.createPosition();
-      point2.setX(csaw.getX() + csaw.getW() / 2d - dimension2.getWidth() / 2d);
-      point2.setY(csaw.getY() + csaw.getH());
-      point2.setZ(0d);
+      String text = csaw.getSpeciesWrapper().getName();
+      if (text == null) {
+        text = csaw.getSpeciesWrapper().getId();
+      }
+      configureTextGlyph(layout.createTextGlyph("TextGlyph_" + csaw.getId()),
+        csaw.getSpecies(), sg.getId(), csaw.getX(), csaw.getY() + csaw.getH() / 2d,
+        10d, text.length() * 3d);
+      // x = csaw.getX() + csaw.getW() / 2d - dimension2.getWidth() / 2d
+      // y = csaw.getY() + csaw.getH()
     }
+  }
+
+  /**
+   * 
+   * @param tg
+   * @param originOfText
+   * @param graphicalObject
+   * @param x
+   * @param y
+   * @param h
+   * @param w
+   */
+  private void configureTextGlyph(TextGlyph tg, String originOfText, String graphicalObject, double x, double y, double h, double w) {
+    configureTextGlyph(tg, originOfText, graphicalObject, x, y, h, w, false);
+  }
+
+  /**
+   * 
+   * @param tg
+   * @param text either the text or the origin of text depending on whether isText is true or false, respectively.
+   * @param graphicalObject
+   * @param x
+   * @param y
+   * @param h
+   * @param w
+   * @param isText
+   */
+  private void configureTextGlyph(TextGlyph tg, String text, String graphicalObject, double x, double y, double h, double w, boolean isText) {
+    if (text != null) {
+      if (!isText) {
+        tg.setOriginOfText(text);
+      } else {
+        tg.setText(text);
+      }
+    }
+    if (graphicalObject != null) {
+      tg.setGraphicalObject(graphicalObject);
+    }
+    tg.createBoundingBox(w, h, 1d, x, y, 0d);
   }
 
 }

@@ -772,7 +772,7 @@ public class SBMLUtil {
    */
   public static void removeEmptyLists(SBase sbase) {
     if ((sbase instanceof ListOf<?>) && ((ListOf<?>) sbase).isEmpty()) {
-      logger.info(MessageFormat.format("Removing empty {0} from SBML document.", sbase.getElementName()));
+      logger.fine(MessageFormat.format("Removing empty {0} from SBML document.", sbase.getElementName()));
       sbase.removeFromParent();
     } else {
       for (int i = 0; i < sbase.getChildCount(); i++) {

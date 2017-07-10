@@ -202,6 +202,11 @@ public class Layout2CDConverter extends BaseLayoutConverter {
    */
   @Override
   public void convert() {
+    if(document.getDeclaredNamespaces().containsValue(SBMLUtil.cellDesignerNS)){
+      document = downgrade_document;
+      return;
+    }
+    
     LayoutModelPlugin mplugin = (LayoutModelPlugin) (model.getPlugin("layout"));
 
     layout = mplugin.getLayout(0);

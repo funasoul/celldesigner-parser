@@ -285,7 +285,7 @@ public class Layout2CDConverter extends BaseLayoutConverter {
         }
         int sboterm = SBMLUtil.intSBOTermForDEFAULT_SPECIES;
         if (sg.isSetSBOTerm()) {
-          sboterm = s.getSBOTerm();
+          sboterm = sg.getSBOTerm();
         } else if (s.isSetSBOTerm()) {
           sboterm = s.getSBOTerm();
         }

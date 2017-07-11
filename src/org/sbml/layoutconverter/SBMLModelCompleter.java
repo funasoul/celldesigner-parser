@@ -15,8 +15,6 @@
  */
 package org.sbml.layoutconverter;
 
-import javax.xml.stream.XMLStreamException;
-
 import org.sbml.jsbml.Compartment;
 import org.sbml.jsbml.ListOf;
 import org.sbml.jsbml.Model;
@@ -24,8 +22,6 @@ import org.sbml.jsbml.ModifierSpeciesReference;
 import org.sbml.jsbml.Parameter;
 import org.sbml.jsbml.Reaction;
 import org.sbml.jsbml.SBMLDocument;
-import org.sbml.jsbml.SBMLException;
-import org.sbml.jsbml.SBMLWriter;
 import org.sbml.jsbml.Species;
 import org.sbml.jsbml.SpeciesReference;
 import org.sbml.jsbml.Unit;
@@ -89,23 +85,24 @@ public class SBMLModelCompleter {
 
     // This saves us the effort of explicitly defining the units of individual
     // model components:
-    if (model.findUnitDefinition(UnitDefinition.SUBSTANCE) != null) {
-      model.setSubstanceUnits(UnitDefinition.SUBSTANCE);
-      model.setExtentUnits(model.getSubstanceUnits());
+    if(document.getLevel() == SBMLUtil.DEFAULT_SBML_LEVEL){
+      if (model.findUnitDefinition(UnitDefinition.SUBSTANCE) != null) {
+        model.setSubstanceUnits(UnitDefinition.SUBSTANCE);
+        model.setExtentUnits(model.getSubstanceUnits());
+      }
+      if (model.findUnitDefinition(UnitDefinition.AREA) != null) {
+        model.setAreaUnits(UnitDefinition.AREA);
+      }
+      if (model.findUnitDefinition(UnitDefinition.VOLUME) != null) {
+        model.setVolumeUnits(UnitDefinition.VOLUME);
+      }
+      if (model.findUnitDefinition(UnitDefinition.LENGTH) != null) {
+        model.setLengthUnits(UnitDefinition.LENGTH);
+      }
+      if (model.findUnitDefinition(UnitDefinition.TIME) != null) {
+        model.setTimeUnits(UnitDefinition.TIME);
+      }
     }
-    if (model.findUnitDefinition(UnitDefinition.AREA) != null) {
-      model.setAreaUnits(UnitDefinition.AREA);
-    }
-    if (model.findUnitDefinition(UnitDefinition.VOLUME) != null) {
-      model.setVolumeUnits(UnitDefinition.VOLUME);
-    }
-    if (model.findUnitDefinition(UnitDefinition.LENGTH) != null) {
-      model.setLengthUnits(UnitDefinition.LENGTH);
-    }
-    if (model.findUnitDefinition(UnitDefinition.TIME) != null) {
-      model.setTimeUnits(UnitDefinition.TIME);
-    }
-
     return document;
   }
 

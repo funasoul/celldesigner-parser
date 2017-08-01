@@ -1404,8 +1404,8 @@ public class ModelWrapper extends Model {
   // return ;
   // }
   public void createSpeciesObjectFromSBOTerm(SpeciesGlyph sg, int sboTerm) {
-    if (SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForCOMPLEX) ||
-        SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForDEGRADED) ||
+    
+    if (sboTerm == SBMLUtil.intSBOTermForCOMPLEX || //since protein is child of protein we can't use isChildOf in order to create protein
         SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForDEGRADED) ||
         SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForDRUG) ||
         SBO.isChildOf(sboTerm, SBMLUtil.intSBOTermForSIMPLE_MOLECULE) ||

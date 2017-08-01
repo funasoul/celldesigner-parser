@@ -598,11 +598,19 @@ public class SBMLUtil {
    * @return the string
    */
   public static String SBOTermToCDSpecies(int sboTerm) {
-    if (SBO.isChildOf(sboTerm, intSBOTermForANTISENSE_RNA)) {
+    if (SBO.isChildOf(sboTerm, intSBOTermForGENERIC)) {
+      return "GENERIC";
+    } else if (SBO.isChildOf(sboTerm, intSBOTermForPROTEIN)) {
+      return "PROTEIN";
+    } else if (SBO.isChildOf(sboTerm, intSBOTermForION_CHANNEL)) {
+      return "ION_CHANNEL";
+    } else if (SBO.isChildOf(sboTerm, intSBOTermForTRUNCATED)) {
+      return "TRUNCATED";
+    } else if (SBO.isChildOf(sboTerm, intSBOTermForRECEPTOR)) {
+      return "RECEPTOR";
+    } else if (SBO.isChildOf(sboTerm, intSBOTermForANTISENSE_RNA)) {
       return "ANTISENSE_RNA";
-    } else if (SBO.isChildOf(sboTerm, intSBOTermForCOMPLEX)) {
-      return "COMPLEX";
-    } else if (SBO.isChildOf(sboTerm, intSBOTermForDEGRADED)) {
+    }  else if (SBO.isChildOf(sboTerm, intSBOTermForDEGRADED)) {
       return "DEGRADED";
     } else if (SBO.isChildOf(sboTerm, intSBOTermForDRUG)) {
       return "DRUG";
@@ -616,15 +624,11 @@ public class SBMLUtil {
       return "RNA";
     } else if (SBO.isChildOf(sboTerm, intSBOTermForSIMPLE_MOLECULE)) {
       return "SIMPLE_MOLECULE";
+    } else if (SBO.isChildOf(sboTerm, intSBOTermForCOMPLEX)) {
+      return "COMPLEX";
     } else if (SBO.isChildOf(sboTerm, intSBOTermForUNKNOWN)) {
       return "UNKNOWN";
-    } else {
-      if (SBO.isChildOf(sboTerm, intSBOTermForGENERIC)) {
-      } else if (SBO.isChildOf(sboTerm, intSBOTermForPROTEIN)) {
-      } else if (SBO.isChildOf(sboTerm, intSBOTermForION_CHANNEL)) {
-      } else if (SBO.isChildOf(sboTerm, intSBOTermForTRUNCATED)) {
-      } else if (SBO.isChildOf(sboTerm, intSBOTermForRECEPTOR)) {
-      }
+    } else {   
       return "PROTEIN";
     }
   }
